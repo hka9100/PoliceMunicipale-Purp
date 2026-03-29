@@ -12,7 +12,7 @@
   import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
   const firebaseConfig = {
-    apiKey: "AIzaSyCGY7Qh7nkwegjLyLifsv29eiupnXRiC4w",
+    apiKey: "AIzaSyCGYQ7h7nkwegjLyLifsv29eiupnXRiC4w",
     authDomain: "site-pmpurp.firebaseapp.com",
     projectId: "site-pmpurp",
     storageBucket: "site-pmpurp.firebasestorage.app",
@@ -829,7 +829,7 @@
 
 <div class="toast-container" id="toasts"></div>
 
-<!-- MODALS (Identiques à votre version) -->
+<!-- MODALS -->
 <div class="modal-overlay" id="modal-rapport"><div class="modal"><div class="modal-header"><div class="modal-title">📋 Nouveau rapport d'intervention</div><button class="close-btn" onclick="closeModal('modal-rapport')">✕</button></div><div class="modal-body"><div class="form-grid"><div class="form-group"><label class="form-label">Type d'intervention</label><select class="form-select" id="r-type"><option>Trouble à l'ordre public</option><option>Vol / Cambriolage</option><option>Accident de la route</option><option>Agression physique</option><option>Trafic de stupéfiants</option><option>Fugitif / Poursuite</option><option>Prise d'otage</option><option>Homicide</option><option>Braquage</option><option>Contrôle routier</option><option>Autre</option></select></div><div class="form-group"><label class="form-label">Statut</label><select class="form-select" id="r-statut"><option>Ouvert</option><option>En cours</option><option>Clôturé</option></select></div><div class="form-group"><label class="form-label">Date et heure</label><input class="form-input" type="datetime-local" id="r-date"></div><div class="form-group"><label class="form-label">Lieu de l'intervention</label><input class="form-input" type="text" id="r-lieu" placeholder="ex: Rue de la Paix..."></div><div class="form-group"><label class="form-label">Agent responsable</label><input class="form-input" type="text" id="r-agent" placeholder="Nom de l'agent"></div><div class="form-group"><label class="form-label">Personnes impliquées</label><input class="form-input" type="text" id="r-personnes" placeholder="Noms, rôles..."></div><div class="form-group span2"><label class="form-label">Description détaillée</label><textarea class="form-textarea" id="r-description" placeholder="Décrivez les faits..."></textarea></div><div class="form-group span2"><label class="form-label">Suites données</label><textarea class="form-textarea" id="r-suites" placeholder="Arrestation, avertissement..." style="min-height:60px;"></textarea></div><div class="form-group"><label class="form-label">Pièces saisies</label><input class="form-input" type="text" id="r-pieces" placeholder="Armes, drogues, véhicule..."></div><div class="form-group"><label class="form-label">Priorité</label><select class="form-select" id="r-priorite"><option>Normale</option><option>Élevée</option><option>Critique</option></select></div></div></div><div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-rapport')">Annuler</button><button class="btn btn-primary" onclick="saveRapport()">💾 Enregistrer</button></div></div></div>
 <div class="modal-overlay" id="modal-signalement"><div class="modal"><div class="modal-header"><div class="modal-title">🚨 Nouveau signalement</div><button class="close-btn" onclick="closeModal('modal-signalement')">✕</button></div><div class="modal-body"><div class="form-grid"><div class="form-group"><label class="form-label">Type de signalement</label><select class="form-select" id="s-type"><option>Personne suspecte</option><option>Véhicule suspect</option><option>Tir / Coups de feu</option><option>Rixe / Bagarre</option><option>Incendie</option><option>Accident</option><option>Fugitif en fuite</option><option>Autre</option></select></div><div class="form-group"><label class="form-label">Priorité</label><select class="form-select" id="s-priorite"><option>Normal</option><option>Urgent</option><option>Critique</option></select></div><div class="form-group"><label class="form-label">Zone / Secteur</label><input class="form-input" type="text" id="s-zone" placeholder="ex: Zone Portuaire..."></div><div class="form-group"><label class="form-label">Heure du signalement</label><input class="form-input" type="datetime-local" id="s-date"></div><div class="form-group span2"><label class="form-label">Description</label><textarea class="form-textarea" id="s-description" placeholder="Détails du signalement..."></textarea></div></div></div><div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-signalement')">Annuler</button><button class="btn btn-primary" onclick="saveSignalement()">💾 Enregistrer</button></div></div></div>
 <div class="modal-overlay" id="modal-plainte"><div class="modal"><div class="modal-header"><div class="modal-title">⚖️ Déposer une plainte</div><button class="close-btn" onclick="closeModal('modal-plainte')">✕</button></div><div class="modal-body"><div class="form-grid"><div class="form-group"><label class="form-label">Agent plaignant</label><input class="form-input" type="text" id="pl-plaignant" placeholder="Votre nom IC"></div><div class="form-group"><label class="form-label">Agent mis en cause</label><input class="form-input" type="text" id="pl-accuse" placeholder="Nom de l'agent mis en cause"></div><div class="form-group"><label class="form-label">Date des faits</label><input class="form-input" type="datetime-local" id="pl-date"></div><div class="form-group"><label class="form-label">Motif</label><select class="form-select" id="pl-motif"><option>Comportement inapproprié</option><option>Abus de pouvoir</option><option>Non-respect du protocole</option><option>Corruption</option><option>Violence excessive</option><option>Harcèlement</option><option>Autre</option></select></div><div class="form-group"><label class="form-label">Statut</label><select class="form-select" id="pl-statut"><option>En attente</option><option>En cours</option><option>Résolue</option><option>Classée sans suite</option></select></div><div class="form-group"><label class="form-label">Gravité</label><select class="form-select" id="pl-gravite"><option>Mineure</option><option>Modérée</option><option>Grave</option><option>Très grave</option></select></div><div class="form-group span2"><label class="form-label">Description des faits</label><textarea class="form-textarea" id="pl-description" placeholder="Décrivez les faits en détail..."></textarea></div><div class="form-group span2"><label class="form-label">Preuves / Éléments joints</label><textarea class="form-textarea" id="pl-preuves" placeholder="Screenshots, témoignages..."></textarea></div></div></div><div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-plainte')">Annuler</button><button class="btn btn-primary" onclick="savePlainte()">💾 Déposer la plainte</button></div></div></div>
@@ -843,7 +843,7 @@
 let currentUser = null, db = null, storage = null, fb = null;
 let counters = { rapports: 0, signalements: 0, saisies: 0, fiches: 0, vehicules: 0, agents: 0, plaintes: 0 };
 let photoFiles = { fi: [], v: [] };
-const ADMIN_GRADES = ['Directeur', 'Directeur Adjoint'];
+const ADMIN_GRADES = ['Directeur', 'Directeur Adjoint', 'Directeur Stagiaire'];
 const MASTER_CODE_B64 = 'NzIzMg==';
 
 window.addEventListener('firebase-ready', () => { db = window._db; storage = window._storage; fb = window._firebase; checkSavedSession(); });
@@ -917,13 +917,122 @@ function renderVehicules(items) { counters.vehicules=items.length; let tbody=doc
 function renderAgents(items) { counters.agents=items.length; document.getElementById('stat-agents').textContent=items.length; let grid=document.getElementById('agents-grid'); if(!items.length){grid.innerHTML='<div style="grid-column:1/-1;"><div class="empty-state"><div class="icon">👮</div><div class="label">Aucun agent enregistré</div></div></div>';return;} grid.innerHTML=items.map(a=>`<div class="agent-card-big"><div class="av">👮</div><div class="name">${a.nom||'—'}</div><div class="grade">${a.grade||'—'}</div><div class="meta"><span>🔖 ${a.matricule||'—'}</span><span>🎮 ${a.pseudo||'—'}</span><span>📅 Depuis le ${a.dateEmbauche||'—'}</span><span>● <span class="badge ${a.statut==='Actif'?'badge-closed':a.statut==='Suspendu'?'badge-open':'badge-neutral'}">${a.statut}</span></span></div>${canDelete()?`<button class="btn btn-danger btn-sm" style="margin-top:10px;" onclick="deleteItem('agents','${a.id}')">🗑️ Supprimer</button>`:''}</div>`).join(''); }
 function renderActivity(items) { let container=document.getElementById('activity-container'); if(!items.length){container.innerHTML='<div class="empty-state"><div class="icon">📋</div><div class="label">Aucune activité pour le moment</div></div>';return;} container.innerHTML=`<div class="activity-list">${items.map(r=>`<div class="activity-item"><div class="activity-dot" style="background:var(--blue);"></div><div><div class="activity-text">Rapport ${r.num||''} — ${r.type||''} à ${r.lieu||'lieu inconnu'}</div><div class="activity-time">${fmtDate(r.date)} • Agent : ${r.agent||'—'}</div></div></div>`).join('')}</div>`; }
 
-async function saveRapport() { let num=`INT-${String(++counters.rapports).padStart(4,'0')}`; await fb.addDoc(fb.collection(db,'rapports'),{num,type:v('r-type'),statut:v('r-statut'),date:v('r-date'),lieu:v('r-lieu'),agent:v('r-agent'),personnes:v('r-personnes'),description:v('r-description'),suites:v('r-suites'),pieces:v('r-pieces'),priorite:v('r-priorite'),createdAt:new Date().toISOString(),createdBy:currentUser?.nom}); closeModal('modal-rapport'); toast('Rapport enregistré',`${num} créé`); resetForm(['r-type','r-statut','r-date','r-lieu','r-agent','r-personnes','r-description','r-suites','r-pieces','r-priorite']); }
-async function saveSignalement() { await fb.addDoc(fb.collection(db,'signalements'),{type:v('s-type'),priorite:v('s-priorite'),zone:v('s-zone'),date:v('s-date'),description:v('s-description'),createdAt:new Date().toISOString(),createdBy:currentUser?.nom}); closeModal('modal-signalement'); toast('Signalement enregistré',''); resetForm(['s-type','s-priorite','s-zone','s-date','s-description']); }
-async function savePlainte() { await fb.addDoc(fb.collection(db,'plaintes'),{plaignant:v('pl-plaignant'),accuse:v('pl-accuse'),date:v('pl-date'),motif:v('pl-motif'),statut:v('pl-statut'),gravite:v('pl-gravite'),description:v('pl-description'),preuves:v('pl-preuves'),createdAt:new Date().toISOString(),createdBy:currentUser?.nom}); closeModal('modal-plainte'); toast('Plainte déposée',''); resetForm(['pl-plaignant','pl-accuse','pl-date','pl-motif','pl-statut','pl-gravite','pl-description','pl-preuves']); }
-async function saveSaisie() { let num=`SAI-${String(++counters.saisies).padStart(4,'0')}`; await fb.addDoc(fb.collection(db,'saisies'),{num,categorie:v('sa-categorie'),date:v('sa-date'),objet:v('sa-objet'),quantite:v('sa-quantite'),proprio:v('sa-proprio'),agent:v('sa-agent'),dossier:v('sa-dossier'),lieu:v('sa-lieu'),description:v('sa-description'),createdAt:new Date().toISOString(),createdBy:currentUser?.nom}); closeModal('modal-saisie'); toast('Saisie enregistrée',`${num} créé`); resetForm(['sa-categorie','sa-date','sa-objet','sa-quantite','sa-proprio','sa-agent','sa-dossier','sa-lieu','sa-description']); }
-async function saveFiche() { let photos=[]; try{photos=await uploadPhotos('fi');}catch(e){} await fb.addDoc(fb.collection(db,'fiches'),{nom:v('fi-nom'),naissance:v('fi-naissance'),nationalite:v('fi-nationalite'),statut:v('fi-statut'),antecedents:v('fi-antecedents'),notes:v('fi-notes'),photos,createdAt:new Date().toISOString(),createdBy:currentUser?.nom}); closeModal('modal-fiche'); resetPhotoPreview('fi'); toast('Fiche enregistrée',''); resetForm(['fi-nom','fi-naissance','fi-nationalite','fi-statut','fi-antecedents','fi-notes']); }
-async function saveVehicule() { let photos=[]; try{photos=await uploadPhotos('v');}catch(e){} await fb.addDoc(fb.collection(db,'vehicules'),{plaque:v('v-plaque'),modele:v('v-modele'),couleur:v('v-couleur'),proprio:v('v-proprio'),motif:v('v-motif'),photos,createdAt:new Date().toISOString(),createdBy:currentUser?.nom}); closeModal('modal-vehicule'); resetPhotoPreview('v'); toast('Véhicule ajouté',''); resetForm(['v-plaque','v-modele','v-couleur','v-proprio','v-motif']); }
-async function saveAgent() { await fb.addDoc(fb.collection(db,'agents'),{nom:v('ag-nom'),pseudo:v('ag-pseudo'),grade:v('ag-grade'),matricule:v('ag-matricule'),statut:v('ag-statut'),dateEmbauche:v('ag-date'),notes:v('ag-notes'),createdAt:new Date().toISOString(),createdBy:currentUser?.nom}); closeModal('modal-agent'); toast('Agent ajouté',''); resetForm(['ag-nom','ag-pseudo','ag-grade','ag-matricule','ag-statut','ag-date','ag-notes']); }
+async function saveRapport() { 
+    try {
+        let num=`INT-${String(Date.now()).slice(-6)}`;
+        await fb.addDoc(fb.collection(db,'rapports'),{
+            num,type:v('r-type'),statut:v('r-statut'),date:v('r-date'),lieu:v('r-lieu'),
+            agent:v('r-agent'),personnes:v('r-personnes'),description:v('r-description'),
+            suites:v('r-suites'),pieces:v('r-pieces'),priorite:v('r-priorite'),
+            createdAt:new Date().toISOString(),createdBy:currentUser?.nom
+        });
+        closeModal('modal-rapport'); 
+        toast('Rapport enregistré',`${num} créé avec succès sur Firebase`); 
+        resetForm(['r-type','r-statut','r-date','r-lieu','r-agent','r-personnes','r-description','r-suites','r-pieces','r-priorite']);
+    } catch(e) { toast('Erreur Firebase', e.message, 'error'); console.error(e); }
+}
+
+async function saveSignalement() { 
+    try {
+        await fb.addDoc(fb.collection(db,'signalements'),{
+            type:v('s-type'),priorite:v('s-priorite'),zone:v('s-zone'),date:v('s-date'),
+            description:v('s-description'),createdAt:new Date().toISOString(),createdBy:currentUser?.nom
+        });
+        closeModal('modal-signalement'); 
+        toast('Signalement enregistré','Données sauvegardées sur Firebase'); 
+        resetForm(['s-type','s-priorite','s-zone','s-date','s-description']);
+    } catch(e) { toast('Erreur Firebase', e.message, 'error'); }
+}
+
+async function savePlainte() { 
+    try {
+        await fb.addDoc(fb.collection(db,'plaintes'),{
+            plaignant:v('pl-plaignant'),accuse:v('pl-accuse'),date:v('pl-date'),motif:v('pl-motif'),
+            statut:v('pl-statut'),gravite:v('pl-gravite'),description:v('pl-description'),
+            preuves:v('pl-preuves'),createdAt:new Date().toISOString(),createdBy:currentUser?.nom
+        });
+        closeModal('modal-plainte'); 
+        toast('Plainte déposée','Sauvegardée sur Firebase'); 
+        resetForm(['pl-plaignant','pl-accuse','pl-date','pl-motif','pl-statut','pl-gravite','pl-description','pl-preuves']);
+    } catch(e) { toast('Erreur Firebase', e.message, 'error'); }
+}
+
+async function saveSaisie() { 
+    try {
+        let num=`SAI-${String(Date.now()).slice(-6)}`;
+        await fb.addDoc(fb.collection(db,'saisies'),{
+            num,categorie:v('sa-categorie'),date:v('sa-date'),objet:v('sa-objet'),quantite:v('sa-quantite'),
+            proprio:v('sa-proprio'),agent:v('sa-agent'),dossier:v('sa-dossier'),lieu:v('sa-lieu'),
+            description:v('sa-description'),createdAt:new Date().toISOString(),createdBy:currentUser?.nom
+        });
+        closeModal('modal-saisie'); 
+        toast('Saisie enregistrée',`${num} créé sur Firebase`); 
+        resetForm(['sa-categorie','sa-date','sa-objet','sa-quantite','sa-proprio','sa-agent','sa-dossier','sa-lieu','sa-description']);
+    } catch(e) { toast('Erreur Firebase', e.message, 'error'); }
+}
+
+async function saveFiche() { 
+    try {
+        let nom = v('fi-nom');
+        if(!nom) { toast('Erreur', 'Le nom est requis', 'error'); return; }
+        
+        let photos = [];
+        if(photoFiles['fi'] && photoFiles['fi'].length > 0) {
+            try {
+                photos = await uploadPhotos('fi');
+                console.log('Photos uploadées:', photos.length);
+            } catch(e) {
+                console.error('Erreur upload photos:', e);
+                toast('Attention', 'Les photos n\'ont pas pu être uploadées, mais la fiche sera créée', 'warn');
+            }
+        }
+        
+        await fb.addDoc(fb.collection(db,'fiches'),{
+            nom:nom,naissance:v('fi-naissance'),nationalite:v('fi-nationalite'),statut:v('fi-statut'),
+            antecedents:v('fi-antecedents'),notes:v('fi-notes'),photos:photos,
+            createdAt:new Date().toISOString(),createdBy:currentUser?.nom
+        });
+        closeModal('modal-fiche'); 
+        resetPhotoPreview('fi'); 
+        toast('Fiche enregistrée','Sauvegardée sur Firebase avec succès'); 
+        resetForm(['fi-nom','fi-naissance','fi-nationalite','fi-statut','fi-antecedents','fi-notes']);
+    } catch(e) { toast('Erreur Firebase', e.message, 'error'); console.error(e); }
+}
+
+async function saveVehicule() { 
+    try {
+        let photos = [];
+        if(photoFiles['v'] && photoFiles['v'].length > 0) {
+            try {
+                photos = await uploadPhotos('v');
+            } catch(e) {
+                console.error('Erreur upload photos:', e);
+            }
+        }
+        
+        await fb.addDoc(fb.collection(db,'vehicules'),{
+            plaque:v('v-plaque'),modele:v('v-modele'),couleur:v('v-couleur'),proprio:v('v-proprio'),
+            motif:v('v-motif'),photos:photos,createdAt:new Date().toISOString(),createdBy:currentUser?.nom
+        });
+        closeModal('modal-vehicule'); 
+        resetPhotoPreview('v'); 
+        toast('Véhicule ajouté','Sauvegardé sur Firebase'); 
+        resetForm(['v-plaque','v-modele','v-couleur','v-proprio','v-motif']);
+    } catch(e) { toast('Erreur Firebase', e.message, 'error'); }
+}
+
+async function saveAgent() { 
+    try {
+        await fb.addDoc(fb.collection(db,'agents'),{
+            nom:v('ag-nom'),pseudo:v('ag-pseudo'),grade:v('ag-grade'),matricule:v('ag-matricule'),
+            statut:v('ag-statut'),dateEmbauche:v('ag-date'),notes:v('ag-notes'),
+            createdAt:new Date().toISOString(),createdBy:currentUser?.nom
+        });
+        closeModal('modal-agent'); 
+        toast('Agent ajouté','Sauvegardé sur Firebase'); 
+        resetForm(['ag-nom','ag-pseudo','ag-grade','ag-matricule','ag-statut','ag-date','ag-notes']);
+    } catch(e) { toast('Erreur Firebase', e.message, 'error'); }
+}
 
 function viewRapport(id){ showViewByFirebase('rapports',id,data=>{ document.getElementById('view-title').innerHTML=`📋 ${data.num||'Rapport'} — ${data.type}`; document.getElementById('view-body').innerHTML=`<div class="view-grid"><div class="view-field"><div class="view-field-label">N° Dossier</div><div class="view-field-value">${data.num||'—'}</div></div><div class="view-field"><div class="view-field-label">Statut</div><div class="view-field-value">${statusBadge(data.statut)}</div></div><div class="view-field"><div class="view-field-label">Type</div><div class="view-field-value">${data.type||'—'}</div></div><div class="view-field"><div class="view-field-label">Date</div><div class="view-field-value">${fmtDate(data.date)}</div></div><div class="view-field"><div class="view-field-label">Lieu</div><div class="view-field-value">${data.lieu||'—'}</div></div><div class="view-field"><div class="view-field-label">Agent</div><div class="view-field-value">${data.agent||'—'}</div></div><div class="view-field"><div class="view-field-label">Priorité</div><div class="view-field-value">${data.priorite||'—'}</div></div><div class="view-field"><div class="view-field-label">Personnes impliquées</div><div class="view-field-value">${data.personnes||'—'}</div></div></div><div class="view-field"><div class="view-field-label">Description</div><div class="view-field-value">${data.description||'—'}</div></div><div class="view-field"><div class="view-field-label">Suites données</div><div class="view-field-value">${data.suites||'—'}</div></div><div class="view-field"><div class="view-field-label">Pièces saisies</div><div class="view-field-value">${data.pieces||'—'}</div></div>`; openModal('modal-view'); }); }
 function viewSignalement(id){ showViewByFirebase('signalements',id,data=>{ document.getElementById('view-title').innerHTML=`🚨 Signalement — ${data.type}`; document.getElementById('view-body').innerHTML=`<div class="view-grid"><div class="view-field"><div class="view-field-label">Type</div><div class="view-field-value">${data.type}</div></div><div class="view-field"><div class="view-field-label">Priorité</div><div class="view-field-value">${data.priorite}</div></div><div class="view-field"><div class="view-field-label">Zone</div><div class="view-field-value">${data.zone||'—'}</div></div><div class="view-field"><div class="view-field-label">Date/Heure</div><div class="view-field-value">${fmtDate(data.date)}</div></div></div><div class="view-field"><div class="view-field-label">Description</div><div class="view-field-value">${data.description||'—'}</div></div>`; openModal('modal-view'); }); }
