@@ -1,0 +1,2109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Police Municipale — Panneau de Commandement</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&family=Exo+2:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep: #080c12;
+    --bg-base: #0d1520;
+    --bg-panel: #111a27;
+    --bg-card: #162030;
+    --bg-hover: #1c2a3e;
+    --border: #1e3050;
+    --border-bright: #2a4a75;
+    --blue: #2d8fff;
+    --blue-dim: #1a5fbb;
+    --blue-glow: rgba(45,143,255,0.18);
+    --cyan: #00d4ff;
+    --red: #ff3d5a;
+    --red-dim: #a01f30;
+    --orange: #ff8c2a;
+    --green: #00e676;
+    --green-dim: #007a3d;
+    --yellow: #ffd600;
+    --text-primary: #d0e8ff;
+    --text-secondary: #6a8fbb;
+    --text-muted: #3d5a7a;
+    --mono: 'Share Tech Mono', monospace;
+    --head: 'Exo 2', sans-serif;
+    --body: 'Rajdhani', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    font-family: var(--body);
+    font-size: 15px;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Scanline overlay */
+  body::before {
+    content:'';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 4px);
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  /* Grid background */
+  body::after {
+    content:'';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(45,143,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(45,143,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ===== LAYOUT ===== */
+  .app { display: flex; min-height: 100vh; position: relative; z-index: 1; }
+
+  /* ===== SIDEBAR ===== */
+  .sidebar {
+    width: 240px;
+    min-height: 100vh;
+    background: var(--bg-panel);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0;
+    z-index: 100;
+  }
+
+  .sidebar-logo {
+    padding: 24px 20px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+
+  .logo-badge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-icon {
+    width: 42px; height: 42px;
+    background: linear-gradient(135deg, var(--blue-dim), var(--blue));
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    box-shadow: 0 0 20px var(--blue-glow);
+  }
+
+  .logo-text { line-height: 1.2; }
+  .logo-title {
+    font-family: var(--head);
+    font-weight: 900;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--blue);
+  }
+  .logo-sub {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+  }
+
+  .status-bar {
+    margin: 12px 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--green);
+  }
+  .status-dot {
+    width: 6px; height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100%{ opacity:1; }
+    50%{ opacity:0.3; }
+  }
+
+  .nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
+
+  .nav-section-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    padding: 12px 8px 6px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    transition: all 0.15s;
+    border: 1px solid transparent;
+    margin-bottom: 2px;
+    position: relative;
+  }
+
+  .nav-item:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+    border-color: var(--border);
+  }
+
+  .nav-item.active {
+    background: var(--blue-glow);
+    color: var(--blue);
+    border-color: var(--blue-dim);
+  }
+
+  .nav-item.active::before {
+    content:'';
+    position: absolute;
+    left: -12px;
+    top: 50%; transform: translateY(-50%);
+    width: 3px; height: 24px;
+    background: var(--blue);
+    border-radius: 0 2px 2px 0;
+  }
+
+  .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+
+  .nav-badge {
+    margin-left: auto;
+    background: var(--red);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 10px;
+    font-weight: 700;
+  }
+
+  .sidebar-footer {
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  .agent-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .agent-avatar {
+    width: 34px; height: 34px;
+    background: linear-gradient(135deg, #1a3a5c, var(--blue-dim));
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    border: 2px solid var(--border-bright);
+  }
+  .agent-name { font-weight: 700; font-size: 13px; }
+  .agent-role {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--blue);
+  }
+
+  /* ===== MAIN ===== */
+  .main {
+    margin-left: 240px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .topbar {
+    background: var(--bg-panel);
+    border-bottom: 1px solid var(--border);
+    padding: 0 28px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .page-title {
+    font-family: var(--head);
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 0.5px;
+  }
+
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .clock {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 18px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-family: var(--body);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    transition: all 0.15s;
+    text-transform: uppercase;
+  }
+
+  .btn-primary {
+    background: var(--blue);
+    color: #fff;
+    box-shadow: 0 0 20px rgba(45,143,255,0.3);
+  }
+  .btn-primary:hover { background: #3d9fff; box-shadow: 0 0 30px rgba(45,143,255,0.5); }
+
+  .btn-danger {
+    background: var(--red-dim);
+    color: #fff;
+    border: 1px solid var(--red);
+  }
+  .btn-danger:hover { background: var(--red); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { border-color: var(--border-bright); color: var(--text-primary); background: var(--bg-hover); }
+
+  .btn-sm { padding: 5px 12px; font-size: 11px; }
+
+  .content { padding: 28px; flex: 1; }
+
+  /* ===== PAGES ===== */
+  .page { display: none; animation: fadeIn 0.2s ease; }
+  .page.active { display: block; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+
+  /* ===== STATS GRID ===== */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .stat-card:hover { border-color: var(--border-bright); }
+
+  .stat-card::after {
+    content:'';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+  .stat-card.blue::after { background: linear-gradient(90deg, transparent, var(--blue), transparent); }
+  .stat-card.red::after { background: linear-gradient(90deg, transparent, var(--red), transparent); }
+  .stat-card.orange::after { background: linear-gradient(90deg, transparent, var(--orange), transparent); }
+  .stat-card.green::after { background: linear-gradient(90deg, transparent, var(--green), transparent); }
+
+  .stat-icon {
+    font-size: 24px;
+    margin-bottom: 10px;
+    opacity: 0.8;
+  }
+  .stat-value {
+    font-family: var(--head);
+    font-size: 34px;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+  .stat-delta {
+    font-size: 11px;
+    margin-top: 8px;
+    font-family: var(--mono);
+  }
+  .delta-up { color: var(--green); }
+  .delta-down { color: var(--red); }
+
+  /* ===== TABLE ===== */
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: var(--head);
+    font-weight: 700;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-title::before {
+    content:'';
+    display: inline-block;
+    width: 3px; height: 18px;
+    background: var(--blue);
+    border-radius: 2px;
+  }
+
+  .table-wrap {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .search-bar {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .search-input {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 14px;
+    color: var(--text-primary);
+    font-family: var(--body);
+    font-size: 13px;
+    width: 260px;
+    transition: border-color 0.2s;
+  }
+  .search-input:focus { outline: none; border-color: var(--blue); }
+  .search-input::placeholder { color: var(--text-muted); }
+
+  .filter-btn {
+    padding: 8px 14px;
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-family: var(--body);
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.15s;
+  }
+  .filter-btn:hover, .filter-btn.active { border-color: var(--blue); color: var(--blue); background: var(--blue-glow); }
+
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    padding: 10px 16px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-panel);
+    white-space: nowrap;
+  }
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.1s;
+    cursor: pointer;
+  }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--bg-hover); }
+  td { padding: 12px 16px; font-size: 14px; }
+
+  /* ===== BADGES ===== */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .badge::before { content:'●'; font-size: 7px; }
+
+  .badge-open { background: rgba(255,61,90,0.12); color: var(--red); border: 1px solid rgba(255,61,90,0.3); }
+  .badge-progress { background: rgba(255,140,42,0.12); color: var(--orange); border: 1px solid rgba(255,140,42,0.3); }
+  .badge-closed { background: rgba(0,230,118,0.1); color: var(--green); border: 1px solid rgba(0,230,118,0.25); }
+  .badge-urgent { background: rgba(255,61,90,0.2); color: #ff6b82; border: 1px solid var(--red); animation: blink 1.2s infinite; }
+  .badge-info { background: rgba(45,143,255,0.12); color: var(--blue); border: 1px solid rgba(45,143,255,0.3); }
+  .badge-neutral { background: rgba(255,255,255,0.05); color: var(--text-secondary); border: 1px solid var(--border); }
+  @keyframes blink { 0%,100%{opacity:1}50%{opacity:0.6} }
+
+  /* ===== MODAL ===== */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--bg-panel);
+    border: 1px solid var(--border-bright);
+    border-radius: 12px;
+    width: 680px;
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(45,143,255,0.1);
+    animation: slideUp 0.2s ease;
+  }
+
+  @keyframes slideUp { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
+
+  .modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .modal-title {
+    font-family: var(--head);
+    font-weight: 700;
+    font-size: 17px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: color 0.15s;
+  }
+  .close-btn:hover { color: var(--text-primary); }
+
+  .modal-body { padding: 24px; }
+  .modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  /* ===== FORM ===== */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-grid.full { grid-template-columns: 1fr; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group.span2 { grid-column: span 2; }
+
+  .form-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  .form-input, .form-select, .form-textarea {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    color: var(--text-primary);
+    font-family: var(--body);
+    font-size: 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+  }
+
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    outline: none;
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(45,143,255,0.1);
+  }
+
+  .form-select option { background: var(--bg-panel); }
+
+  .form-textarea { resize: vertical; min-height: 90px; line-height: 1.5; }
+
+  .form-divider {
+    grid-column: span 2;
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 4px 0;
+  }
+
+  /* ===== VIEW MODAL ===== */
+  .view-field {
+    margin-bottom: 16px;
+  }
+  .view-field-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .view-field-value {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-primary);
+  }
+  .view-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  /* ===== ALERTES ===== */
+  .alert-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+
+  .alert-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--red);
+    border-radius: 8px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    transition: background 0.15s;
+    animation: slideIn 0.3s ease;
+  }
+  .alert-item:hover { background: var(--bg-hover); }
+
+  .alert-item.warn { border-left-color: var(--orange); }
+  .alert-item.info { border-left-color: var(--blue); }
+
+  @keyframes slideIn { from{transform:translateX(-6px);opacity:0} to{transform:translateX(0);opacity:1} }
+
+  .alert-icon { font-size: 20px; }
+  .alert-content { flex: 1; }
+  .alert-title { font-weight: 700; font-size: 14px; }
+  .alert-desc { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+  .alert-time { font-family: var(--mono); font-size: 11px; color: var(--text-muted); }
+
+  /* ===== RECENT ACTIVITY ===== */
+  .activity-list { display: flex; flex-direction: column; }
+  .activity-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .activity-item:last-child { border-bottom: none; }
+  .activity-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+  .activity-text { font-size: 13px; line-height: 1.5; }
+  .activity-time { font-family: var(--mono); font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+
+  /* ===== AGENTS PAGE ===== */
+  .agents-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  .agent-card-big {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    transition: border-color 0.2s, transform 0.15s;
+    cursor: pointer;
+  }
+  .agent-card-big:hover { border-color: var(--border-bright); transform: translateY(-2px); }
+
+  .agent-card-big .av {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1a3a5c, var(--blue-dim));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    border: 2px solid var(--border-bright);
+    margin-bottom: 12px;
+  }
+
+  .agent-card-big .name { font-weight: 700; font-size: 15px; margin-bottom: 3px; }
+  .agent-card-big .grade {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--blue);
+    margin-bottom: 10px;
+  }
+  .agent-card-big .meta {
+    font-size: 12px;
+    color: var(--text-secondary);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  /* ===== FICHES PAGE ===== */
+  .fiche-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .detail-block {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .detail-block-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--head);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    background: var(--bg-panel);
+  }
+  .detail-block-body { padding: 16px; }
+
+  /* ===== DANGER ZONE ===== */
+  .danger-bar {
+    background: rgba(255,61,90,0.06);
+    border: 1px solid rgba(255,61,90,0.25);
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    color: #ff8899;
+    margin-bottom: 20px;
+  }
+
+  /* ===== TOAST ===== */
+  .toast-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 500;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .toast {
+    background: var(--bg-panel);
+    border: 1px solid var(--border-bright);
+    border-left: 3px solid var(--green);
+    border-radius: 8px;
+    padding: 12px 18px;
+    font-size: 13px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    animation: toastIn 0.25s ease, toastOut 0.25s ease 2.75s forwards;
+    max-width: 300px;
+  }
+  .toast.error { border-left-color: var(--red); }
+  .toast strong { font-weight: 700; display: block; margin-bottom: 2px; }
+
+  @keyframes toastIn { from{opacity:0;transform:translateX(10px)} to{opacity:1;transform:translateX(0)} }
+  @keyframes toastOut { from{opacity:1} to{opacity:0} }
+
+  /* ===== EMPTY STATE ===== */
+  .empty-state {
+    padding: 60px 20px;
+    text-align: center;
+    color: var(--text-muted);
+  }
+  .empty-state .icon { font-size: 48px; margin-bottom: 16px; opacity: 0.5; }
+  .empty-state .label { font-family: var(--mono); font-size: 12px; letter-spacing: 1px; }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-badge">
+        <div class="logo-icon">🛡️</div>
+        <div class="logo-text">
+          <div class="logo-title">Police Municipale</div>
+          <div class="logo-sub">Panneau de Commandement</div>
+        </div>
+      </div>
+      <div class="status-bar">
+        <div class="status-dot"></div>
+        SYSTÈME EN LIGNE
+      </div>
+    </div>
+
+    <nav class="nav">
+      <div class="nav-section-label">Principal</div>
+      <div class="nav-item active" onclick="showPage('dashboard', this)">
+        <span class="nav-icon">📊</span> Tableau de bord
+      </div>
+
+      <div class="nav-section-label">Opérations</div>
+      <div class="nav-item" onclick="showPage('rapports', this)">
+        <span class="nav-icon">📋</span> Rapports d'intervention
+        <span class="nav-badge" id="badge-rapports">0</span>
+      </div>
+      <div class="nav-item" onclick="showPage('signalements', this)">
+        <span class="nav-icon">🚨</span> Signalements
+        <span class="nav-badge" id="badge-signalements" style="background:var(--orange);display:none;">0</span>
+      </div>
+      <div class="nav-item" onclick="showPage('pv', this)">
+        <span class="nav-icon">📄</span> Procès-verbaux
+      </div>
+      <div class="nav-item" onclick="showPage('saisies', this)">
+        <span class="nav-icon">🔫</span> Saisies
+      </div>
+
+      <div class="nav-section-label">Dossiers</div>
+      <div class="nav-item" onclick="showPage('fiches', this)">
+        <span class="nav-icon">👤</span> Fiches individus
+      </div>
+      <div class="nav-item" onclick="showPage('vehicules', this)">
+        <span class="nav-icon">🚗</span> Véhicules recherchés
+      </div>
+
+      <div class="nav-section-label">Administration</div>
+      <div class="nav-item" onclick="showPage('agents', this)">
+        <span class="nav-icon">👮</span> Agents
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="agent-card">
+        <div class="agent-avatar">👮</div>
+        <div>
+          <div class="agent-name">Directeur</div>
+          <div class="agent-role">ACCÈS COMPLET</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="topbar">
+      <div class="page-title" id="page-title">Tableau de bord</div>
+      <div class="topbar-right">
+        <div class="clock" id="clock">--:--:--</div>
+        <button class="btn btn-primary btn-sm" onclick="openNewModal()">+ Nouveau rapport</button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- =================== DASHBOARD =================== -->
+      <div class="page active" id="page-dashboard">
+
+        <div class="stats-grid" id="stats-grid">
+          <div class="stat-card blue">
+            <div class="stat-icon">📋</div>
+            <div class="stat-value" id="stat-rapports">0</div>
+            <div class="stat-label">RAPPORTS TOTAL</div>
+            <div class="stat-delta delta-up">↑ Ce mois</div>
+          </div>
+          <div class="stat-card red">
+            <div class="stat-icon">🚨</div>
+            <div class="stat-value" id="stat-ouverts">0</div>
+            <div class="stat-label">DOSSIERS OUVERTS</div>
+          </div>
+          <div class="stat-card orange">
+            <div class="stat-icon">🔫</div>
+            <div class="stat-value" id="stat-gav">0</div>
+            <div class="stat-label">SAISIES TOTAL</div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-icon">👮</div>
+            <div class="stat-value" id="stat-agents">0</div>
+            <div class="stat-label">AGENTS ENREGISTRÉS</div>
+          </div>
+        </div>
+
+        <div id="alerts-section" style="display:none;">
+          <div class="section-header">
+            <div class="section-title">Alertes actives</div>
+          </div>
+          <div class="alert-feed" id="alerts-feed"></div>
+        </div>
+
+        <div class="section-header">
+          <div class="section-title">Activité récente</div>
+          <button class="btn btn-ghost btn-sm" onclick="showPage('rapports', document.querySelector('[onclick*=rapports]'))">Voir tout</button>
+        </div>
+
+        <div class="table-wrap">
+          <div id="activity-container">
+            <div class="empty-state">
+              <div class="icon">📋</div>
+              <div class="label">Aucune activité pour le moment</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- =================== RAPPORTS =================== -->
+      <div class="page" id="page-rapports">
+        <div class="section-header">
+          <div class="section-title">Rapports d'intervention</div>
+          <button class="btn btn-primary btn-sm" onclick="openNewModal()">+ Nouveau rapport</button>
+        </div>
+        <div class="table-wrap">
+          <div class="search-bar">
+            <input class="search-input" type="text" placeholder="🔍  Rechercher un rapport..." oninput="filterTable('rapports-table', this.value)">
+            <button class="filter-btn active" onclick="filterStatus('rapports-table','')">Tous</button>
+            <button class="filter-btn" onclick="filterStatus('rapports-table','Ouvert')">Ouverts</button>
+            <button class="filter-btn" onclick="filterStatus('rapports-table','En cours')">En cours</button>
+            <button class="filter-btn" onclick="filterStatus('rapports-table','Clôturé')">Clôturés</button>
+          </div>
+          <table id="rapports-table">
+            <thead>
+              <tr>
+                <th>N° DOSSIER</th>
+                <th>DATE</th>
+                <th>TYPE</th>
+                <th>LIEU</th>
+                <th>AGENT</th>
+                <th>STATUT</th>
+                <th>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody id="rapports-tbody">
+              <tr><td colspan="7"><div class="empty-state"><div class="icon">📋</div><div class="label">Aucun rapport enregistré</div></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- =================== SIGNALEMENTS =================== -->
+      <div class="page" id="page-signalements">
+        <div class="section-header">
+          <div class="section-title">Signalements</div>
+          <button class="btn btn-primary btn-sm" onclick="openSignalementModal()">+ Nouveau signalement</button>
+        </div>
+        <div class="table-wrap">
+          <div class="search-bar">
+            <input class="search-input" type="text" placeholder="🔍  Rechercher..." oninput="filterTable('signalements-table', this.value)">
+            <button class="filter-btn" onclick="filterStatus('signalements-table','Urgent')">Urgents</button>
+          </div>
+          <table id="signalements-table">
+            <thead>
+              <tr>
+                <th>N°</th>
+                <th>DATE/HEURE</th>
+                <th>TYPE</th>
+                <th>DESCRIPTION</th>
+                <th>ZONE</th>
+                <th>PRIORITÉ</th>
+                <th>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody id="signalements-tbody">
+              <tr><td colspan="7"><div class="empty-state"><div class="icon">🚨</div><div class="label">Aucun signalement</div></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- =================== PV =================== -->
+      <div class="page" id="page-pv">
+        <div class="section-header">
+          <div class="section-title">Procès-verbaux</div>
+          <button class="btn btn-primary btn-sm" onclick="openPvModal()">+ Nouveau PV</button>
+        </div>
+        <div class="table-wrap">
+          <div class="search-bar">
+            <input class="search-input" type="text" placeholder="🔍  Rechercher un PV..." oninput="filterTable('pv-table', this.value)">
+          </div>
+          <table id="pv-table">
+            <thead>
+              <tr><th>N° PV</th><th>DATE</th><th>CONTREVENANT</th><th>INFRACTION</th><th>MONTANT</th><th>AGENT</th><th>ACTIONS</th></tr>
+            </thead>
+            <tbody id="pv-tbody">
+              <tr><td colspan="7"><div class="empty-state"><div class="icon">📄</div><div class="label">Aucun procès-verbal</div></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- =================== SAISIES =================== -->
+      <div class="page" id="page-saisies">
+        <div class="section-header">
+          <div class="section-title">Saisies</div>
+          <button class="btn btn-primary btn-sm" onclick="openSaisieModal()">+ Nouvelle saisie</button>
+        </div>
+        <div class="table-wrap">
+          <div class="search-bar">
+            <input class="search-input" type="text" placeholder="🔍  Rechercher une saisie..." oninput="filterTable('saisies-table', this.value)">
+            <button class="filter-btn" onclick="filterStatus('saisies-table','Arme')">Armes</button>
+            <button class="filter-btn" onclick="filterStatus('saisies-table','Stupéfiants')">Stupéfiants</button>
+            <button class="filter-btn" onclick="filterStatus('saisies-table','Véhicule')">Véhicules</button>
+          </div>
+          <table id="saisies-table">
+            <thead>
+              <tr><th>N° SAISIE</th><th>DATE</th><th>CATÉGORIE</th><th>OBJET(S)</th><th>QUANTITÉ</th><th>PROPRIÉTAIRE</th><th>AGENT</th><th>DOSSIER LIÉ</th><th>ACTIONS</th></tr>
+            </thead>
+            <tbody id="saisies-tbody">
+              <tr><td colspan="9"><div class="empty-state"><div class="icon">🔫</div><div class="label">Aucune saisie enregistrée</div></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- =================== FICHES INDIVIDUS =================== -->
+      <div class="page" id="page-fiches">
+        <div class="section-header">
+          <div class="section-title">Fiches individus</div>
+          <button class="btn btn-primary btn-sm" onclick="openFicheModal()">+ Nouvelle fiche</button>
+        </div>
+        <div class="table-wrap">
+          <div class="search-bar">
+            <input class="search-input" type="text" placeholder="🔍  Rechercher un individu..." oninput="filterTable('fiches-table', this.value)">
+            <button class="filter-btn" onclick="filterStatus('fiches-table','Recherché')">Recherchés</button>
+            <button class="filter-btn" onclick="filterStatus('fiches-table','Dangereux')">Dangereux</button>
+          </div>
+          <table id="fiches-table">
+            <thead>
+              <tr><th>NOM PRÉNOM</th><th>DATE NAISS.</th><th>NATIONALITÉ</th><th>STATUT</th><th>ANTÉCÉDENTS</th><th>NOTE</th><th>ACTIONS</th></tr>
+            </thead>
+            <tbody id="fiches-tbody">
+              <tr><td colspan="7"><div class="empty-state"><div class="icon">👤</div><div class="label">Aucune fiche individu</div></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- =================== VEHICULES =================== -->
+      <div class="page" id="page-vehicules">
+        <div class="section-header">
+          <div class="section-title">Véhicules recherchés</div>
+          <button class="btn btn-primary btn-sm" onclick="openVehiculeModal()">+ Ajouter véhicule</button>
+        </div>
+        <div class="table-wrap">
+          <div class="search-bar">
+            <input class="search-input" type="text" placeholder="🔍  Plaque, modèle..." oninput="filterTable('vehicules-table', this.value)">
+          </div>
+          <table id="vehicules-table">
+            <thead>
+              <tr><th>PLAQUE</th><th>MARQUE/MODÈLE</th><th>COULEUR</th><th>PROPRIÉTAIRE</th><th>MOTIF</th><th>DATE AJOUT</th><th>ACTIONS</th></tr>
+            </thead>
+            <tbody id="vehicules-tbody">
+              <tr><td colspan="7"><div class="empty-state"><div class="icon">🚗</div><div class="label">Aucun véhicule recherché</div></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- =================== AGENTS =================== -->
+      <div class="page" id="page-agents">
+        <div class="section-header">
+          <div class="section-title">Gestion des agents</div>
+          <button class="btn btn-primary btn-sm" onclick="openAgentModal()">+ Ajouter agent</button>
+        </div>
+        <div class="agents-grid" id="agents-grid">
+          <div style="grid-column:1/-1;"><div class="empty-state"><div class="icon">👮</div><div class="label">Aucun agent enregistré</div></div></div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </main>
+</div>
+
+<!-- =================== TOAST =================== -->
+<div class="toast-container" id="toasts"></div>
+
+<!-- =================== MODAL NOUVEAU RAPPORT =================== -->
+<div class="modal-overlay" id="modal-rapport">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">📋 Nouveau rapport d'intervention</div>
+      <button class="close-btn" onclick="closeModal('modal-rapport')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Type d'intervention</label>
+          <select class="form-select" id="r-type">
+            <option>Trouble à l'ordre public</option>
+            <option>Vol / Cambriolage</option>
+            <option>Accident de la route</option>
+            <option>Agression physique</option>
+            <option>Trafic de stupéfiants</option>
+            <option>Fugitif / Poursuite</option>
+            <option>Prise d'otage</option>
+            <option>Homicide</option>
+            <option>Braquage</option>
+            <option>Contrôle routier</option>
+            <option>Autre</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Statut</label>
+          <select class="form-select" id="r-statut">
+            <option>Ouvert</option>
+            <option>En cours</option>
+            <option>Clôturé</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Date et heure</label>
+          <input class="form-input" type="datetime-local" id="r-date">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Lieu de l'intervention</label>
+          <input class="form-input" type="text" id="r-lieu" placeholder="ex: Rue de la Paix, Sandy Shores...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Agent responsable</label>
+          <input class="form-input" type="text" id="r-agent" placeholder="Nom de l'agent">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Personnes impliquées</label>
+          <input class="form-input" type="text" id="r-personnes" placeholder="Noms, rôles...">
+        </div>
+        <div class="form-group span2">
+          <label class="form-label">Description détaillée</label>
+          <textarea class="form-textarea" id="r-description" placeholder="Décrivez les faits, le déroulement de l'intervention..."></textarea>
+        </div>
+        <div class="form-group span2">
+          <label class="form-label">Suites données</label>
+          <textarea class="form-textarea" id="r-suites" placeholder="Arrestation, avertissement, transfert, en cours d'enquête..." style="min-height:60px;"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Pièces saisies</label>
+          <input class="form-input" type="text" id="r-pieces" placeholder="Armes, drogues, véhicule...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Priorité</label>
+          <select class="form-select" id="r-priorite">
+            <option>Normale</option>
+            <option>Élevée</option>
+            <option>Critique</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-rapport')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveRapport()">💾 Enregistrer le rapport</button>
+    </div>
+  </div>
+</div>
+
+<!-- =================== MODAL SIGNALEMENT =================== -->
+<div class="modal-overlay" id="modal-signalement">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🚨 Nouveau signalement</div>
+      <button class="close-btn" onclick="closeModal('modal-signalement')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Type de signalement</label>
+          <select class="form-select" id="s-type">
+            <option>Personne suspecte</option>
+            <option>Véhicule suspect</option>
+            <option>Tir / Coups de feu</option>
+            <option>Rixe / Bagarre</option>
+            <option>Incendie</option>
+            <option>Accident</option>
+            <option>Fugitif en fuite</option>
+            <option>Autre</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Priorité</label>
+          <select class="form-select" id="s-priorite">
+            <option>Normal</option>
+            <option>Urgent</option>
+            <option>Critique</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Zone / Secteur</label>
+          <input class="form-input" type="text" id="s-zone" placeholder="ex: Zone Portuaire, Pillbox Hill...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Heure du signalement</label>
+          <input class="form-input" type="datetime-local" id="s-date">
+        </div>
+        <div class="form-group span2">
+          <label class="form-label">Description</label>
+          <textarea class="form-textarea" id="s-description" placeholder="Détails du signalement..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-signalement')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveSignalement()">💾 Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- =================== MODAL PV =================== -->
+<div class="modal-overlay" id="modal-pv">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">📄 Nouveau procès-verbal</div>
+      <button class="close-btn" onclick="closeModal('modal-pv')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Nom du contrevenant</label>
+          <input class="form-input" type="text" id="pv-contrevenant" placeholder="Prénom NOM">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Date</label>
+          <input class="form-input" type="datetime-local" id="pv-date">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Infraction</label>
+          <input class="form-input" type="text" id="pv-infraction" placeholder="Nature de l'infraction">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Montant ($)</label>
+          <input class="form-input" type="number" id="pv-montant" placeholder="0">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Agent verbalisateur</label>
+          <input class="form-input" type="text" id="pv-agent" placeholder="Nom de l'agent">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Lieu</label>
+          <input class="form-input" type="text" id="pv-lieu" placeholder="Lieu de l'infraction">
+        </div>
+        <div class="form-group span2">
+          <label class="form-label">Observations</label>
+          <textarea class="form-textarea" id="pv-observations" placeholder="Détails supplémentaires..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-pv')">Annuler</button>
+      <button class="btn btn-primary" onclick="savePv()">💾 Enregistrer le PV</button>
+    </div>
+  </div>
+</div>
+
+<!-- =================== MODAL SAISIE =================== -->
+<div class="modal-overlay" id="modal-saisie">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🔫 Nouvelle saisie</div>
+      <button class="close-btn" onclick="closeModal('modal-saisie')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Catégorie</label>
+          <select class="form-select" id="sa-categorie">
+            <option>Arme à feu</option>
+            <option>Arme blanche</option>
+            <option>Stupéfiants</option>
+            <option>Véhicule</option>
+            <option>Argent liquide</option>
+            <option>Matériel électronique</option>
+            <option>Munitions</option>
+            <option>Autre</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Date de saisie</label>
+          <input class="form-input" type="datetime-local" id="sa-date">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Objet(s) saisi(s)</label>
+          <input class="form-input" type="text" id="sa-objet" placeholder="ex: Pistolet Glock 17, Sac de cocaïne...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Quantité / Détails</label>
+          <input class="form-input" type="text" id="sa-quantite" placeholder="ex: 1 unité, 250g, $5 000...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Propriétaire / Suspect</label>
+          <input class="form-input" type="text" id="sa-proprio" placeholder="Nom de la personne">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Agent responsable</label>
+          <input class="form-input" type="text" id="sa-agent" placeholder="Nom de l'agent">
+        </div>
+        <div class="form-group">
+          <label class="form-label">N° de dossier lié</label>
+          <input class="form-input" type="text" id="sa-dossier" placeholder="ex: INT-0001 (optionnel)">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Lieu de saisie</label>
+          <input class="form-input" type="text" id="sa-lieu" placeholder="Adresse / Zone">
+        </div>
+        <div class="form-group span2">
+          <label class="form-label">Description / Remarques</label>
+          <textarea class="form-textarea" id="sa-description" placeholder="Contexte de la saisie, état de l'objet, numéro de série..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-saisie')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveSaisie()">💾 Enregistrer la saisie</button>
+    </div>
+  </div>
+</div>
+
+<!-- =================== MODAL FICHE =================== -->
+<div class="modal-overlay" id="modal-fiche">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">👤 Nouvelle fiche individu</div>
+      <button class="close-btn" onclick="closeModal('modal-fiche')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Nom complet</label>
+          <input class="form-input" type="text" id="fi-nom" placeholder="Prénom NOM">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Date de naissance</label>
+          <input class="form-input" type="date" id="fi-naissance">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nationalité</label>
+          <input class="form-input" type="text" id="fi-nationalite" placeholder="Française, Américaine...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Statut</label>
+          <select class="form-select" id="fi-statut">
+            <option>Fichier actif</option>
+            <option>Recherché</option>
+            <option>Dangereux</option>
+            <option>Sous surveillance</option>
+            <option>Antécédents</option>
+          </select>
+        </div>
+        <div class="form-group span2">
+          <label class="form-label">Antécédents judiciaires</label>
+          <textarea class="form-textarea" id="fi-antecedents" placeholder="Infractions, condamnations passées..."></textarea>
+        </div>
+        <div class="form-group span2">
+          <label class="form-label">Notes / Remarques</label>
+          <textarea class="form-textarea" id="fi-notes" placeholder="Informations complémentaires, relations connues..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-fiche')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveFiche()">💾 Enregistrer la fiche</button>
+    </div>
+  </div>
+</div>
+
+<!-- =================== MODAL VEHICULE =================== -->
+<div class="modal-overlay" id="modal-vehicule">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🚗 Véhicule recherché</div>
+      <button class="close-btn" onclick="closeModal('modal-vehicule')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Plaque d'immatriculation</label>
+          <input class="form-input" type="text" id="v-plaque" placeholder="ABC-1234">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Marque / Modèle</label>
+          <input class="form-input" type="text" id="v-modele" placeholder="ex: Vapid Dominator">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Couleur</label>
+          <input class="form-input" type="text" id="v-couleur" placeholder="Noire, Rouge...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Propriétaire</label>
+          <input class="form-input" type="text" id="v-proprio" placeholder="Nom du propriétaire">
+        </div>
+        <div class="form-group span2">
+          <label class="form-label">Motif de recherche</label>
+          <textarea class="form-textarea" id="v-motif" placeholder="Raison pour laquelle ce véhicule est recherché..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-vehicule')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveVehicule()">💾 Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- =================== MODAL AGENT =================== -->
+<div class="modal-overlay" id="modal-agent">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">👮 Ajouter un agent</div>
+      <button class="close-btn" onclick="closeModal('modal-agent')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Nom complet (IC)</label>
+          <input class="form-input" type="text" id="ag-nom" placeholder="Prénom NOM">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Pseudo (OOC)</label>
+          <input class="form-input" type="text" id="ag-pseudo" placeholder="Pseudo Discord / Serveur">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Grade</label>
+          <select class="form-select" id="ag-grade">
+            <option>Gardien Stagiaire</option>
+            <option>Gardien Titulaire</option>
+            <option>Gardien Principal</option>
+            <option>Brigadier</option>
+            <option>Brigadier-Chef</option>
+            <option>Brigadier-Chef Principal</option>
+            <option>Chef de Police</option>
+            <option>Chef De Service Stagiaire</option>
+            <option>Chef De Service Classe Normale</option>
+            <option>Chef De Service Classe Supérieur</option>
+            <option>Chef De Service Classe Exceptionnel</option>
+            <option>Directeur Stagiaire</option>
+            <option>Directeur</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Matricule</label>
+          <input class="form-input" type="text" id="ag-matricule" placeholder="ex: PM-042">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Statut</label>
+          <select class="form-select" id="ag-statut">
+            <option>Actif</option>
+            <option>En formation</option>
+            <option>Suspendu</option>
+            <option>Inactif</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Date d'embauche</label>
+          <input class="form-input" type="date" id="ag-date">
+        </div>
+        <div class="form-group span2">
+          <label class="form-label">Notes</label>
+          <textarea class="form-textarea" id="ag-notes" placeholder="Informations complémentaires..." style="min-height:60px;"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-agent')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveAgent()">💾 Enregistrer l'agent</button>
+    </div>
+  </div>
+</div>
+
+<!-- =================== MODAL VIEW =================== -->
+<div class="modal-overlay" id="modal-view">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="view-title">Détails</div>
+      <button class="close-btn" onclick="closeModal('modal-view')">✕</button>
+    </div>
+    <div class="modal-body" id="view-body"></div>
+    <div class="modal-footer" id="view-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-view')">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+//  DATA STORE
+// ============================================================
+const DB = {
+  rapports: [],
+  signalements: [],
+  pvs: [],
+  saisies: [],
+  fiches: [],
+  vehicules: [],
+  agents: []
+};
+
+let counters = { r:1, s:1, p:1, g:1, f:1, v:1, a:1 };
+
+function pad(n, len=4) { return String(n).padStart(len,'0'); }
+function nowDT() { return new Date().toISOString().slice(0,16); }
+function fmtDT(v) {
+  if(!v) return '—';
+  const d = new Date(v);
+  return d.toLocaleDateString('fr-FR') + ' ' + d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+}
+
+// ============================================================
+//  NAVIGATION
+// ============================================================
+const pageTitles = {
+  dashboard:'Tableau de bord', rapports:'Rapports d\'intervention',
+  signalements:'Signalements', pv:'Procès-verbaux', saisies:'Saisies',
+  fiches:'Fiches individus', vehicules:'Véhicules recherchés', agents:'Agents'
+};
+
+function showPage(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(el) el.classList.add('active');
+  document.getElementById('page-title').textContent = pageTitles[id] || id;
+  if(id === 'dashboard') refreshDashboard();
+}
+
+// ============================================================
+//  CLOCK
+// ============================================================
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent =
+    now.toLocaleTimeString('fr-FR') + ' — ' + now.toLocaleDateString('fr-FR');
+}
+setInterval(updateClock, 1000); updateClock();
+
+// ============================================================
+//  MODAL HELPERS
+// ============================================================
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', e => { if(e.target === o) o.classList.remove('open'); });
+});
+
+function openNewModal() {
+  document.getElementById('r-date').value = nowDT();
+  openModal('modal-rapport');
+}
+function openSignalementModal() {
+  document.getElementById('s-date').value = nowDT();
+  openModal('modal-signalement');
+}
+function openPvModal() {
+  document.getElementById('pv-date').value = nowDT();
+  openModal('modal-pv');
+}
+function openSaisieModal() {
+  document.getElementById('sa-date').value = nowDT();
+  openModal('modal-saisie');
+}
+function openGavModal() {} // kept as stub for compatibility
+function openFicheModal() { openModal('modal-fiche'); }
+function openVehiculeModal() { openModal('modal-vehicule'); }
+function openAgentModal() { openModal('modal-agent'); }
+
+// ============================================================
+//  TOAST
+// ============================================================
+function toast(title, msg, type='') {
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.innerHTML = `<strong>${title}</strong>${msg||''}`;
+  document.getElementById('toasts').appendChild(t);
+  setTimeout(() => t.remove(), 3200);
+}
+
+// ============================================================
+//  BADGE UTILS
+// ============================================================
+function badgeHtml(text) {
+  const map = {
+    'Ouvert':'open','En cours':'progress','Clôturé':'closed',
+    'Urgent':'urgent','Critique':'urgent','Normal':'info',
+    'Normale':'info','Élevée':'progress',
+    'Actif':'closed','Suspendu':'open','En formation':'progress','Inactif':'neutral',
+    'Recherché':'urgent','Dangereux':'open','Sous surveillance':'progress',
+    'Fichier actif':'info','Antécédents':'neutral',
+    'En GAV':'urgent','Libéré':'closed'
+  };
+  const cls = map[text] || 'neutral';
+  return `<span class="badge badge-${cls}">${text}</span>`;
+}
+
+// ============================================================
+//  SAVE FUNCTIONS
+// ============================================================
+function clearInputs(ids) { ids.forEach(id => { const el = document.getElementById(id); if(el) el.value = el.tagName==='SELECT' ? el.options[0].value : ''; }); }
+
+function saveRapport() {
+  const data = {
+    id: 'INT-'+pad(counters.r++),
+    type: document.getElementById('r-type').value,
+    statut: document.getElementById('r-statut').value,
+    date: document.getElementById('r-date').value,
+    lieu: document.getElementById('r-lieu').value || '—',
+    agent: document.getElementById('r-agent').value || '—',
+    personnes: document.getElementById('r-personnes').value,
+    description: document.getElementById('r-description').value,
+    suites: document.getElementById('r-suites').value,
+    pieces: document.getElementById('r-pieces').value,
+    priorite: document.getElementById('r-priorite').value
+  };
+  DB.rapports.unshift(data);
+  closeModal('modal-rapport');
+  clearInputs(['r-lieu','r-agent','r-personnes','r-description','r-suites','r-pieces']);
+  renderRapports(); updateBadges(); refreshDashboard();
+  toast('✅ Rapport enregistré', data.id, '');
+  logActivity(`🆕 Rapport <b>${data.id}</b> créé — ${data.type}`, 'var(--blue)');
+}
+
+function saveSignalement() {
+  const data = {
+    id: 'SIG-'+pad(counters.s++),
+    type: document.getElementById('s-type').value,
+    priorite: document.getElementById('s-priorite').value,
+    zone: document.getElementById('s-zone').value || '—',
+    date: document.getElementById('s-date').value,
+    description: document.getElementById('s-description').value
+  };
+  DB.signalements.unshift(data);
+  closeModal('modal-signalement');
+  clearInputs(['s-zone','s-description']);
+  renderSignalements(); updateBadges(); refreshDashboard();
+  toast('🚨 Signalement enregistré', data.id, data.priorite==='Urgent'?'error':'');
+  logActivity(`🚨 Signalement <b>${data.id}</b> — ${data.type} (${data.priorite})`, 'var(--orange)');
+}
+
+function savePv() {
+  const data = {
+    id: 'PV-'+pad(counters.p++),
+    contrevenant: document.getElementById('pv-contrevenant').value || '—',
+    date: document.getElementById('pv-date').value,
+    infraction: document.getElementById('pv-infraction').value || '—',
+    montant: document.getElementById('pv-montant').value || '0',
+    agent: document.getElementById('pv-agent').value || '—',
+    lieu: document.getElementById('pv-lieu').value || '—',
+    observations: document.getElementById('pv-observations').value
+  };
+  DB.pvs.unshift(data);
+  closeModal('modal-pv');
+  clearInputs(['pv-contrevenant','pv-infraction','pv-montant','pv-agent','pv-lieu','pv-observations']);
+  renderPvs(); refreshDashboard();
+  toast('📄 PV enregistré', data.id);
+  logActivity(`📄 PV <b>${data.id}</b> — ${data.contrevenant} — $${data.montant}`, 'var(--yellow)');
+}
+
+function saveSaisie() {
+  const data = {
+    id: 'SAI-'+pad(counters.g++),
+    categorie: document.getElementById('sa-categorie').value,
+    date: document.getElementById('sa-date').value,
+    objet: document.getElementById('sa-objet').value || '—',
+    quantite: document.getElementById('sa-quantite').value || '—',
+    proprio: document.getElementById('sa-proprio').value || '—',
+    agent: document.getElementById('sa-agent').value || '—',
+    dossier: document.getElementById('sa-dossier').value || '—',
+    lieu: document.getElementById('sa-lieu').value || '—',
+    description: document.getElementById('sa-description').value
+  };
+  DB.saisies.unshift(data);
+  closeModal('modal-saisie');
+  clearInputs(['sa-objet','sa-quantite','sa-proprio','sa-agent','sa-dossier','sa-lieu','sa-description']);
+  renderSaisies(); refreshDashboard();
+  toast('🔫 Saisie enregistrée', data.id);
+  logActivity(`🔫 Saisie <b>${data.id}</b> — ${data.objet} (${data.categorie})`, 'var(--red)');
+}
+
+function saveFiche() {
+  const data = {
+    id: 'FIC-'+pad(counters.f++),
+    nom: document.getElementById('fi-nom').value || '—',
+    naissance: document.getElementById('fi-naissance').value,
+    nationalite: document.getElementById('fi-nationalite').value || '—',
+    statut: document.getElementById('fi-statut').value,
+    antecedents: document.getElementById('fi-antecedents').value || 'Aucun',
+    notes: document.getElementById('fi-notes').value
+  };
+  DB.fiches.unshift(data);
+  closeModal('modal-fiche');
+  clearInputs(['fi-nom','fi-naissance','fi-nationalite','fi-antecedents','fi-notes']);
+  renderFiches(); refreshDashboard();
+  toast('👤 Fiche créée', data.nom);
+  logActivity(`👤 Fiche créée — ${data.nom} (${data.statut})`, 'var(--cyan)');
+}
+
+function saveVehicule() {
+  const data = {
+    id: 'VEH-'+pad(counters.v++),
+    plaque: document.getElementById('v-plaque').value || '—',
+    modele: document.getElementById('v-modele').value || '—',
+    couleur: document.getElementById('v-couleur').value || '—',
+    proprio: document.getElementById('v-proprio').value || '—',
+    motif: document.getElementById('v-motif').value,
+    date: new Date().toISOString().slice(0,10)
+  };
+  DB.vehicules.unshift(data);
+  closeModal('modal-vehicule');
+  clearInputs(['v-plaque','v-modele','v-couleur','v-proprio','v-motif']);
+  renderVehicules(); refreshDashboard();
+  toast('🚗 Véhicule ajouté', data.plaque);
+  logActivity(`🚗 Véhicule recherché — <b>${data.plaque}</b> ${data.modele}`, 'var(--orange)');
+}
+
+function saveAgent() {
+  const data = {
+    id: 'AGT-'+pad(counters.a++),
+    nom: document.getElementById('ag-nom').value || '—',
+    pseudo: document.getElementById('ag-pseudo').value || '—',
+    grade: document.getElementById('ag-grade').value,
+    matricule: document.getElementById('ag-matricule').value || '—',
+    statut: document.getElementById('ag-statut').value,
+    date: document.getElementById('ag-date').value,
+    notes: document.getElementById('ag-notes').value
+  };
+  DB.agents.unshift(data);
+  closeModal('modal-agent');
+  clearInputs(['ag-nom','ag-pseudo','ag-matricule','ag-date','ag-notes']);
+  renderAgents(); refreshDashboard();
+  toast('👮 Agent enregistré', data.nom);
+  logActivity(`👮 Nouvel agent — ${data.nom} (${data.grade})`, 'var(--green)');
+}
+
+// ============================================================
+//  RENDER FUNCTIONS
+// ============================================================
+function renderRapports() {
+  const tbody = document.getElementById('rapports-tbody');
+  if(!DB.rapports.length) {
+    tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="icon">📋</div><div class="label">Aucun rapport enregistré</div></div></td></tr>';
+    return;
+  }
+  tbody.innerHTML = DB.rapports.map((r,i) => `
+    <tr>
+      <td><span style="font-family:var(--mono);font-size:12px;color:var(--blue)">${r.id}</span></td>
+      <td style="font-family:var(--mono);font-size:11px;color:var(--text-secondary)">${fmtDT(r.date)}</td>
+      <td>${r.type}</td>
+      <td style="font-size:12px;">${r.lieu}</td>
+      <td style="font-size:12px;">${r.agent}</td>
+      <td>${badgeHtml(r.statut)}</td>
+      <td>
+        <button class="btn btn-ghost btn-sm" onclick="viewRapport(${i})">👁 Voir</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteItem('rapports',${i})">🗑</button>
+      </td>
+    </tr>`).join('');
+}
+
+function renderSignalements() {
+  const tbody = document.getElementById('signalements-tbody');
+  if(!DB.signalements.length) {
+    tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="icon">🚨</div><div class="label">Aucun signalement</div></div></td></tr>';
+    return;
+  }
+  tbody.innerHTML = DB.signalements.map((s,i) => `
+    <tr>
+      <td><span style="font-family:var(--mono);font-size:12px;color:var(--orange)">${s.id}</span></td>
+      <td style="font-family:var(--mono);font-size:11px;color:var(--text-secondary)">${fmtDT(s.date)}</td>
+      <td>${s.type}</td>
+      <td style="font-size:12px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.description||'—'}</td>
+      <td style="font-size:12px;">${s.zone}</td>
+      <td>${badgeHtml(s.priorite)}</td>
+      <td>
+        <button class="btn btn-ghost btn-sm" onclick="viewSignalement(${i})">👁 Voir</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteItem('signalements',${i})">🗑</button>
+      </td>
+    </tr>`).join('');
+}
+
+function renderPvs() {
+  const tbody = document.getElementById('pv-tbody');
+  if(!DB.pvs.length) {
+    tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="icon">📄</div><div class="label">Aucun procès-verbal</div></div></td></tr>';
+    return;
+  }
+  tbody.innerHTML = DB.pvs.map((p,i) => `
+    <tr>
+      <td><span style="font-family:var(--mono);font-size:12px;color:var(--yellow)">${p.id}</span></td>
+      <td style="font-family:var(--mono);font-size:11px;color:var(--text-secondary)">${fmtDT(p.date)}</td>
+      <td>${p.contrevenant}</td>
+      <td style="font-size:12px;">${p.infraction}</td>
+      <td style="font-family:var(--mono);color:var(--green)">$${Number(p.montant).toLocaleString()}</td>
+      <td style="font-size:12px;">${p.agent}</td>
+      <td>
+        <button class="btn btn-ghost btn-sm" onclick="viewPv(${i})">👁 Voir</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteItem('pvs',${i})">🗑</button>
+      </td>
+    </tr>`).join('');
+}
+
+function renderSaisies() {
+  const tbody = document.getElementById('saisies-tbody');
+  if(!DB.saisies.length) {
+    tbody.innerHTML = '<tr><td colspan="9"><div class="empty-state"><div class="icon">🔫</div><div class="label">Aucune saisie enregistrée</div></div></td></tr>';
+    return;
+  }
+  const catIcons = {
+    'Arme à feu':'🔫','Arme blanche':'🔪','Stupéfiants':'💊','Véhicule':'🚗',
+    'Argent liquide':'💵','Matériel électronique':'📱','Munitions':'🔶','Autre':'📦'
+  };
+  tbody.innerHTML = DB.saisies.map((s,i) => `
+    <tr>
+      <td><span style="font-family:var(--mono);font-size:12px;color:var(--red)">${s.id}</span></td>
+      <td style="font-family:var(--mono);font-size:11px;color:var(--text-secondary)">${fmtDT(s.date)}</td>
+      <td><span style="color:var(--orange)">${catIcons[s.categorie]||'📦'}</span> ${s.categorie}</td>
+      <td><b>${s.objet}</b></td>
+      <td style="font-family:var(--mono);font-size:12px;color:var(--cyan)">${s.quantite}</td>
+      <td style="font-size:12px;">${s.proprio}</td>
+      <td style="font-size:12px;">${s.agent}</td>
+      <td style="font-family:var(--mono);font-size:11px;color:${s.dossier!=='—'?'var(--blue)':'var(--text-muted)'}">${s.dossier}</td>
+      <td>
+        <button class="btn btn-ghost btn-sm" onclick="viewSaisie(${i})">👁 Voir</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteItem('saisies',${i})">🗑</button>
+      </td>
+    </tr>`).join('');
+}
+
+function renderFiches() {
+  const tbody = document.getElementById('fiches-tbody');
+  if(!DB.fiches.length) {
+    tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="icon">👤</div><div class="label">Aucune fiche individu</div></div></td></tr>';
+    return;
+  }
+  tbody.innerHTML = DB.fiches.map((f,i) => `
+    <tr>
+      <td><b>${f.nom}</b></td>
+      <td style="font-family:var(--mono);font-size:11px;color:var(--text-secondary)">${f.naissance ? new Date(f.naissance).toLocaleDateString('fr-FR') : '—'}</td>
+      <td style="font-size:12px;">${f.nationalite}</td>
+      <td>${badgeHtml(f.statut)}</td>
+      <td style="font-size:12px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${f.antecedents}</td>
+      <td style="font-size:12px;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text-secondary)">${f.notes||'—'}</td>
+      <td>
+        <button class="btn btn-ghost btn-sm" onclick="viewFiche(${i})">👁 Voir</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteItem('fiches',${i})">🗑</button>
+      </td>
+    </tr>`).join('');
+}
+
+function renderVehicules() {
+  const tbody = document.getElementById('vehicules-tbody');
+  if(!DB.vehicules.length) {
+    tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="icon">🚗</div><div class="label">Aucun véhicule recherché</div></div></td></tr>';
+    return;
+  }
+  tbody.innerHTML = DB.vehicules.map((v,i) => `
+    <tr>
+      <td><span style="font-family:var(--mono);font-weight:700;color:var(--orange)">${v.plaque}</span></td>
+      <td>${v.modele}</td>
+      <td>${v.couleur}</td>
+      <td>${v.proprio}</td>
+      <td style="font-size:12px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${v.motif||'—'}</td>
+      <td style="font-family:var(--mono);font-size:11px;color:var(--text-secondary)">${v.date}</td>
+      <td>
+        <button class="btn btn-danger btn-sm" onclick="deleteItem('vehicules',${i})">🗑 Retirer</button>
+      </td>
+    </tr>`).join('');
+}
+
+function renderAgents() {
+  const grid = document.getElementById('agents-grid');
+  if(!DB.agents.length) {
+    grid.innerHTML = '<div style="grid-column:1/-1;"><div class="empty-state"><div class="icon">👮</div><div class="label">Aucun agent enregistré</div></div></div>';
+    return;
+  }
+  const gradeColors = {
+    'Gardien Stagiaire':           'var(--text-muted)',
+    'Gardien Titulaire':           'var(--text-secondary)',
+    'Gardien Principal':           'var(--text-primary)',
+    'Brigadier':                   'var(--orange)',
+    'Brigadier-Chef':              'var(--yellow)',
+    'Brigadier-Chef Principal':    'var(--yellow)',
+    'Chef de Police':              'var(--green)',
+    'Chef De Service Stagiaire':   'var(--cyan)',
+    'Chef De Service Classe Normale':    'var(--cyan)',
+    'Chef De Service Classe Supérieur':  'var(--cyan)',
+    'Chef De Service Classe Exceptionnel':'var(--cyan)',
+    'Directeur Stagiaire':         'var(--blue)',
+    'Directeur':                   'var(--blue)'
+  };
+  grid.innerHTML = DB.agents.map((a,i) => `
+    <div class="agent-card-big">
+      <div class="av">👮</div>
+      <div class="name">${a.nom}</div>
+      <div class="grade" style="color:${gradeColors[a.grade]||'var(--blue)'}">
+        ${a.grade} — <span style="color:var(--text-muted)">${a.matricule}</span>
+      </div>
+      <div style="margin-bottom:10px;">${badgeHtml(a.statut)}</div>
+      <div class="meta">
+        <span>🎮 ${a.pseudo}</span>
+        ${a.date?`<span>📅 Embauche: ${new Date(a.date).toLocaleDateString('fr-FR')}</span>`:''}
+        ${a.notes?`<span style="margin-top:4px;font-style:italic;color:var(--text-muted)">${a.notes}</span>`:''}
+      </div>
+      <div style="margin-top:12px;display:flex;gap:6px;">
+        <button class="btn btn-danger btn-sm" onclick="deleteItem('agents',${i})" style="width:100%">🗑 Retirer</button>
+      </div>
+    </div>`).join('');
+}
+
+// ============================================================
+//  VIEW MODALS
+// ============================================================
+function viewRapport(i) {
+  const r = DB.rapports[i];
+  document.getElementById('view-title').innerHTML = `📋 ${r.id} — ${r.type}`;
+  document.getElementById('view-body').innerHTML = `
+    <div class="view-grid">
+      <div class="view-field"><div class="view-field-label">Statut</div><div>${badgeHtml(r.statut)}</div></div>
+      <div class="view-field"><div class="view-field-label">Priorité</div><div>${badgeHtml(r.priorite)}</div></div>
+      <div class="view-field"><div class="view-field-label">Date</div><div class="view-field-value">${fmtDT(r.date)}</div></div>
+      <div class="view-field"><div class="view-field-label">Lieu</div><div class="view-field-value">${r.lieu}</div></div>
+      <div class="view-field"><div class="view-field-label">Agent responsable</div><div class="view-field-value">${r.agent}</div></div>
+      <div class="view-field"><div class="view-field-label">Personnes impliquées</div><div class="view-field-value">${r.personnes||'—'}</div></div>
+    </div>
+    <div class="view-field" style="margin-top:16px;"><div class="view-field-label">Description</div><div class="view-field-value" style="background:var(--bg-card);padding:12px;border-radius:6px;border:1px solid var(--border);line-height:1.6">${r.description||'—'}</div></div>
+    <div class="view-field" style="margin-top:12px;"><div class="view-field-label">Suites données</div><div class="view-field-value" style="background:var(--bg-card);padding:12px;border-radius:6px;border:1px solid var(--border)">${r.suites||'—'}</div></div>
+    <div class="view-field" style="margin-top:12px;"><div class="view-field-label">Pièces saisies</div><div class="view-field-value">${r.pieces||'Aucune'}</div></div>`;
+  document.getElementById('view-footer').innerHTML = `<button class="btn btn-ghost" onclick="closeModal('modal-view')">Fermer</button>`;
+  openModal('modal-view');
+}
+
+function viewSignalement(i) {
+  const s = DB.signalements[i];
+  document.getElementById('view-title').innerHTML = `🚨 ${s.id} — ${s.type}`;
+  document.getElementById('view-body').innerHTML = `
+    <div class="view-grid">
+      <div class="view-field"><div class="view-field-label">Priorité</div><div>${badgeHtml(s.priorite)}</div></div>
+      <div class="view-field"><div class="view-field-label">Zone</div><div class="view-field-value">${s.zone}</div></div>
+      <div class="view-field"><div class="view-field-label">Date / Heure</div><div class="view-field-value">${fmtDT(s.date)}</div></div>
+    </div>
+    <div class="view-field" style="margin-top:16px;"><div class="view-field-label">Description</div><div class="view-field-value" style="background:var(--bg-card);padding:12px;border-radius:6px;border:1px solid var(--border);line-height:1.6">${s.description||'—'}</div></div>`;
+  document.getElementById('view-footer').innerHTML = `<button class="btn btn-ghost" onclick="closeModal('modal-view')">Fermer</button>`;
+  openModal('modal-view');
+}
+
+function viewPv(i) {
+  const p = DB.pvs[i];
+  document.getElementById('view-title').innerHTML = `📄 ${p.id}`;
+  document.getElementById('view-body').innerHTML = `
+    <div class="view-grid">
+      <div class="view-field"><div class="view-field-label">Contrevenant</div><div class="view-field-value"><b>${p.contrevenant}</b></div></div>
+      <div class="view-field"><div class="view-field-label">Montant</div><div class="view-field-value" style="color:var(--green);font-family:var(--mono);font-size:18px">$${Number(p.montant).toLocaleString()}</div></div>
+      <div class="view-field"><div class="view-field-label">Infraction</div><div class="view-field-value">${p.infraction}</div></div>
+      <div class="view-field"><div class="view-field-label">Lieu</div><div class="view-field-value">${p.lieu}</div></div>
+      <div class="view-field"><div class="view-field-label">Agent verbalisateur</div><div class="view-field-value">${p.agent}</div></div>
+      <div class="view-field"><div class="view-field-label">Date</div><div class="view-field-value">${fmtDT(p.date)}</div></div>
+    </div>
+    ${p.observations?`<div class="view-field" style="margin-top:16px;"><div class="view-field-label">Observations</div><div class="view-field-value" style="background:var(--bg-card);padding:12px;border-radius:6px;border:1px solid var(--border)">${p.observations}</div></div>`:''}`;
+  document.getElementById('view-footer').innerHTML = `<button class="btn btn-ghost" onclick="closeModal('modal-view')">Fermer</button>`;
+  openModal('modal-view');
+}
+
+function viewFiche(i) {
+  const f = DB.fiches[i];
+  document.getElementById('view-title').innerHTML = `👤 ${f.nom}`;
+  document.getElementById('view-body').innerHTML = `
+    <div class="view-grid">
+      <div class="view-field"><div class="view-field-label">Statut</div><div>${badgeHtml(f.statut)}</div></div>
+      <div class="view-field"><div class="view-field-label">Nationalité</div><div class="view-field-value">${f.nationalite}</div></div>
+      <div class="view-field"><div class="view-field-label">Date de naissance</div><div class="view-field-value">${f.naissance?new Date(f.naissance).toLocaleDateString('fr-FR'):'—'}</div></div>
+      <div class="view-field"><div class="view-field-label">Référence</div><div class="view-field-value" style="font-family:var(--mono);color:var(--blue)">${f.id}</div></div>
+    </div>
+    <div class="view-field" style="margin-top:16px;"><div class="view-field-label">Antécédents judiciaires</div><div class="view-field-value" style="background:var(--bg-card);padding:12px;border-radius:6px;border:1px solid var(--border);line-height:1.6">${f.antecedents}</div></div>
+    ${f.notes?`<div class="view-field" style="margin-top:12px;"><div class="view-field-label">Notes</div><div class="view-field-value" style="background:var(--bg-card);padding:12px;border-radius:6px;border:1px solid var(--border)">${f.notes}</div></div>`:''}`;
+  document.getElementById('view-footer').innerHTML = `<button class="btn btn-ghost" onclick="closeModal('modal-view')">Fermer</button>`;
+  openModal('modal-view');
+}
+
+function viewSaisie(i) {
+  const s = DB.saisies[i];
+  const catIcons = {
+    'Arme à feu':'🔫','Arme blanche':'🔪','Stupéfiants':'💊','Véhicule':'🚗',
+    'Argent liquide':'💵','Matériel électronique':'📱','Munitions':'🔶','Autre':'📦'
+  };
+  document.getElementById('view-title').innerHTML = `${catIcons[s.categorie]||'📦'} ${s.id} — ${s.categorie}`;
+  document.getElementById('view-body').innerHTML = `
+    <div class="view-grid">
+      <div class="view-field"><div class="view-field-label">Objet saisi</div><div class="view-field-value"><b>${s.objet}</b></div></div>
+      <div class="view-field"><div class="view-field-label">Quantité / Détails</div><div class="view-field-value" style="font-family:var(--mono);color:var(--cyan)">${s.quantite}</div></div>
+      <div class="view-field"><div class="view-field-label">Propriétaire / Suspect</div><div class="view-field-value">${s.proprio}</div></div>
+      <div class="view-field"><div class="view-field-label">Agent responsable</div><div class="view-field-value">${s.agent}</div></div>
+      <div class="view-field"><div class="view-field-label">Lieu de saisie</div><div class="view-field-value">${s.lieu}</div></div>
+      <div class="view-field"><div class="view-field-label">Dossier lié</div><div class="view-field-value" style="font-family:var(--mono);color:var(--blue)">${s.dossier}</div></div>
+      <div class="view-field"><div class="view-field-label">Date</div><div class="view-field-value">${fmtDT(s.date)}</div></div>
+    </div>
+    ${s.description?`<div class="view-field" style="margin-top:16px;"><div class="view-field-label">Description / Remarques</div><div class="view-field-value" style="background:var(--bg-card);padding:12px;border-radius:6px;border:1px solid var(--border);line-height:1.6">${s.description}</div></div>`:''}`;
+  document.getElementById('view-footer').innerHTML = `<button class="btn btn-ghost" onclick="closeModal('modal-view')">Fermer</button>`;
+  openModal('modal-view');
+}
+
+function deleteItem(store, i) {
+  if(!confirm('Confirmer la suppression de cet enregistrement ?')) return;
+  DB[store].splice(i,1);
+  const renders = {
+    rapports:renderRapports, signalements:renderSignalements,
+    pvs:renderPvs, saisies:renderSaisies, fiches:renderFiches,
+    vehicules:renderVehicules, agents:renderAgents
+  };
+  renders[store]?.();
+  updateBadges(); refreshDashboard();
+  toast('🗑 Supprimé', '', 'error');
+}
+
+// ============================================================
+//  ACTIVITY LOG
+// ============================================================
+const activityLog = [];
+
+function logActivity(text, color='var(--blue)') {
+  const now = new Date().toLocaleTimeString('fr-FR');
+  activityLog.unshift({ text, color, time: now });
+  if(activityLog.length > 20) activityLog.pop();
+}
+
+// ============================================================
+//  DASHBOARD REFRESH
+// ============================================================
+function refreshDashboard() {
+  document.getElementById('stat-rapports').textContent = DB.rapports.length;
+  document.getElementById('stat-ouverts').textContent = DB.rapports.filter(r=>r.statut==='Ouvert'||r.statut==='En cours').length;
+  document.getElementById('stat-gav').textContent = DB.saisies.length;
+  document.getElementById('stat-agents').textContent = DB.agents.length;
+
+  // Alerts
+  const urgents = DB.signalements.filter(s=>s.priorite==='Urgent'||s.priorite==='Critique');
+  const alertSection = document.getElementById('alerts-section');
+  const alertFeed = document.getElementById('alerts-feed');
+  if(urgents.length) {
+    alertSection.style.display='block';
+    alertFeed.innerHTML = urgents.slice(0,3).map(s=>`
+      <div class="alert-item ${s.priorite==='Critique'?'':'warn'}" onclick="viewSignalement(${DB.signalements.indexOf(s)})">
+        <div class="alert-icon">${s.priorite==='Critique'?'🔴':'🟠'}</div>
+        <div class="alert-content">
+          <div class="alert-title">${s.id} — ${s.type}</div>
+          <div class="alert-desc">${s.zone} — ${s.description?.slice(0,60)||''}${s.description?.length>60?'...':''}</div>
+        </div>
+        <div class="alert-time">${fmtDT(s.date)}</div>
+      </div>`).join('');
+  } else {
+    alertSection.style.display='none';
+  }
+
+  // Activity
+  const container = document.getElementById('activity-container');
+  if(!activityLog.length) {
+    container.innerHTML = '<div class="empty-state"><div class="icon">📋</div><div class="label">Aucune activité pour le moment</div></div>';
+  } else {
+    container.innerHTML = `<div class="activity-list">${activityLog.slice(0,8).map(a=>`
+      <div class="activity-item">
+        <div class="activity-dot" style="background:${a.color}"></div>
+        <div>
+          <div class="activity-text">${a.text}</div>
+          <div class="activity-time">${a.time}</div>
+        </div>
+      </div>`).join('')}</div>`;
+  }
+}
+
+// ============================================================
+//  BADGES
+// ============================================================
+function updateBadges() {
+  const open = DB.rapports.filter(r=>r.statut==='Ouvert').length;
+  const br = document.getElementById('badge-rapports');
+  br.textContent = open;
+  br.style.display = open ? '' : 'none';
+
+  const sig = DB.signalements.filter(s=>s.priorite==='Urgent'||s.priorite==='Critique').length;
+  const bs = document.getElementById('badge-signalements');
+  bs.textContent = sig;
+  bs.style.display = sig ? '' : 'none';
+}
+
+// ============================================================
+//  SEARCH / FILTER
+// ============================================================
+function filterTable(tableId, query) {
+  const q = query.toLowerCase();
+  document.querySelectorAll(`#${tableId} tbody tr`).forEach(row => {
+    row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+function filterStatus(tableId, status) {
+  document.querySelectorAll(`#${tableId} tbody tr`).forEach(row => {
+    row.style.display = (!status || row.textContent.includes(status)) ? '' : 'none';
+  });
+  document.querySelectorAll(`[onclick*="${tableId}"]`).forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// ============================================================
+//  INIT
+// ============================================================
+refreshDashboard();
+</script>
+</body>
+</html>
