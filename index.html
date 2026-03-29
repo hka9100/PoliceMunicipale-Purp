@@ -29,7 +29,6 @@
   window._storage = storage;
   window._firebase = { collection, addDoc, getDocs, deleteDoc, doc, updateDoc, onSnapshot, setDoc, getDoc, query, orderBy, ref, uploadBytes, getDownloadURL };
 
-  // Signal app ready
   window.dispatchEvent(new Event('firebase-ready'));
 </script>
 <style>
@@ -506,7 +505,7 @@
     background: var(--bg-panel);
     white-space: nowrap;
   }
-  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; cursor: pointer; }
   tbody tr:last-child { border-bottom: none; }
   tbody tr:hover { background: var(--bg-hover); }
   td { padding: 12px 16px; font-size: 14px; }
@@ -599,7 +598,6 @@
   .form-select option { background: var(--bg-panel); }
   .form-textarea { resize: vertical; min-height: 90px; line-height: 1.5; }
 
-  /* Photo upload */
   .photo-upload-zone {
     border: 2px dashed var(--border-bright);
     border-radius: 8px;
@@ -632,7 +630,6 @@
     display: flex; align-items: center; justify-content: center;
   }
 
-  /* ===== VIEW MODAL ===== */
   .view-field { margin-bottom: 16px; }
   .view-field-label { font-family: var(--mono); font-size: 10px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
   .view-field-value { font-size: 14px; line-height: 1.5; color: var(--text-primary); }
@@ -640,9 +637,7 @@
   .view-photos { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
   .view-photos img { width: 100px; height: 100px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border-bright); cursor: pointer; }
 
-  /* ===== AGENTS PAGE ===== */
   .agents-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; margin-top: 20px; }
-
   .agent-card-big {
     background: var(--bg-card);
     border: 1px solid var(--border);
@@ -657,31 +652,6 @@
   .agent-card-big .grade { font-family: var(--mono); font-size: 11px; color: var(--blue); margin-bottom: 10px; }
   .agent-card-big .meta { font-size: 12px; color: var(--text-secondary); display: flex; flex-direction: column; gap: 4px; }
 
-  /* ===== ALERT FEED ===== */
-  .alert-feed { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
-  .alert-item {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--red);
-    border-radius: 8px;
-    padding: 14px 18px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    transition: background 0.15s;
-    animation: slideIn 0.3s ease;
-  }
-  .alert-item:hover { background: var(--bg-hover); }
-  .alert-item.warn { border-left-color: var(--orange); }
-  .alert-item.info { border-left-color: var(--blue); }
-  @keyframes slideIn { from{transform:translateX(-6px);opacity:0} to{transform:translateX(0);opacity:1} }
-  .alert-icon { font-size: 20px; }
-  .alert-content { flex: 1; }
-  .alert-title { font-weight: 700; font-size: 14px; }
-  .alert-desc { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
-  .alert-time { font-family: var(--mono); font-size: 11px; color: var(--text-muted); }
-
-  /* ===== ACTIVITY ===== */
   .activity-list { display: flex; flex-direction: column; }
   .activity-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border); }
   .activity-item:last-child { border-bottom: none; }
@@ -689,7 +659,6 @@
   .activity-text { font-size: 13px; line-height: 1.5; }
   .activity-time { font-family: var(--mono); font-size: 10px; color: var(--text-muted); margin-top: 2px; }
 
-  /* ===== GESTION PAGE ===== */
   .gestion-section { margin-bottom: 32px; }
   .gestion-title { font-family: var(--head); font-weight: 700; font-size: 15px; margin-bottom: 14px; color: var(--blue); display: flex; align-items: center; gap: 8px; }
   .gestion-title::before { content:''; display: inline-block; width: 3px; height: 16px; background: var(--blue); border-radius: 2px; }
@@ -722,7 +691,6 @@
     margin-bottom: 12px;
   }
 
-  /* ===== TOAST ===== */
   .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 500; display: flex; flex-direction: column; gap: 8px; }
   .toast {
     background: var(--bg-panel);
@@ -741,7 +709,6 @@
   @keyframes toastIn { from{opacity:0;transform:translateX(10px)} to{opacity:1;transform:translateX(0)} }
   @keyframes toastOut { from{opacity:1} to{opacity:0} }
 
-  /* ===== EMPTY STATE ===== */
   .empty-state { padding: 60px 20px; text-align: center; color: var(--text-muted); }
   .empty-state .icon { font-size: 48px; margin-bottom: 16px; opacity: 0.5; }
   .empty-state .label { font-family: var(--mono); font-size: 12px; letter-spacing: 1px; }
@@ -750,7 +717,6 @@
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 3px; }
 
-  /* image lightbox */
   .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9000; align-items: center; justify-content: center; }
   .lightbox.open { display: flex; }
   .lightbox img { max-width: 90vw; max-height: 90vh; border-radius: 8px; }
@@ -759,30 +725,10 @@
 </head>
 <body>
 
-<!-- ========== MASTER CODE BUTTON (top-left) ========== -->
-<button id="master-btn" onclick="openMasterModal()" style="
-  position:fixed;top:14px;left:14px;z-index:99999;
-  background:rgba(13,21,32,0.85);border:1px solid #1e3050;
-  border-radius:8px;padding:7px 13px;color:#3d5a7a;
-  font-family:'Share Tech Mono',monospace;font-size:11px;
-  letter-spacing:1px;cursor:pointer;transition:all 0.2s;
-  backdrop-filter:blur(4px);
-" onmouseover="this.style.borderColor='#2d8fff';this.style.color='#2d8fff';"
-   onmouseout="this.style.borderColor='#1e3050';this.style.color='#3d5a7a';">
-  🔑 ACCÈS MAÎTRE
-</button>
+<button id="master-btn" onclick="openMasterModal()" style="position:fixed;top:14px;left:14px;z-index:99999;background:rgba(13,21,32,0.85);border:1px solid #1e3050;border-radius:8px;padding:7px 13px;color:#3d5a7a;font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:1px;cursor:pointer;transition:all 0.2s;backdrop-filter:blur(4px);" onmouseover="this.style.borderColor='#2d8fff';this.style.color='#2d8fff';" onmouseout="this.style.borderColor='#1e3050';this.style.color='#3d5a7a';">🔑 ACCÈS MAÎTRE</button>
 
-<!-- ========== MASTER CODE MODAL ========== -->
-<div id="modal-master" style="
-  display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);
-  z-index:99998;align-items:center;justify-content:center;backdrop-filter:blur(6px);
-" onclick="if(event.target===this)closeMasterModal()">
-  <div style="
-    background:#111a27;border:1px solid #2a4a75;border-radius:14px;
-    padding:36px 40px;width:360px;max-width:95vw;
-    box-shadow:0 20px 60px rgba(0,0,0,0.7),0 0 40px rgba(45,143,255,0.12);
-    animation:slideUp 0.2s ease;
-  ">
+<div id="modal-master" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:99998;align-items:center;justify-content:center;backdrop-filter:blur(6px);" onclick="if(event.target===this)closeMasterModal()">
+  <div style="background:#111a27;border:1px solid #2a4a75;border-radius:14px;padding:36px 40px;width:360px;max-width:95vw;box-shadow:0 20px 60px rgba(0,0,0,0.7),0 0 40px rgba(45,143,255,0.12);animation:slideUp 0.2s ease;">
     <div style="text-align:center;margin-bottom:24px;">
       <div style="font-size:36px;margin-bottom:8px;filter:drop-shadow(0 0 12px rgba(45,143,255,0.6));">🔐</div>
       <div style="font-family:'Exo 2',sans-serif;font-weight:900;font-size:16px;letter-spacing:2px;color:#2d8fff;text-transform:uppercase;">Code d'accès maître</div>
@@ -790,11 +736,7 @@
     </div>
     <div style="margin-bottom:16px;">
       <div style="font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1.5px;color:#3d5a7a;text-transform:uppercase;margin-bottom:6px;">Code secret</div>
-      <input id="master-code-input" type="password" placeholder="••••••••"
-        style="background:#162030;border:1px solid #1e3050;border-radius:6px;padding:12px 14px;color:#d0e8ff;font-family:'Share Tech Mono',monospace;font-size:16px;width:100%;letter-spacing:4px;transition:border-color 0.2s,box-shadow 0.2s;"
-        onfocus="this.style.borderColor='#2d8fff';this.style.boxShadow='0 0 0 3px rgba(45,143,255,0.1)'"
-        onblur="this.style.borderColor='#1e3050';this.style.boxShadow='none'"
-        onkeydown="if(event.key==='Enter')doMasterLogin()">
+      <input id="master-code-input" type="password" placeholder="••••••••" style="background:#162030;border:1px solid #1e3050;border-radius:6px;padding:12px 14px;color:#d0e8ff;font-family:'Share Tech Mono',monospace;font-size:16px;width:100%;letter-spacing:4px;transition:border-color 0.2s,box-shadow 0.2s;" onfocus="this.style.borderColor='#2d8fff';this.style.boxShadow='0 0 0 3px rgba(45,143,255,0.1)'" onblur="this.style.borderColor='#1e3050';this.style.boxShadow='none'" onkeydown="if(event.key==='Enter')doMasterLogin()">
     </div>
     <div id="master-error" style="display:none;color:#ff3d5a;font-family:'Share Tech Mono',monospace;font-size:11px;margin-bottom:12px;text-align:center;">❌ Code incorrect</div>
     <div style="display:flex;gap:10px;">
@@ -804,7 +746,6 @@
   </div>
 </div>
 
-<!-- ========== LOGIN SCREEN ========== -->
 <div id="login-screen">
   <div class="login-box">
     <div class="login-logo">
@@ -812,1768 +753,219 @@
       <div class="title">Police Municipale</div>
       <div class="sub">Panneau de Commandement</div>
     </div>
-
     <div class="login-tabs">
       <div class="login-tab active" id="tab-login" onclick="switchLoginTab('login')">Connexion</div>
       <div class="login-tab" id="tab-register" onclick="switchLoginTab('register')">Demander l'accès</div>
     </div>
-
-    <!-- Login form -->
     <div id="form-login" class="login-form">
-      <div>
-        <div class="form-label">Prénom</div>
-        <input class="form-input" type="text" id="login-prenom" placeholder="Votre prénom IC">
-      </div>
-      <div>
-        <div class="form-label">Nom</div>
-        <input class="form-input" type="text" id="login-nom" placeholder="Votre nom IC">
-      </div>
+      <div><div class="form-label">Prénom</div><input class="form-input" type="text" id="login-prenom" placeholder="Votre prénom IC"></div>
+      <div><div class="form-label">Nom</div><input class="form-input" type="text" id="login-nom" placeholder="Votre nom IC"></div>
       <button class="login-btn" onclick="doLogin()">Se connecter</button>
     </div>
-
-    <!-- Register form -->
     <div id="form-register" class="login-form" style="display:none;">
-      <div>
-        <div class="form-label">Prénom (IC)</div>
-        <input class="form-input" type="text" id="reg-prenom" placeholder="Votre prénom">
-      </div>
-      <div>
-        <div class="form-label">Nom (IC)</div>
-        <input class="form-input" type="text" id="reg-nom" placeholder="Votre nom">
-      </div>
-      <div>
-        <div class="form-label">Pseudo (Discord/Serveur)</div>
-        <input class="form-input" type="text" id="reg-pseudo" placeholder="Pseudo OOC">
-      </div>
-      <div>
-        <div class="form-label">Grade</div>
-        <select class="form-input" id="reg-grade">
-          <option>Gardien Stagiaire</option>
-          <option>Gardien Titulaire</option>
-          <option>Gardien Principal</option>
-          <option>Brigadier</option>
-          <option>Brigadier-Chef</option>
-          <option>Brigadier-Chef Principal</option>
-          <option>Chef de Police</option>
-          <option>Chef De Service Stagiaire</option>
-          <option>Chef De Service Classe Normale</option>
-          <option>Chef De Service Classe Supérieur</option>
-          <option>Chef De Service Classe Exceptionnel</option>
-          <option>Directeur Stagiaire</option>
-          <option>Directeur Adjoint</option>
-          <option>Directeur</option>
-        </select>
-      </div>
+      <div><div class="form-label">Prénom (IC)</div><input class="form-input" type="text" id="reg-prenom" placeholder="Votre prénom"></div>
+      <div><div class="form-label">Nom (IC)</div><input class="form-input" type="text" id="reg-nom" placeholder="Votre nom"></div>
+      <div><div class="form-label">Pseudo (Discord/Serveur)</div><input class="form-input" type="text" id="reg-pseudo" placeholder="Pseudo OOC"></div>
+      <div><div class="form-label">Grade</div><select class="form-input" id="reg-grade"><option>Gardien Stagiaire</option><option>Gardien Titulaire</option><option>Gardien Principal</option><option>Brigadier</option><option>Brigadier-Chef</option><option>Brigadier-Chef Principal</option><option>Chef de Police</option><option>Chef De Service Stagiaire</option><option>Chef De Service Classe Normale</option><option>Chef De Service Classe Supérieur</option><option>Chef De Service Classe Exceptionnel</option><option>Directeur Stagiaire</option><option>Directeur Adjoint</option><option>Directeur</option></select></div>
       <button class="login-btn" onclick="doRegister()">Envoyer la demande d'accès</button>
     </div>
-
-    <div id="login-pending" class="login-pending">
-      ⏳ Votre demande d'accès est en attente de validation par un Directeur.
-    </div>
+    <div id="login-pending" class="login-pending">⏳ Votre demande d'accès est en attente de validation par un Directeur.</div>
   </div>
 </div>
 
-<!-- ========== LIGHTBOX ========== -->
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
   <button class="lightbox-close" onclick="closeLightbox()">✕</button>
   <img id="lightbox-img" src="" alt="">
 </div>
 
-<!-- ========== MAIN APP ========== -->
 <div class="app" id="main-app" style="display:none;">
-
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-logo">
-      <div class="logo-badge">
-        <div class="logo-icon">🛡️</div>
-        <div class="logo-text">
-          <div class="logo-title">Police Municipale</div>
-          <div class="logo-sub">Panneau de Commandement</div>
-        </div>
-      </div>
-      <div class="status-bar">
-        <div class="status-dot"></div>
-        SYSTÈME EN LIGNE
-      </div>
+      <div class="logo-badge"><div class="logo-icon">🛡️</div><div class="logo-text"><div class="logo-title">Police Municipale</div><div class="logo-sub">Panneau de Commandement</div></div></div>
+      <div class="status-bar"><div class="status-dot"></div>SYSTÈME EN LIGNE</div>
     </div>
-
     <nav class="nav">
       <div class="nav-section-label">Principal</div>
-      <div class="nav-item active" onclick="showPage('dashboard', this)">
-        <span class="nav-icon">📊</span> Tableau de bord
-      </div>
-
+      <div class="nav-item active" onclick="showPage('dashboard', this)"><span class="nav-icon">📊</span> Tableau de bord</div>
       <div class="nav-section-label">Opérations</div>
-      <div class="nav-item" onclick="showPage('rapports', this)">
-        <span class="nav-icon">📋</span> Rapports d'intervention
-        <span class="nav-badge" id="badge-rapports" style="display:none;">0</span>
-      </div>
-      <div class="nav-item" onclick="showPage('signalements', this)">
-        <span class="nav-icon">🚨</span> Signalements
-        <span class="nav-badge" id="badge-signalements" style="background:var(--orange);display:none;">0</span>
-      </div>
-      <div class="nav-item" onclick="showPage('plaintes', this)">
-        <span class="nav-icon">⚖️</span> Plaintes
-        <span class="nav-badge" id="badge-plaintes" style="background:var(--red);display:none;">0</span>
-      </div>
-      <div class="nav-item" onclick="showPage('saisies', this)">
-        <span class="nav-icon">🔫</span> Saisies
-      </div>
-
+      <div class="nav-item" onclick="showPage('rapports', this)"><span class="nav-icon">📋</span> Rapports d'intervention<span class="nav-badge" id="badge-rapports" style="display:none;">0</span></div>
+      <div class="nav-item" onclick="showPage('signalements', this)"><span class="nav-icon">🚨</span> Signalements<span class="nav-badge" id="badge-signalements" style="background:var(--orange);display:none;">0</span></div>
+      <div class="nav-item" onclick="showPage('plaintes', this)"><span class="nav-icon">⚖️</span> Plaintes<span class="nav-badge" id="badge-plaintes" style="background:var(--red);display:none;">0</span></div>
+      <div class="nav-item" onclick="showPage('saisies', this)"><span class="nav-icon">🔫</span> Saisies</div>
       <div class="nav-section-label">Dossiers</div>
-      <div class="nav-item" onclick="showPage('fiches', this)">
-        <span class="nav-icon">👤</span> Fiches individus
-      </div>
-      <div class="nav-item" onclick="showPage('vehicules', this)">
-        <span class="nav-icon">🚗</span> Véhicules recherchés
-      </div>
-
+      <div class="nav-item" onclick="showPage('fiches', this)"><span class="nav-icon">👤</span> Fiches individus</div>
+      <div class="nav-item" onclick="showPage('vehicules', this)"><span class="nav-icon">🚗</span> Véhicules recherchés</div>
       <div class="nav-section-label">Administration</div>
-      <div class="nav-item" onclick="showPage('agents', this)">
-        <span class="nav-icon">👮</span> Agents
-      </div>
-      <div class="nav-item admin-only" id="nav-gestion" onclick="showPage('gestion', this)">
-        <span class="nav-icon">⚙️</span> Gestion du site
-        <span class="nav-badge" id="badge-gestion" style="background:var(--orange);display:none;">0</span>
-      </div>
+      <div class="nav-item" onclick="showPage('agents', this)"><span class="nav-icon">👮</span> Agents</div>
+      <div class="nav-item admin-only" id="nav-gestion" onclick="showPage('gestion', this)"><span class="nav-icon">⚙️</span> Gestion du site<span class="nav-badge" id="badge-gestion" style="background:var(--orange);display:none;">0</span></div>
     </nav>
-
-    <div class="sidebar-footer">
-      <div class="agent-card">
-        <div class="agent-avatar">👮</div>
-        <div>
-          <div class="agent-name" id="sidebar-username">Agent</div>
-          <div class="agent-role" id="sidebar-role">CONNECTÉ</div>
-        </div>
-      </div>
-      <button class="btn btn-ghost btn-sm" style="margin-top:10px;width:100%;" onclick="doLogout()">🚪 Déconnexion</button>
-    </div>
+    <div class="sidebar-footer"><div class="agent-card"><div class="agent-avatar">👮</div><div><div class="agent-name" id="sidebar-username">Agent</div><div class="agent-role" id="sidebar-role">CONNECTÉ</div></div></div><button class="btn btn-ghost btn-sm" style="margin-top:10px;width:100%;" onclick="doLogout()">🚪 Déconnexion</button></div>
   </aside>
-
-  <!-- MAIN -->
   <main class="main">
-    <div class="topbar">
-      <div class="page-title" id="page-title">Tableau de bord</div>
-      <div class="topbar-right">
-        <div class="clock" id="clock">--:--:--</div>
-        <button class="btn btn-primary btn-sm" onclick="openNewModal()">+ Nouveau rapport</button>
+    <div class="topbar"><div class="page-title" id="page-title">Tableau de bord</div><div class="topbar-right"><div class="clock" id="clock">--:--:--</div><button class="btn btn-primary btn-sm" onclick="openNewModal()">+ Nouveau rapport</button></div></div>
+    <div class="content">
+      <div class="page active" id="page-dashboard">
+        <div class="stats-grid"><div class="stat-card blue"><div class="stat-icon">📋</div><div class="stat-value" id="stat-rapports">0</div><div class="stat-label">RAPPORTS TOTAL</div></div><div class="stat-card red"><div class="stat-icon">⚖️</div><div class="stat-value" id="stat-plaintes">0</div><div class="stat-label">PLAINTES ACTIVES</div></div><div class="stat-card orange"><div class="stat-icon">🔫</div><div class="stat-value" id="stat-gav">0</div><div class="stat-label">SAISIES TOTAL</div></div><div class="stat-card green"><div class="stat-icon">👮</div><div class="stat-value" id="stat-agents">0</div><div class="stat-label">AGENTS ENREGISTRÉS</div></div></div>
+        <div class="section-header"><div class="section-title">Activité récente</div></div>
+        <div class="table-wrap"><div id="activity-container"><div class="empty-state"><div class="icon">📋</div><div class="label">Aucune activité pour le moment</div></div></div></div>
+      </div>
+      <div class="page" id="page-rapports"><div class="section-header"><div class="section-title">Rapports d'intervention</div><button class="btn btn-primary btn-sm" onclick="openNewModal()">+ Nouveau rapport</button></div><div class="table-wrap"><div class="search-bar"><input class="search-input" type="text" placeholder="🔍 Rechercher..." oninput="filterTable('rapports-table', this.value)"><button class="filter-btn active" onclick="filterStatus('rapports-table','')">Tous</button><button class="filter-btn" onclick="filterStatus('rapports-table','Ouvert')">Ouverts</button><button class="filter-btn" onclick="filterStatus('rapports-table','En cours')">En cours</button><button class="filter-btn" onclick="filterStatus('rapports-table','Clôturé')">Clôturés</button></div><table id="rapports-table"><thead><tr><th>N° DOSSIER</th><th>DATE</th><th>TYPE</th><th>LIEU</th><th>AGENT</th><th>STATUT</th><th>ACTIONS</th></tr></thead><tbody id="rapports-tbody"><tr><td colspan="7"><div class="empty-state"><div class="icon">📋</div><div class="label">Aucun rapport enregistré</div></div></td></tr></tbody></table></div></div>
+      <div class="page" id="page-signalements"><div class="section-header"><div class="section-title">Signalements</div><button class="btn btn-primary btn-sm" onclick="openSignalementModal()">+ Nouveau signalement</button></div><div class="table-wrap"><div class="search-bar"><input class="search-input" type="text" placeholder="🔍 Rechercher..." oninput="filterTable('signalements-table', this.value)"><button class="filter-btn" onclick="filterStatus('signalements-table','Urgent')">Urgents</button></div><table id="signalements-table"><thead><tr><th>N°</th><th>DATE/HEURE</th><th>TYPE</th><th>DESCRIPTION</th><th>ZONE</th><th>PRIORITÉ</th><th>ACTIONS</th></tr></thead><tbody id="signalements-tbody"><tr><td colspan="7"><div class="empty-state"><div class="icon">🚨</div><div class="label">Aucun signalement</div></div></td></tr></tbody></table></div></div>
+      <div class="page" id="page-plaintes"><div class="section-header"><div class="section-title">Plaintes</div><button class="btn btn-primary btn-sm" onclick="openPlainteModal()">+ Déposer une plainte</button></div><div class="table-wrap"><div class="search-bar"><input class="search-input" type="text" placeholder="🔍 Rechercher..." oninput="filterTable('plaintes-table', this.value)"><button class="filter-btn active" onclick="filterStatus('plaintes-table','')">Toutes</button><button class="filter-btn" onclick="filterStatus('plaintes-table','En attente')">En attente</button><button class="filter-btn" onclick="filterStatus('plaintes-table','En cours')">En cours</button><button class="filter-btn" onclick="filterStatus('plaintes-table','Résolue')">Résolues</button></div><table id="plaintes-table"><thead><tr><th>N° PLAINTE</th><th>DATE</th><th>PLAIGNANT</th><th>AGENT MIS EN CAUSE</th><th>MOTIF</th><th>STATUT</th><th>ACTIONS</th></tr></thead><tbody id="plaintes-tbody"><tr><td colspan="7"><div class="empty-state"><div class="icon">⚖️</div><div class="label">Aucune plainte enregistrée</div></div></td></tr></tbody></table></div></div>
+      <div class="page" id="page-saisies"><div class="section-header"><div class="section-title">Saisies</div><button class="btn btn-primary btn-sm" onclick="openSaisieModal()">+ Nouvelle saisie</button></div><div class="table-wrap"><div class="search-bar"><input class="search-input" type="text" placeholder="🔍 Rechercher..." oninput="filterTable('saisies-table', this.value)"><button class="filter-btn" onclick="filterStatus('saisies-table','Arme')">Armes</button><button class="filter-btn" onclick="filterStatus('saisies-table','Stupéfiants')">Stupéfiants</button><button class="filter-btn" onclick="filterStatus('saisies-table','Véhicule')">Véhicules</button></div><table id="saisies-table"><thead><tr><th>N° SAISIE</th><th>DATE</th><th>CATÉGORIE</th><th>OBJET(S)</th><th>QUANTITÉ</th><th>PROPRIÉTAIRE</th><th>AGENT</th><th>DOSSIER LIÉ</th><th>ACTIONS</th></tr></thead><tbody id="saisies-tbody"><tr><td colspan="9"><div class="empty-state"><div class="icon">🔫</div><div class="label">Aucune saisie enregistrée</div></div></td></tr></tbody></table></div></div>
+      <div class="page" id="page-fiches"><div class="section-header"><div class="section-title">Fiches individus</div><button class="btn btn-primary btn-sm" onclick="openFicheModal()">+ Nouvelle fiche</button></div><div class="table-wrap"><div class="search-bar"><input class="search-input" type="text" placeholder="🔍 Rechercher..." oninput="filterTable('fiches-table', this.value)"><button class="filter-btn" onclick="filterStatus('fiches-table','Recherché')">Recherchés</button><button class="filter-btn" onclick="filterStatus('fiches-table','Dangereux')">Dangereux</button></div><table id="fiches-table"><thead><tr><th>PHOTO</th><th>NOM PRÉNOM</th><th>DATE NAISS.</th><th>NATIONALITÉ</th><th>STATUT</th><th>ANTÉCÉDENTS</th><th>ACTIONS</th></tr></thead><tbody id="fiches-tbody"><tr><td colspan="7"><div class="empty-state"><div class="icon">👤</div><div class="label">Aucune fiche individu</div></div></td></tr></tbody></table></div></div>
+      <div class="page" id="page-vehicules"><div class="section-header"><div class="section-title">Véhicules recherchés</div><button class="btn btn-primary btn-sm" onclick="openVehiculeModal()">+ Ajouter véhicule</button></div><div class="table-wrap"><div class="search-bar"><input class="search-input" type="text" placeholder="🔍 Plaque, modèle..." oninput="filterTable('vehicules-table', this.value)"></div><table id="vehicules-table"><thead><tr><th>PHOTO</th><th>PLAQUE</th><th>MARQUE/MODÈLE</th><th>COULEUR</th><th>PROPRIÉTAIRE</th><th>MOTIF</th><th>DATE AJOUT</th><th>ACTIONS</th></tr></thead><tbody id="vehicules-tbody"><tr><td colspan="8"><div class="empty-state"><div class="icon">🚗</div><div class="label">Aucun véhicule recherché</div></div></td></tr></tbody></table></div></div>
+      <div class="page" id="page-agents"><div class="section-header"><div class="section-title">Gestion des agents</div><button class="btn btn-primary btn-sm" onclick="openAgentModal()">+ Ajouter agent</button></div><div class="agents-grid" id="agents-grid"><div style="grid-column:1/-1;"><div class="empty-state"><div class="icon">👮</div><div class="label">Aucun agent enregistré</div></div></div></div></div>
+      <div class="page" id="page-gestion">
+        <div class="section-header"><div class="section-title">Gestion du site</div></div>
+        <div class="gestion-section"><div class="gestion-title">🌐 Autorisation de connexion au site</div><div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;"><div><div style="font-weight:700;font-size:15px;margin-bottom:4px;">Accès au site activé</div><div style="font-size:12px;color:var(--text-secondary);font-family:var(--mono);">Si désactivé, aucun agent ne peut se connecter (sauf code maître).</div></div><div style="display:flex;align-items:center;gap:12px;"><span id="site-access-label" style="font-family:var(--mono);font-size:11px;color:var(--green);">ACTIVÉ</span><div id="site-access-toggle" onclick="toggleSiteAccess()" style="width:52px;height:28px;border-radius:14px;background:var(--green);cursor:pointer;position:relative;transition:background 0.3s;border:1px solid rgba(255,255,255,0.1);"><div id="site-access-knob" style="position:absolute;top:3px;left:26px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left 0.3s;box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div></div></div></div></div>
+        <div class="gestion-section"><div class="gestion-title">⏳ Demandes d'accès en attente</div><div id="access-requests-list"><div class="empty-state" style="padding:30px 0;"><div class="label">Aucune demande en attente</div></div></div></div>
+        <div class="gestion-section"><div class="gestion-title">✅ Utilisateurs autorisés</div><div id="approved-users-list"><div class="empty-state" style="padding:30px 0;"><div class="label">Aucun utilisateur</div></div></div></div>
+        <div class="gestion-section"><div class="gestion-title">🗑️ Suppression de données</div><div class="danger-bar">⚠️ Zone sensible — les suppressions sont définitives et irréversibles.</div><div style="display:flex;gap:10px;flex-wrap:wrap;"><button class="btn btn-danger btn-sm" onclick="confirmDelete('rapports','tous les rapports')">🗑️ Vider les rapports</button><button class="btn btn-danger btn-sm" onclick="confirmDelete('saisies','toutes les saisies')">🗑️ Vider les saisies</button><button class="btn btn-danger btn-sm" onclick="confirmDelete('signalements','tous les signalements')">🗑️ Vider les signalements</button><button class="btn btn-danger btn-sm" onclick="confirmDelete('plaintes','toutes les plaintes')">🗑️ Vider les plaintes</button><button class="btn btn-danger btn-sm" onclick="confirmDelete('fiches','toutes les fiches individus')">🗑️ Vider fiches individus</button><button class="btn btn-danger btn-sm" onclick="confirmDelete('vehicules','tous les véhicules')">🗑️ Vider véhicules</button></div></div>
       </div>
     </div>
-
-    <div class="content">
-
-      <!-- =================== DASHBOARD =================== -->
-      <div class="page active" id="page-dashboard">
-        <div class="stats-grid">
-          <div class="stat-card blue">
-            <div class="stat-icon">📋</div>
-            <div class="stat-value" id="stat-rapports">0</div>
-            <div class="stat-label">RAPPORTS TOTAL</div>
-          </div>
-          <div class="stat-card red">
-            <div class="stat-icon">⚖️</div>
-            <div class="stat-value" id="stat-plaintes">0</div>
-            <div class="stat-label">PLAINTES ACTIVES</div>
-          </div>
-          <div class="stat-card orange">
-            <div class="stat-icon">🔫</div>
-            <div class="stat-value" id="stat-gav">0</div>
-            <div class="stat-label">SAISIES TOTAL</div>
-          </div>
-          <div class="stat-card green">
-            <div class="stat-icon">👮</div>
-            <div class="stat-value" id="stat-agents">0</div>
-            <div class="stat-label">AGENTS ENREGISTRÉS</div>
-          </div>
-        </div>
-
-        <div class="section-header">
-          <div class="section-title">Activité récente</div>
-        </div>
-        <div class="table-wrap">
-          <div id="activity-container">
-            <div class="empty-state"><div class="icon">📋</div><div class="label">Aucune activité pour le moment</div></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- =================== RAPPORTS =================== -->
-      <div class="page" id="page-rapports">
-        <div class="section-header">
-          <div class="section-title">Rapports d'intervention</div>
-          <button class="btn btn-primary btn-sm" onclick="openNewModal()">+ Nouveau rapport</button>
-        </div>
-        <div class="table-wrap">
-          <div class="search-bar">
-            <input class="search-input" type="text" placeholder="🔍  Rechercher un rapport..." oninput="filterTable('rapports-table', this.value)">
-            <button class="filter-btn active" onclick="filterStatus('rapports-table','')">Tous</button>
-            <button class="filter-btn" onclick="filterStatus('rapports-table','Ouvert')">Ouverts</button>
-            <button class="filter-btn" onclick="filterStatus('rapports-table','En cours')">En cours</button>
-            <button class="filter-btn" onclick="filterStatus('rapports-table','Clôturé')">Clôturés</button>
-          </div>
-          <table id="rapports-table">
-            <thead>
-              <tr>
-                <th>N° DOSSIER</th><th>DATE</th><th>TYPE</th><th>LIEU</th><th>AGENT</th><th>STATUT</th><th>ACTIONS</th>
-              </tr>
-            </thead>
-            <tbody id="rapports-tbody">
-              <tr><td colspan="7"><div class="empty-state"><div class="icon">📋</div><div class="label">Aucun rapport enregistré</div></div></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- =================== SIGNALEMENTS =================== -->
-      <div class="page" id="page-signalements">
-        <div class="section-header">
-          <div class="section-title">Signalements</div>
-          <button class="btn btn-primary btn-sm" onclick="openSignalementModal()">+ Nouveau signalement</button>
-        </div>
-        <div class="table-wrap">
-          <div class="search-bar">
-            <input class="search-input" type="text" placeholder="🔍  Rechercher..." oninput="filterTable('signalements-table', this.value)">
-            <button class="filter-btn" onclick="filterStatus('signalements-table','Urgent')">Urgents</button>
-          </div>
-          <table id="signalements-table">
-            <thead>
-              <tr><th>N°</th><th>DATE/HEURE</th><th>TYPE</th><th>DESCRIPTION</th><th>ZONE</th><th>PRIORITÉ</th><th>ACTIONS</th></tr>
-            </thead>
-            <tbody id="signalements-tbody">
-              <tr><td colspan="7"><div class="empty-state"><div class="icon">🚨</div><div class="label">Aucun signalement</div></div></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- =================== PLAINTES =================== -->
-      <div class="page" id="page-plaintes">
-        <div class="section-header">
-          <div class="section-title">Plaintes</div>
-          <button class="btn btn-primary btn-sm" onclick="openPlainteModal()">+ Déposer une plainte</button>
-        </div>
-        <div class="table-wrap">
-          <div class="search-bar">
-            <input class="search-input" type="text" placeholder="🔍  Rechercher une plainte..." oninput="filterTable('plaintes-table', this.value)">
-            <button class="filter-btn active" onclick="filterStatus('plaintes-table','')">Toutes</button>
-            <button class="filter-btn" onclick="filterStatus('plaintes-table','En attente')">En attente</button>
-            <button class="filter-btn" onclick="filterStatus('plaintes-table','En cours')">En cours</button>
-            <button class="filter-btn" onclick="filterStatus('plaintes-table','Résolue')">Résolues</button>
-          </div>
-          <table id="plaintes-table">
-            <thead>
-              <tr><th>N° PLAINTE</th><th>DATE</th><th>PLAIGNANT</th><th>AGENT MIS EN CAUSE</th><th>MOTIF</th><th>STATUT</th><th>ACTIONS</th></tr>
-            </thead>
-            <tbody id="plaintes-tbody">
-              <tr><td colspan="7"><div class="empty-state"><div class="icon">⚖️</div><div class="label">Aucune plainte enregistrée</div></div></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- =================== SAISIES =================== -->
-      <div class="page" id="page-saisies">
-        <div class="section-header">
-          <div class="section-title">Saisies</div>
-          <button class="btn btn-primary btn-sm" onclick="openSaisieModal()">+ Nouvelle saisie</button>
-        </div>
-        <div class="table-wrap">
-          <div class="search-bar">
-            <input class="search-input" type="text" placeholder="🔍  Rechercher une saisie..." oninput="filterTable('saisies-table', this.value)">
-            <button class="filter-btn" onclick="filterStatus('saisies-table','Arme')">Armes</button>
-            <button class="filter-btn" onclick="filterStatus('saisies-table','Stupéfiants')">Stupéfiants</button>
-            <button class="filter-btn" onclick="filterStatus('saisies-table','Véhicule')">Véhicules</button>
-          </div>
-          <table id="saisies-table">
-            <thead>
-              <tr><th>N° SAISIE</th><th>DATE</th><th>CATÉGORIE</th><th>OBJET(S)</th><th>QUANTITÉ</th><th>PROPRIÉTAIRE</th><th>AGENT</th><th>DOSSIER LIÉ</th><th>ACTIONS</th></tr>
-            </thead>
-            <tbody id="saisies-tbody">
-              <tr><td colspan="9"><div class="empty-state"><div class="icon">🔫</div><div class="label">Aucune saisie enregistrée</div></div></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- =================== FICHES INDIVIDUS =================== -->
-      <div class="page" id="page-fiches">
-        <div class="section-header">
-          <div class="section-title">Fiches individus</div>
-          <button class="btn btn-primary btn-sm" onclick="openFicheModal()">+ Nouvelle fiche</button>
-        </div>
-        <div class="table-wrap">
-          <div class="search-bar">
-            <input class="search-input" type="text" placeholder="🔍  Rechercher un individu..." oninput="filterTable('fiches-table', this.value)">
-            <button class="filter-btn" onclick="filterStatus('fiches-table','Recherché')">Recherchés</button>
-            <button class="filter-btn" onclick="filterStatus('fiches-table','Dangereux')">Dangereux</button>
-          </div>
-          <table id="fiches-table">
-            <thead>
-              <tr><th>PHOTO</th><th>NOM PRÉNOM</th><th>DATE NAISS.</th><th>NATIONALITÉ</th><th>STATUT</th><th>ANTÉCÉDENTS</th><th>ACTIONS</th></tr>
-            </thead>
-            <tbody id="fiches-tbody">
-              <tr><td colspan="7"><div class="empty-state"><div class="icon">👤</div><div class="label">Aucune fiche individu</div></div></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- =================== VEHICULES =================== -->
-      <div class="page" id="page-vehicules">
-        <div class="section-header">
-          <div class="section-title">Véhicules recherchés</div>
-          <button class="btn btn-primary btn-sm" onclick="openVehiculeModal()">+ Ajouter véhicule</button>
-        </div>
-        <div class="table-wrap">
-          <div class="search-bar">
-            <input class="search-input" type="text" placeholder="🔍  Plaque, modèle..." oninput="filterTable('vehicules-table', this.value)">
-          </div>
-          <table id="vehicules-table">
-            <thead>
-              <tr><th>PHOTO</th><th>PLAQUE</th><th>MARQUE/MODÈLE</th><th>COULEUR</th><th>PROPRIÉTAIRE</th><th>MOTIF</th><th>DATE AJOUT</th><th>ACTIONS</th></tr>
-            </thead>
-            <tbody id="vehicules-tbody">
-              <tr><td colspan="8"><div class="empty-state"><div class="icon">🚗</div><div class="label">Aucun véhicule recherché</div></div></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- =================== AGENTS =================== -->
-      <div class="page" id="page-agents">
-        <div class="section-header">
-          <div class="section-title">Gestion des agents</div>
-          <button class="btn btn-primary btn-sm" onclick="openAgentModal()">+ Ajouter agent</button>
-        </div>
-        <div class="agents-grid" id="agents-grid">
-          <div style="grid-column:1/-1;"><div class="empty-state"><div class="icon">👮</div><div class="label">Aucun agent enregistré</div></div></div>
-        </div>
-      </div>
-
-      <!-- =================== GESTION DU SITE =================== -->
-      <div class="page" id="page-gestion">
-        <div class="section-header">
-          <div class="section-title">Gestion du site</div>
-        </div>
-
-        <!-- Site authorization toggle -->
-        <div class="gestion-section">
-          <div class="gestion-title">🌐 Autorisation de connexion au site</div>
-          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;">
-            <div>
-              <div style="font-weight:700;font-size:15px;margin-bottom:4px;">Accès au site activé</div>
-              <div style="font-size:12px;color:var(--text-secondary);font-family:var(--mono);">Si désactivé, aucun agent ne peut se connecter (sauf code maître).</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:12px;">
-              <span id="site-access-label" style="font-family:var(--mono);font-size:11px;color:var(--green);">ACTIVÉ</span>
-              <div id="site-access-toggle" onclick="toggleSiteAccess()" style="
-                width:52px;height:28px;border-radius:14px;background:var(--green);
-                cursor:pointer;position:relative;transition:background 0.3s;
-                border:1px solid rgba(255,255,255,0.1);
-              ">
-                <div id="site-access-knob" style="
-                  position:absolute;top:3px;left:26px;
-                  width:20px;height:20px;border-radius:50%;background:#fff;
-                  transition:left 0.3s;box-shadow:0 1px 4px rgba(0,0,0,0.3);
-                "></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Access requests -->
-        <div class="gestion-section">
-          <div class="gestion-title">⏳ Demandes d'accès en attente</div>
-          <div id="access-requests-list">
-            <div class="empty-state" style="padding:30px 0;"><div class="label">Aucune demande en attente</div></div>
-          </div>
-        </div>
-
-        <!-- Approved users -->
-        <div class="gestion-section">
-          <div class="gestion-title">✅ Utilisateurs autorisés</div>
-          <div id="approved-users-list">
-            <div class="empty-state" style="padding:30px 0;"><div class="label">Aucun utilisateur</div></div>
-          </div>
-        </div>
-
-        <!-- Delete data -->
-        <div class="gestion-section">
-          <div class="gestion-title">🗑️ Suppression de données</div>
-          <div class="danger-bar">⚠️ Zone sensible — les suppressions sont définitives et irréversibles.</div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;">
-            <button class="btn btn-danger btn-sm" onclick="confirmDelete('rapports','tous les rapports')">🗑️ Vider les rapports</button>
-            <button class="btn btn-danger btn-sm" onclick="confirmDelete('saisies','toutes les saisies')">🗑️ Vider les saisies</button>
-            <button class="btn btn-danger btn-sm" onclick="confirmDelete('signalements','tous les signalements')">🗑️ Vider les signalements</button>
-            <button class="btn btn-danger btn-sm" onclick="confirmDelete('plaintes','toutes les plaintes')">🗑️ Vider les plaintes</button>
-            <button class="btn btn-danger btn-sm" onclick="confirmDelete('fiches','toutes les fiches individus')">🗑️ Vider fiches individus</button>
-            <button class="btn btn-danger btn-sm" onclick="confirmDelete('vehicules','tous les véhicules')">🗑️ Vider véhicules</button>
-          </div>
-        </div>
-      </div>
-
-    </div><!-- /content -->
   </main>
 </div>
 
-<!-- ========== TOAST ========== -->
 <div class="toast-container" id="toasts"></div>
 
-<!-- ========== MODAL NOUVEAU RAPPORT ========== -->
-<div class="modal-overlay" id="modal-rapport">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title">📋 Nouveau rapport d'intervention</div>
-      <button class="close-btn" onclick="closeModal('modal-rapport')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-grid">
-        <div class="form-group">
-          <label class="form-label">Type d'intervention</label>
-          <select class="form-select" id="r-type">
-            <option>Trouble à l'ordre public</option>
-            <option>Vol / Cambriolage</option>
-            <option>Accident de la route</option>
-            <option>Agression physique</option>
-            <option>Trafic de stupéfiants</option>
-            <option>Fugitif / Poursuite</option>
-            <option>Prise d'otage</option>
-            <option>Homicide</option>
-            <option>Braquage</option>
-            <option>Contrôle routier</option>
-            <option>Autre</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Statut</label>
-          <select class="form-select" id="r-statut">
-            <option>Ouvert</option>
-            <option>En cours</option>
-            <option>Clôturé</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Date et heure</label>
-          <input class="form-input" type="datetime-local" id="r-date">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Lieu de l'intervention</label>
-          <input class="form-input" type="text" id="r-lieu" placeholder="ex: Rue de la Paix...">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Agent responsable</label>
-          <input class="form-input" type="text" id="r-agent" placeholder="Nom de l'agent">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Personnes impliquées</label>
-          <input class="form-input" type="text" id="r-personnes" placeholder="Noms, rôles...">
-        </div>
-        <div class="form-group span2">
-          <label class="form-label">Description détaillée</label>
-          <textarea class="form-textarea" id="r-description" placeholder="Décrivez les faits..."></textarea>
-        </div>
-        <div class="form-group span2">
-          <label class="form-label">Suites données</label>
-          <textarea class="form-textarea" id="r-suites" placeholder="Arrestation, avertissement..." style="min-height:60px;"></textarea>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Pièces saisies</label>
-          <input class="form-input" type="text" id="r-pieces" placeholder="Armes, drogues, véhicule...">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Priorité</label>
-          <select class="form-select" id="r-priorite">
-            <option>Normale</option>
-            <option>Élevée</option>
-            <option>Critique</option>
-          </select>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('modal-rapport')">Annuler</button>
-      <button class="btn btn-primary" onclick="saveRapport()">💾 Enregistrer</button>
-    </div>
-  </div>
-</div>
-
-<!-- ========== MODAL SIGNALEMENT ========== -->
-<div class="modal-overlay" id="modal-signalement">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title">🚨 Nouveau signalement</div>
-      <button class="close-btn" onclick="closeModal('modal-signalement')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-grid">
-        <div class="form-group">
-          <label class="form-label">Type de signalement</label>
-          <select class="form-select" id="s-type">
-            <option>Personne suspecte</option>
-            <option>Véhicule suspect</option>
-            <option>Tir / Coups de feu</option>
-            <option>Rixe / Bagarre</option>
-            <option>Incendie</option>
-            <option>Accident</option>
-            <option>Fugitif en fuite</option>
-            <option>Autre</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Priorité</label>
-          <select class="form-select" id="s-priorite">
-            <option>Normal</option>
-            <option>Urgent</option>
-            <option>Critique</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Zone / Secteur</label>
-          <input class="form-input" type="text" id="s-zone" placeholder="ex: Zone Portuaire...">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Heure du signalement</label>
-          <input class="form-input" type="datetime-local" id="s-date">
-        </div>
-        <div class="form-group span2">
-          <label class="form-label">Description</label>
-          <textarea class="form-textarea" id="s-description" placeholder="Détails du signalement..."></textarea>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('modal-signalement')">Annuler</button>
-      <button class="btn btn-primary" onclick="saveSignalement()">💾 Enregistrer</button>
-    </div>
-  </div>
-</div>
-
-<!-- ========== MODAL PLAINTE ========== -->
-<div class="modal-overlay" id="modal-plainte">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title">⚖️ Déposer une plainte</div>
-      <button class="close-btn" onclick="closeModal('modal-plainte')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-grid">
-        <div class="form-group">
-          <label class="form-label">Agent plaignant</label>
-          <input class="form-input" type="text" id="pl-plaignant" placeholder="Votre nom IC">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Agent mis en cause</label>
-          <input class="form-input" type="text" id="pl-accuse" placeholder="Nom de l'agent mis en cause">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Date des faits</label>
-          <input class="form-input" type="datetime-local" id="pl-date">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Motif</label>
-          <select class="form-select" id="pl-motif">
-            <option>Comportement inapproprié</option>
-            <option>Abus de pouvoir</option>
-            <option>Non-respect du protocole</option>
-            <option>Corruption</option>
-            <option>Violence excessive</option>
-            <option>Harcèlement</option>
-            <option>Autre</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Statut</label>
-          <select class="form-select" id="pl-statut">
-            <option>En attente</option>
-            <option>En cours</option>
-            <option>Résolue</option>
-            <option>Classée sans suite</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Gravité</label>
-          <select class="form-select" id="pl-gravite">
-            <option>Mineure</option>
-            <option>Modérée</option>
-            <option>Grave</option>
-            <option>Très grave</option>
-          </select>
-        </div>
-        <div class="form-group span2">
-          <label class="form-label">Description des faits</label>
-          <textarea class="form-textarea" id="pl-description" placeholder="Décrivez les faits en détail, le contexte, les témoins éventuels..."></textarea>
-        </div>
-        <div class="form-group span2">
-          <label class="form-label">Preuves / Éléments joints</label>
-          <textarea class="form-textarea" id="pl-preuves" placeholder="Screenshots, témoignages, N° de dossier lié..." style="min-height:60px;"></textarea>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('modal-plainte')">Annuler</button>
-      <button class="btn btn-primary" onclick="savePlainte()">💾 Déposer la plainte</button>
-    </div>
-  </div>
-</div>
-
-<!-- ========== MODAL SAISIE ========== -->
-<div class="modal-overlay" id="modal-saisie">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title">🔫 Nouvelle saisie</div>
-      <button class="close-btn" onclick="closeModal('modal-saisie')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-grid">
-        <div class="form-group">
-          <label class="form-label">Catégorie</label>
-          <select class="form-select" id="sa-categorie">
-            <option>Arme à feu</option>
-            <option>Arme blanche</option>
-            <option>Stupéfiants</option>
-            <option>Véhicule</option>
-            <option>Argent liquide</option>
-            <option>Matériel électronique</option>
-            <option>Munitions</option>
-            <option>Autre</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Date de saisie</label>
-          <input class="form-input" type="datetime-local" id="sa-date">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Objet(s) saisi(s)</label>
-          <input class="form-input" type="text" id="sa-objet" placeholder="ex: Pistolet Glock 17...">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Quantité / Détails</label>
-          <input class="form-input" type="text" id="sa-quantite" placeholder="ex: 1 unité, 250g...">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Propriétaire / Suspect</label>
-          <input class="form-input" type="text" id="sa-proprio" placeholder="Nom de la personne">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Agent responsable</label>
-          <input class="form-input" type="text" id="sa-agent" placeholder="Nom de l'agent">
-        </div>
-        <div class="form-group">
-          <label class="form-label">N° de dossier lié</label>
-          <input class="form-input" type="text" id="sa-dossier" placeholder="ex: INT-0001 (optionnel)">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Lieu de saisie</label>
-          <input class="form-input" type="text" id="sa-lieu" placeholder="Adresse / Zone">
-        </div>
-        <div class="form-group span2">
-          <label class="form-label">Description / Remarques</label>
-          <textarea class="form-textarea" id="sa-description" placeholder="Contexte de la saisie..."></textarea>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('modal-saisie')">Annuler</button>
-      <button class="btn btn-primary" onclick="saveSaisie()">💾 Enregistrer la saisie</button>
-    </div>
-  </div>
-</div>
-
-<!-- ========== MODAL FICHE ========== -->
-<div class="modal-overlay" id="modal-fiche">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title">👤 Nouvelle fiche individu</div>
-      <button class="close-btn" onclick="closeModal('modal-fiche')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-grid">
-        <div class="form-group">
-          <label class="form-label">Nom complet</label>
-          <input class="form-input" type="text" id="fi-nom" placeholder="Prénom NOM">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Date de naissance</label>
-          <input class="form-input" type="date" id="fi-naissance">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Nationalité</label>
-          <input class="form-input" type="text" id="fi-nationalite" placeholder="Française...">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Statut</label>
-          <select class="form-select" id="fi-statut">
-            <option>Fichier actif</option>
-            <option>Recherché</option>
-            <option>Dangereux</option>
-            <option>Sous surveillance</option>
-            <option>Antécédents</option>
-          </select>
-        </div>
-        <div class="form-group span2">
-          <label class="form-label">Antécédents judiciaires</label>
-          <textarea class="form-textarea" id="fi-antecedents" placeholder="Infractions, condamnations passées..."></textarea>
-        </div>
-        <div class="form-group span2">
-          <label class="form-label">Notes / Remarques</label>
-          <textarea class="form-textarea" id="fi-notes" placeholder="Informations complémentaires..."></textarea>
-        </div>
-        <div class="form-group span2">
-          <label class="form-label">Photos</label>
-          <div class="photo-upload-zone" onclick="document.getElementById('fi-photos-input').click()">
-            <input type="file" id="fi-photos-input" accept="image/*" multiple onchange="handlePhotoSelect('fi', this)">
-            <div style="font-size:28px;margin-bottom:6px;">📷</div>
-            <div style="font-family:var(--mono);font-size:11px;color:var(--text-muted);">Cliquez pour ajouter des photos</div>
-            <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">JPG, PNG • Plusieurs photos possibles</div>
-          </div>
-          <div class="photo-preview-grid" id="fi-photos-preview"></div>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('modal-fiche')">Annuler</button>
-      <button class="btn btn-primary" onclick="saveFiche()">💾 Enregistrer la fiche</button>
-    </div>
-  </div>
-</div>
-
-<!-- ========== MODAL VEHICULE ========== -->
-<div class="modal-overlay" id="modal-vehicule">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title">🚗 Véhicule recherché</div>
-      <button class="close-btn" onclick="closeModal('modal-vehicule')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-grid">
-        <div class="form-group">
-          <label class="form-label">Plaque d'immatriculation</label>
-          <input class="form-input" type="text" id="v-plaque" placeholder="ABC-1234">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Marque / Modèle</label>
-          <input class="form-input" type="text" id="v-modele" placeholder="ex: Vapid Dominator">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Couleur</label>
-          <input class="form-input" type="text" id="v-couleur" placeholder="Noire, Rouge...">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Propriétaire</label>
-          <input class="form-input" type="text" id="v-proprio" placeholder="Nom du propriétaire">
-        </div>
-        <div class="form-group span2">
-          <label class="form-label">Motif de recherche</label>
-          <textarea class="form-textarea" id="v-motif" placeholder="Raison pour laquelle ce véhicule est recherché..."></textarea>
-        </div>
-        <div class="form-group span2">
-          <label class="form-label">Photos du véhicule</label>
-          <div class="photo-upload-zone" onclick="document.getElementById('v-photos-input').click()">
-            <input type="file" id="v-photos-input" accept="image/*" multiple onchange="handlePhotoSelect('v', this)">
-            <div style="font-size:28px;margin-bottom:6px;">📷</div>
-            <div style="font-family:var(--mono);font-size:11px;color:var(--text-muted);">Cliquez pour ajouter des photos</div>
-            <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">JPG, PNG • Plusieurs photos possibles</div>
-          </div>
-          <div class="photo-preview-grid" id="v-photos-preview"></div>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('modal-vehicule')">Annuler</button>
-      <button class="btn btn-primary" onclick="saveVehicule()">💾 Enregistrer</button>
-    </div>
-  </div>
-</div>
-
-<!-- ========== MODAL AGENT ========== -->
-<div class="modal-overlay" id="modal-agent">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title">👮 Ajouter un agent</div>
-      <button class="close-btn" onclick="closeModal('modal-agent')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-grid">
-        <div class="form-group">
-          <label class="form-label">Nom complet (IC)</label>
-          <input class="form-input" type="text" id="ag-nom" placeholder="Prénom NOM">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Pseudo (OOC)</label>
-          <input class="form-input" type="text" id="ag-pseudo" placeholder="Pseudo Discord / Serveur">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Grade</label>
-          <select class="form-select" id="ag-grade">
-            <option>Gardien Stagiaire</option>
-            <option>Gardien Titulaire</option>
-            <option>Gardien Principal</option>
-            <option>Brigadier</option>
-            <option>Brigadier-Chef</option>
-            <option>Brigadier-Chef Principal</option>
-            <option>Chef de Police</option>
-            <option>Chef De Service Stagiaire</option>
-            <option>Chef De Service Classe Normale</option>
-            <option>Chef De Service Classe Supérieur</option>
-            <option>Chef De Service Classe Exceptionnel</option>
-            <option>Directeur Stagiaire</option>
-            <option>Directeur Adjoint</option>
-            <option>Directeur</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Matricule</label>
-          <input class="form-input" type="text" id="ag-matricule" placeholder="ex: PM-042">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Statut</label>
-          <select class="form-select" id="ag-statut">
-            <option>Actif</option>
-            <option>En formation</option>
-            <option>Suspendu</option>
-            <option>Inactif</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Date d'embauche</label>
-          <input class="form-input" type="date" id="ag-date">
-        </div>
-        <div class="form-group span2">
-          <label class="form-label">Notes</label>
-          <textarea class="form-textarea" id="ag-notes" placeholder="Informations complémentaires..." style="min-height:60px;"></textarea>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('modal-agent')">Annuler</button>
-      <button class="btn btn-primary" onclick="saveAgent()">💾 Enregistrer l'agent</button>
-    </div>
-  </div>
-</div>
-
-<!-- ========== MODAL VIEW ========== -->
-<div class="modal-overlay" id="modal-view">
-  <div class="modal" style="width:720px;">
-    <div class="modal-header">
-      <div class="modal-title" id="view-title">Détails</div>
-      <button class="close-btn" onclick="closeModal('modal-view')">✕</button>
-    </div>
-    <div class="modal-body" id="view-body"></div>
-    <div class="modal-footer" id="view-footer">
-      <button class="btn btn-ghost" onclick="closeModal('modal-view')">Fermer</button>
-    </div>
-  </div>
-</div>
+<!-- MODALS (Identiques à votre version) -->
+<div class="modal-overlay" id="modal-rapport"><div class="modal"><div class="modal-header"><div class="modal-title">📋 Nouveau rapport d'intervention</div><button class="close-btn" onclick="closeModal('modal-rapport')">✕</button></div><div class="modal-body"><div class="form-grid"><div class="form-group"><label class="form-label">Type d'intervention</label><select class="form-select" id="r-type"><option>Trouble à l'ordre public</option><option>Vol / Cambriolage</option><option>Accident de la route</option><option>Agression physique</option><option>Trafic de stupéfiants</option><option>Fugitif / Poursuite</option><option>Prise d'otage</option><option>Homicide</option><option>Braquage</option><option>Contrôle routier</option><option>Autre</option></select></div><div class="form-group"><label class="form-label">Statut</label><select class="form-select" id="r-statut"><option>Ouvert</option><option>En cours</option><option>Clôturé</option></select></div><div class="form-group"><label class="form-label">Date et heure</label><input class="form-input" type="datetime-local" id="r-date"></div><div class="form-group"><label class="form-label">Lieu de l'intervention</label><input class="form-input" type="text" id="r-lieu" placeholder="ex: Rue de la Paix..."></div><div class="form-group"><label class="form-label">Agent responsable</label><input class="form-input" type="text" id="r-agent" placeholder="Nom de l'agent"></div><div class="form-group"><label class="form-label">Personnes impliquées</label><input class="form-input" type="text" id="r-personnes" placeholder="Noms, rôles..."></div><div class="form-group span2"><label class="form-label">Description détaillée</label><textarea class="form-textarea" id="r-description" placeholder="Décrivez les faits..."></textarea></div><div class="form-group span2"><label class="form-label">Suites données</label><textarea class="form-textarea" id="r-suites" placeholder="Arrestation, avertissement..." style="min-height:60px;"></textarea></div><div class="form-group"><label class="form-label">Pièces saisies</label><input class="form-input" type="text" id="r-pieces" placeholder="Armes, drogues, véhicule..."></div><div class="form-group"><label class="form-label">Priorité</label><select class="form-select" id="r-priorite"><option>Normale</option><option>Élevée</option><option>Critique</option></select></div></div></div><div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-rapport')">Annuler</button><button class="btn btn-primary" onclick="saveRapport()">💾 Enregistrer</button></div></div></div>
+<div class="modal-overlay" id="modal-signalement"><div class="modal"><div class="modal-header"><div class="modal-title">🚨 Nouveau signalement</div><button class="close-btn" onclick="closeModal('modal-signalement')">✕</button></div><div class="modal-body"><div class="form-grid"><div class="form-group"><label class="form-label">Type de signalement</label><select class="form-select" id="s-type"><option>Personne suspecte</option><option>Véhicule suspect</option><option>Tir / Coups de feu</option><option>Rixe / Bagarre</option><option>Incendie</option><option>Accident</option><option>Fugitif en fuite</option><option>Autre</option></select></div><div class="form-group"><label class="form-label">Priorité</label><select class="form-select" id="s-priorite"><option>Normal</option><option>Urgent</option><option>Critique</option></select></div><div class="form-group"><label class="form-label">Zone / Secteur</label><input class="form-input" type="text" id="s-zone" placeholder="ex: Zone Portuaire..."></div><div class="form-group"><label class="form-label">Heure du signalement</label><input class="form-input" type="datetime-local" id="s-date"></div><div class="form-group span2"><label class="form-label">Description</label><textarea class="form-textarea" id="s-description" placeholder="Détails du signalement..."></textarea></div></div></div><div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-signalement')">Annuler</button><button class="btn btn-primary" onclick="saveSignalement()">💾 Enregistrer</button></div></div></div>
+<div class="modal-overlay" id="modal-plainte"><div class="modal"><div class="modal-header"><div class="modal-title">⚖️ Déposer une plainte</div><button class="close-btn" onclick="closeModal('modal-plainte')">✕</button></div><div class="modal-body"><div class="form-grid"><div class="form-group"><label class="form-label">Agent plaignant</label><input class="form-input" type="text" id="pl-plaignant" placeholder="Votre nom IC"></div><div class="form-group"><label class="form-label">Agent mis en cause</label><input class="form-input" type="text" id="pl-accuse" placeholder="Nom de l'agent mis en cause"></div><div class="form-group"><label class="form-label">Date des faits</label><input class="form-input" type="datetime-local" id="pl-date"></div><div class="form-group"><label class="form-label">Motif</label><select class="form-select" id="pl-motif"><option>Comportement inapproprié</option><option>Abus de pouvoir</option><option>Non-respect du protocole</option><option>Corruption</option><option>Violence excessive</option><option>Harcèlement</option><option>Autre</option></select></div><div class="form-group"><label class="form-label">Statut</label><select class="form-select" id="pl-statut"><option>En attente</option><option>En cours</option><option>Résolue</option><option>Classée sans suite</option></select></div><div class="form-group"><label class="form-label">Gravité</label><select class="form-select" id="pl-gravite"><option>Mineure</option><option>Modérée</option><option>Grave</option><option>Très grave</option></select></div><div class="form-group span2"><label class="form-label">Description des faits</label><textarea class="form-textarea" id="pl-description" placeholder="Décrivez les faits en détail..."></textarea></div><div class="form-group span2"><label class="form-label">Preuves / Éléments joints</label><textarea class="form-textarea" id="pl-preuves" placeholder="Screenshots, témoignages..."></textarea></div></div></div><div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-plainte')">Annuler</button><button class="btn btn-primary" onclick="savePlainte()">💾 Déposer la plainte</button></div></div></div>
+<div class="modal-overlay" id="modal-saisie"><div class="modal"><div class="modal-header"><div class="modal-title">🔫 Nouvelle saisie</div><button class="close-btn" onclick="closeModal('modal-saisie')">✕</button></div><div class="modal-body"><div class="form-grid"><div class="form-group"><label class="form-label">Catégorie</label><select class="form-select" id="sa-categorie"><option>Arme à feu</option><option>Arme blanche</option><option>Stupéfiants</option><option>Véhicule</option><option>Argent liquide</option><option>Matériel électronique</option><option>Munitions</option><option>Autre</option></select></div><div class="form-group"><label class="form-label">Date de saisie</label><input class="form-input" type="datetime-local" id="sa-date"></div><div class="form-group"><label class="form-label">Objet(s) saisi(s)</label><input class="form-input" type="text" id="sa-objet" placeholder="ex: Pistolet Glock 17..."></div><div class="form-group"><label class="form-label">Quantité / Détails</label><input class="form-input" type="text" id="sa-quantite" placeholder="ex: 1 unité, 250g..."></div><div class="form-group"><label class="form-label">Propriétaire / Suspect</label><input class="form-input" type="text" id="sa-proprio" placeholder="Nom de la personne"></div><div class="form-group"><label class="form-label">Agent responsable</label><input class="form-input" type="text" id="sa-agent" placeholder="Nom de l'agent"></div><div class="form-group"><label class="form-label">N° de dossier lié</label><input class="form-input" type="text" id="sa-dossier" placeholder="ex: INT-0001 (optionnel)"></div><div class="form-group"><label class="form-label">Lieu de saisie</label><input class="form-input" type="text" id="sa-lieu" placeholder="Adresse / Zone"></div><div class="form-group span2"><label class="form-label">Description / Remarques</label><textarea class="form-textarea" id="sa-description" placeholder="Contexte de la saisie..."></textarea></div></div></div><div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-saisie')">Annuler</button><button class="btn btn-primary" onclick="saveSaisie()">💾 Enregistrer la saisie</button></div></div></div>
+<div class="modal-overlay" id="modal-fiche"><div class="modal"><div class="modal-header"><div class="modal-title">👤 Nouvelle fiche individu</div><button class="close-btn" onclick="closeModal('modal-fiche')">✕</button></div><div class="modal-body"><div class="form-grid"><div class="form-group"><label class="form-label">Nom complet</label><input class="form-input" type="text" id="fi-nom" placeholder="Prénom NOM"></div><div class="form-group"><label class="form-label">Date de naissance</label><input class="form-input" type="date" id="fi-naissance"></div><div class="form-group"><label class="form-label">Nationalité</label><input class="form-input" type="text" id="fi-nationalite" placeholder="Française..."></div><div class="form-group"><label class="form-label">Statut</label><select class="form-select" id="fi-statut"><option>Fichier actif</option><option>Recherché</option><option>Dangereux</option><option>Sous surveillance</option><option>Antécédents</option></select></div><div class="form-group span2"><label class="form-label">Antécédents judiciaires</label><textarea class="form-textarea" id="fi-antecedents" placeholder="Infractions, condamnations passées..."></textarea></div><div class="form-group span2"><label class="form-label">Notes / Remarques</label><textarea class="form-textarea" id="fi-notes" placeholder="Informations complémentaires..."></textarea></div><div class="form-group span2"><label class="form-label">Photos</label><div class="photo-upload-zone" onclick="document.getElementById('fi-photos-input').click()"><input type="file" id="fi-photos-input" accept="image/*" multiple onchange="handlePhotoSelect('fi', this)"><div style="font-size:28px;margin-bottom:6px;">📷</div><div style="font-family:var(--mono);font-size:11px;color:var(--text-muted);">Cliquez pour ajouter des photos</div></div><div class="photo-preview-grid" id="fi-photos-preview"></div></div></div></div><div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-fiche')">Annuler</button><button class="btn btn-primary" onclick="saveFiche()">💾 Enregistrer la fiche</button></div></div></div>
+<div class="modal-overlay" id="modal-vehicule"><div class="modal"><div class="modal-header"><div class="modal-title">🚗 Véhicule recherché</div><button class="close-btn" onclick="closeModal('modal-vehicule')">✕</button></div><div class="modal-body"><div class="form-grid"><div class="form-group"><label class="form-label">Plaque d'immatriculation</label><input class="form-input" type="text" id="v-plaque" placeholder="ABC-1234"></div><div class="form-group"><label class="form-label">Marque / Modèle</label><input class="form-input" type="text" id="v-modele" placeholder="ex: Vapid Dominator"></div><div class="form-group"><label class="form-label">Couleur</label><input class="form-input" type="text" id="v-couleur" placeholder="Noire, Rouge..."></div><div class="form-group"><label class="form-label">Propriétaire</label><input class="form-input" type="text" id="v-proprio" placeholder="Nom du propriétaire"></div><div class="form-group span2"><label class="form-label">Motif de recherche</label><textarea class="form-textarea" id="v-motif" placeholder="Raison pour laquelle ce véhicule est recherché..."></textarea></div><div class="form-group span2"><label class="form-label">Photos du véhicule</label><div class="photo-upload-zone" onclick="document.getElementById('v-photos-input').click()"><input type="file" id="v-photos-input" accept="image/*" multiple onchange="handlePhotoSelect('v', this)"><div style="font-size:28px;margin-bottom:6px;">📷</div><div style="font-family:var(--mono);font-size:11px;color:var(--text-muted);">Cliquez pour ajouter des photos</div></div><div class="photo-preview-grid" id="v-photos-preview"></div></div></div></div><div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-vehicule')">Annuler</button><button class="btn btn-primary" onclick="saveVehicule()">💾 Enregistrer</button></div></div></div>
+<div class="modal-overlay" id="modal-agent"><div class="modal"><div class="modal-header"><div class="modal-title">👮 Ajouter un agent</div><button class="close-btn" onclick="closeModal('modal-agent')">✕</button></div><div class="modal-body"><div class="form-grid"><div class="form-group"><label class="form-label">Nom complet (IC)</label><input class="form-input" type="text" id="ag-nom" placeholder="Prénom NOM"></div><div class="form-group"><label class="form-label">Pseudo (OOC)</label><input class="form-input" type="text" id="ag-pseudo" placeholder="Pseudo Discord / Serveur"></div><div class="form-group"><label class="form-label">Grade</label><select class="form-select" id="ag-grade"><option>Gardien Stagiaire</option><option>Gardien Titulaire</option><option>Gardien Principal</option><option>Brigadier</option><option>Brigadier-Chef</option><option>Brigadier-Chef Principal</option><option>Chef de Police</option><option>Chef De Service Stagiaire</option><option>Chef De Service Classe Normale</option><option>Chef De Service Classe Supérieur</option><option>Chef De Service Classe Exceptionnel</option><option>Directeur Stagiaire</option><option>Directeur Adjoint</option><option>Directeur</option></select></div><div class="form-group"><label class="form-label">Matricule</label><input class="form-input" type="text" id="ag-matricule" placeholder="ex: PM-042"></div><div class="form-group"><label class="form-label">Statut</label><select class="form-select" id="ag-statut"><option>Actif</option><option>En formation</option><option>Suspendu</option><option>Inactif</option></select></div><div class="form-group"><label class="form-label">Date d'embauche</label><input class="form-input" type="date" id="ag-date"></div><div class="form-group span2"><label class="form-label">Notes</label><textarea class="form-textarea" id="ag-notes" placeholder="Informations complémentaires..." style="min-height:60px;"></textarea></div></div></div><div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-agent')">Annuler</button><button class="btn btn-primary" onclick="saveAgent()">💾 Enregistrer l'agent</button></div></div></div>
+<div class="modal-overlay" id="modal-view"><div class="modal" style="width:720px;"><div class="modal-header"><div class="modal-title" id="view-title">Détails</div><button class="close-btn" onclick="closeModal('modal-view')">✕</button></div><div class="modal-body" id="view-body"></div><div class="modal-footer" id="view-footer"><button class="btn btn-ghost" onclick="closeModal('modal-view')">Fermer</button></div></div></div>
 
 <script>
-// =================== GLOBALS ===================
-let currentUser = null;
-let db = null;
-let storage = null;
-let fb = null;
+let currentUser = null, db = null, storage = null, fb = null;
 let counters = { rapports: 0, signalements: 0, saisies: 0, fiches: 0, vehicules: 0, agents: 0, plaintes: 0 };
 let photoFiles = { fi: [], v: [] };
-let uploadedPhotoURLs = { fi: [], v: [] };
-
 const ADMIN_GRADES = ['Directeur', 'Directeur Adjoint'];
-
-// =================== FIREBASE READY ===================
-window.addEventListener('firebase-ready', () => {
-  db = window._db;
-  storage = window._storage;
-  fb = window._firebase;
-  checkSavedSession();
-});
-
-// =================== CLOCK ===================
-setInterval(() => {
-  const el = document.getElementById('clock');
-  if (el) el.textContent = new Date().toLocaleTimeString('fr-FR');
-}, 1000);
-
-// =================== SESSION ===================
-function checkSavedSession() {
-  const saved = localStorage.getItem('pm_session');
-  if (saved) {
-    try {
-      const user = JSON.parse(saved);
-      loginUser(user, false);
-    } catch(e) { localStorage.removeItem('pm_session'); }
-  }
-}
-
-function doLogout() {
-  localStorage.removeItem('pm_session');
-  currentUser = null;
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('main-app').style.display = 'none';
-  document.getElementById('master-btn').style.display = 'block';
-  toast('Déconnecté', 'À bientôt !', 'info');
-}
-
-// =================== LOGIN ===================
-function switchLoginTab(tab) {
-  document.getElementById('tab-login').classList.toggle('active', tab === 'login');
-  document.getElementById('tab-register').classList.toggle('active', tab === 'register');
-  document.getElementById('form-login').style.display = tab === 'login' ? 'flex' : 'none';
-  document.getElementById('form-register').style.display = tab === 'register' ? 'flex' : 'none';
-  document.getElementById('login-pending').style.display = 'none';
-}
-
-async function doLogin() {
-  if (!db) return toast('Erreur', 'Base de données non connectée', 'error');
-
-  // Check if site access is enabled
-  try {
-    const configSnap = await fb.getDoc(fb.doc(db, 'config', 'site'));
-    if (configSnap.exists() && configSnap.data().accessEnabled === false) {
-      toast('Accès fermé', 'Le site est temporairement fermé par la Direction.', 'error');
-      return;
-    }
-  } catch(e) { /* ignore config errors, allow login */ }
-
-  const prenom = document.getElementById('login-prenom').value.trim();
-  const nom = document.getElementById('login-nom').value.trim();
-  if (!prenom || !nom) return toast('Erreur', 'Veuillez remplir prénom et nom', 'error');
-
-  const key = `${prenom.toLowerCase()}_${nom.toLowerCase()}`;
-  try {
-    const docRef = fb.doc(db, 'users', key);
-    const snap = await fb.getDoc(docRef);
-    if (!snap.exists()) {
-      toast('Accès refusé', 'Aucun compte trouvé. Faites une demande d\'accès.', 'error');
-      return;
-    }
-    const userData = snap.data();
-    if (userData.status === 'pending') {
-      document.getElementById('form-login').style.display = 'none';
-      document.getElementById('login-pending').style.display = 'block';
-      return;
-    }
-    if (userData.status === 'rejected') {
-      toast('Accès refusé', 'Votre demande a été refusée.', 'error');
-      return;
-    }
-    if (userData.status === 'approved') {
-      loginUser(userData, true);
-    }
-  } catch(e) {
-    toast('Erreur', e.message, 'error');
-  }
-}
-
-function loginUser(userData, saveSession) {
-  currentUser = userData;
-  if (saveSession) localStorage.setItem('pm_session', JSON.stringify(userData));
-
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('main-app').style.display = 'flex';
-
-  document.getElementById('sidebar-username').textContent = `${userData.prenom} ${userData.nom}`;
-  document.getElementById('sidebar-role').textContent = userData.grade || 'AGENT';
-
-  const isAdmin = ADMIN_GRADES.includes(userData.grade);
-  if (isAdmin) {
-    document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'flex');
-    loadAccessRequests();
-  }
-
-  toast('Bienvenue', `${userData.prenom} ${userData.nom} — ${userData.grade}`, 'success');
-  document.getElementById('master-btn').style.display = 'none';
-  initListeners();
-  updateStats();
-}
-
-// =================== MASTER CODE ===================
-// Code 7232 stored as base64: btoa('7232') = 'NzIzMg=='
 const MASTER_CODE_B64 = 'NzIzMg==';
 
-function openMasterModal() {
-  document.getElementById('modal-master').style.display = 'flex';
-  document.getElementById('master-code-input').value = '';
-  document.getElementById('master-error').style.display = 'none';
-  setTimeout(() => document.getElementById('master-code-input').focus(), 100);
+window.addEventListener('firebase-ready', () => { db = window._db; storage = window._storage; fb = window._firebase; checkSavedSession(); });
+setInterval(() => { let el = document.getElementById('clock'); if(el) el.textContent = new Date().toLocaleTimeString('fr-FR'); }, 1000);
+
+function checkSavedSession() { let saved = localStorage.getItem('pm_session'); if(saved) try { loginUser(JSON.parse(saved), false); } catch(e){} }
+function doLogout() { localStorage.removeItem('pm_session'); currentUser = null; document.getElementById('login-screen').style.display = 'flex'; document.getElementById('main-app').style.display = 'none'; document.getElementById('master-btn').style.display = 'block'; toast('Déconnecté', 'À bientôt !', 'info'); }
+function switchLoginTab(tab) { document.getElementById('tab-login').classList.toggle('active', tab==='login'); document.getElementById('tab-register').classList.toggle('active', tab==='register'); document.getElementById('form-login').style.display = tab==='login'?'flex':'none'; document.getElementById('form-register').style.display = tab==='register'?'flex':'none'; document.getElementById('login-pending').style.display = 'none'; }
+
+async function doLogin() {
+  if(!db) return toast('Erreur', 'Base non connectée', 'error');
+  let prenom = document.getElementById('login-prenom').value.trim(), nom = document.getElementById('login-nom').value.trim();
+  if(!prenom||!nom) return toast('Erreur', 'Veuillez remplir les champs', 'error');
+  let key = `${prenom.toLowerCase()}_${nom.toLowerCase()}`;
+  try {
+    let snap = await fb.getDoc(fb.doc(db, 'users', key));
+    if(!snap.exists()) return toast('Accès refusé', 'Aucun compte trouvé.', 'error');
+    let userData = snap.data();
+    if(userData.status === 'pending') { document.getElementById('form-login').style.display='none'; document.getElementById('login-pending').style.display='block'; return; }
+    if(userData.status !== 'approved') return toast('Accès refusé', 'Demande rejetée.', 'error');
+    loginUser(userData, true);
+  } catch(e) { toast('Erreur', e.message, 'error'); }
 }
 
-function closeMasterModal() {
-  document.getElementById('modal-master').style.display = 'none';
+function loginUser(userData, save) {
+  currentUser = userData; if(save) localStorage.setItem('pm_session', JSON.stringify(userData));
+  document.getElementById('login-screen').style.display = 'none'; document.getElementById('main-app').style.display = 'flex';
+  document.getElementById('sidebar-username').textContent = `${userData.prenom} ${userData.nom}`;
+  document.getElementById('sidebar-role').textContent = userData.grade || 'AGENT';
+  let isAdmin = ADMIN_GRADES.includes(userData.grade);
+  if(isAdmin) { document.querySelectorAll('.admin-only').forEach(el=>el.style.display='flex'); loadAccessRequests(); loadSiteAccessState(); }
+  document.getElementById('master-btn').style.display = 'none';
+  initListeners();
 }
 
-function doMasterLogin() {
-  const input = document.getElementById('master-code-input').value.trim();
-  const encoded = btoa(input);
-  if (encoded === MASTER_CODE_B64) {
-    closeMasterModal();
-    const masterUser = { prenom: 'Accès', nom: 'Maître', grade: 'Directeur', status: 'approved', isMaster: true };
-    loginUser(masterUser, true);
-  } else {
-    document.getElementById('master-error').style.display = 'block';
-    document.getElementById('master-code-input').value = '';
-    document.getElementById('master-code-input').focus();
-  }
-}
+function openMasterModal() { document.getElementById('modal-master').style.display='flex'; document.getElementById('master-code-input').value=''; document.getElementById('master-error').style.display='none'; setTimeout(()=>document.getElementById('master-code-input').focus(),100); }
+function closeMasterModal() { document.getElementById('modal-master').style.display='none'; }
+function doMasterLogin() { let input = document.getElementById('master-code-input').value.trim(); if(btoa(input) === MASTER_CODE_B64) { closeMasterModal(); loginUser({ prenom:'Accès', nom:'Maître', grade:'Directeur', status:'approved', isMaster:true }, true); } else { document.getElementById('master-error').style.display='block'; } }
 
-// =================== REGISTER ===================
 async function doRegister() {
-  const prenom = document.getElementById('reg-prenom').value.trim();
-  const nom = document.getElementById('reg-nom').value.trim();
-  const pseudo = document.getElementById('reg-pseudo').value.trim();
-  const grade = document.getElementById('reg-grade').value;
-
-  if (!prenom || !nom || !pseudo) return toast('Erreur', 'Veuillez remplir tous les champs', 'error');
-
-  // Wait for Firebase if not ready yet
-  if (!db) {
-    toast('Chargement...', 'Connexion à la base de données en cours, réessayez dans 2 secondes.', 'warn');
-    return;
-  }
-
-  const key = `${prenom.toLowerCase().replace(/\s+/g,'_')}_${nom.toLowerCase().replace(/\s+/g,'_')}`;
+  let prenom = document.getElementById('reg-prenom').value.trim(), nom = document.getElementById('reg-nom').value.trim(), pseudo = document.getElementById('reg-pseudo').value.trim(), grade = document.getElementById('reg-grade').value;
+  if(!prenom||!nom||!pseudo) return toast('Erreur', 'Tous les champs requis', 'error');
+  let key = `${prenom.toLowerCase()}_${nom.toLowerCase()}`;
   try {
-    const docRef = fb.doc(db, 'users', key);
-    const existing = await fb.getDoc(docRef);
-    if (existing.exists()) {
-      const d = existing.data();
-      if (d.status === 'pending') {
-        document.getElementById('form-register').style.display = 'none';
-        document.getElementById('login-pending').style.display = 'block';
-        return;
-      }
-      if (d.status === 'approved') {
-        toast('Info', 'Un compte avec ce nom existe déjà. Connectez-vous via l\'onglet Connexion.', 'warn');
-        return;
-      }
-      // rejected — allow re-request by overwriting
-    }
-    await fb.setDoc(docRef, { prenom, nom, pseudo, grade, status: 'pending', createdAt: new Date().toISOString() });
-    document.getElementById('form-register').style.display = 'none';
-    document.getElementById('login-pending').style.display = 'block';
-    toast('Demande envoyée ✅', 'Un directeur examinera votre demande.', 'success');
-  } catch(e) {
-    toast('Erreur Firebase', e.message, 'error');
-    console.error(e);
-  }
-}
-
-// =================== ACCESS MANAGEMENT ===================
-async function loadAccessRequests() {
-  if (!db) return;
-  const listEl = document.getElementById('access-requests-list');
-  const approvedEl = document.getElementById('approved-users-list');
-  try {
-    const snap = await fb.getDocs(fb.collection(db, 'users'));
-    const pending = [], approved = [];
-    snap.forEach(d => {
-      const u = { id: d.id, ...d.data() };
-      if (u.status === 'pending') pending.push(u);
-      else if (u.status === 'approved') approved.push(u);
-    });
-
-    // Update badge
-    const badge = document.getElementById('badge-gestion');
-    if (pending.length > 0) { badge.style.display = 'inline'; badge.textContent = pending.length; }
-    else badge.style.display = 'none';
-
-    // Pending
-    listEl.innerHTML = pending.length === 0
-      ? '<div class="empty-state" style="padding:20px 0;"><div class="label">Aucune demande en attente</div></div>'
-      : pending.map(u => `
-        <div class="access-request-card">
-          <div class="info">
-            <div class="name">👤 ${u.prenom} ${u.nom}</div>
-            <div class="sub">Grade demandé : ${u.grade} • OOC : ${u.pseudo}</div>
-          </div>
-          <div class="actions">
-            <button class="btn btn-primary btn-sm" onclick="approveUser('${u.id}')">✅ Accepter</button>
-            <button class="btn btn-danger btn-sm" onclick="rejectUser('${u.id}')">❌ Refuser</button>
-          </div>
-        </div>`).join('');
-
-    // Approved
-    approvedEl.innerHTML = approved.length === 0
-      ? '<div class="empty-state" style="padding:20px 0;"><div class="label">Aucun utilisateur</div></div>'
-      : approved.map(u => `
-        <div class="access-request-card">
-          <div class="info">
-            <div class="name">✅ ${u.prenom} ${u.nom}</div>
-            <div class="sub">${u.grade} • OOC : ${u.pseudo || '—'}</div>
-          </div>
-          <div class="actions">
-            <button class="btn btn-danger btn-sm" onclick="revokeUser('${u.id}')">🚫 Révoquer</button>
-          </div>
-        </div>`).join('');
+    await fb.setDoc(fb.doc(db, 'users', key), { prenom, nom, pseudo, grade, status:'pending', createdAt: new Date().toISOString() });
+    document.getElementById('form-register').style.display='none'; document.getElementById('login-pending').style.display='block';
+    toast('Demande envoyée', 'Un directeur examinera votre demande.', 'success');
   } catch(e) { toast('Erreur', e.message, 'error'); }
 }
 
-async function approveUser(key) {
-  await fb.updateDoc(fb.doc(db, 'users', key), { status: 'approved' });
-  toast('Accès accordé', 'L\'utilisateur peut maintenant se connecter.', 'success');
-  loadAccessRequests();
+async function loadAccessRequests() { if(!db) return; let snap = await fb.getDocs(fb.collection(db,'users')); let pending=[], approved=[]; snap.forEach(d=>{ let u={id:d.id,...d.data()}; if(u.status==='pending') pending.push(u); else if(u.status==='approved') approved.push(u); }); document.getElementById('badge-gestion').style.display = pending.length?'inline':'none'; if(pending.length) document.getElementById('badge-gestion').textContent=pending.length;
+  document.getElementById('access-requests-list').innerHTML = pending.length?pending.map(u=>`<div class="access-request-card"><div class="info"><div class="name">👤 ${u.prenom} ${u.nom}</div><div class="sub">Grade demandé : ${u.grade} • OOC : ${u.pseudo}</div></div><div class="actions"><button class="btn btn-primary btn-sm" onclick="approveUser('${u.id}')">✅ Accepter</button><button class="btn btn-danger btn-sm" onclick="rejectUser('${u.id}')">❌ Refuser</button></div></div>`).join(''):'<div class="empty-state" style="padding:20px 0;"><div class="label">Aucune demande en attente</div></div>';
+  document.getElementById('approved-users-list').innerHTML = approved.length?approved.map(u=>`<div class="access-request-card"><div class="info"><div class="name">✅ ${u.prenom} ${u.nom}</div><div class="sub">${u.grade} • OOC : ${u.pseudo||'—'}</div></div><div class="actions"><button class="btn btn-danger btn-sm" onclick="revokeUser('${u.id}')">🚫 Révoquer</button></div></div>`).join(''):'<div class="empty-state" style="padding:20px 0;"><div class="label">Aucun utilisateur</div></div>';
 }
-
-async function rejectUser(key) {
-  await fb.updateDoc(fb.doc(db, 'users', key), { status: 'rejected' });
-  toast('Accès refusé', 'La demande a été rejetée.', 'warn');
-  loadAccessRequests();
-}
-
-// =================== SITE ACCESS TOGGLE ===================
+async function approveUser(id) { await fb.updateDoc(fb.doc(db,'users',id),{status:'approved'}); toast('Accès accordé','','success'); loadAccessRequests(); }
+async function rejectUser(id) { await fb.updateDoc(fb.doc(db,'users',id),{status:'rejected'}); toast('Accès refusé','','warn'); loadAccessRequests(); }
+async function revokeUser(id) { await fb.updateDoc(fb.doc(db,'users',id),{status:'rejected'}); toast('Accès révoqué','','warn'); loadAccessRequests(); }
+async function loadSiteAccessState() { if(!db) return; let snap = await fb.getDoc(fb.doc(db,'config','site')); siteAccessEnabled = snap.exists()?snap.data().accessEnabled!==false:true; renderSiteAccessToggle(); }
+function renderSiteAccessToggle() { let toggle = document.getElementById('site-access-toggle'), knob = document.getElementById('site-access-knob'), label = document.getElementById('site-access-label'); if(!toggle) return; if(siteAccessEnabled) { toggle.style.background='var(--green)'; knob.style.left='26px'; label.textContent='ACTIVÉ'; label.style.color='var(--green)'; } else { toggle.style.background='#a01f30'; knob.style.left='3px'; label.textContent='DÉSACTIVÉ'; label.style.color='var(--red)'; } }
 let siteAccessEnabled = true;
+async function toggleSiteAccess() { if(!db) return; siteAccessEnabled = !siteAccessEnabled; renderSiteAccessToggle(); await fb.setDoc(fb.doc(db,'config','site'),{ accessEnabled: siteAccessEnabled }); toast(siteAccessEnabled?'✅ Site ouvert':'🔒 Site fermé', siteAccessEnabled?'Les agents peuvent maintenant se connecter.':'Les connexions sont maintenant bloquées.', siteAccessEnabled?'success':'warn'); }
+function initListeners() { if(!db) return; listenCollection('rapports', renderRapports); listenCollection('signalements', renderSignalements); listenCollection('saisies', renderSaisies); listenCollection('fiches', renderFiches); listenCollection('vehicules', renderVehicules); listenCollection('agents', renderAgents); listenCollection('plaintes', renderPlaintes); }
+function listenCollection(col, cb) { fb.onSnapshot(fb.collection(db, col), snap => { let items=[]; snap.forEach(d=>items.push({id:d.id,...d.data()})); items.sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||'')); cb(items); }); }
 
-async function loadSiteAccessState() {
-  if (!db) return;
-  try {
-    const snap = await fb.getDoc(fb.doc(db, 'config', 'site'));
-    siteAccessEnabled = snap.exists() ? snap.data().accessEnabled !== false : true;
-    renderSiteAccessToggle();
-  } catch(e) { console.warn('Site access state error', e); }
-}
+function renderRapports(items) { counters.rapports=items.length; document.getElementById('stat-rapports').textContent=items.length; let tbody=document.getElementById('rapports-tbody'); if(!items.length){ tbody.innerHTML='<tr><td colspan="7"><div class="empty-state"><div class="icon">📋</div><div class="label">Aucun rapport enregistré</div></div></td></tr>'; return; } tbody.innerHTML=items.map(r=>`<tr onclick="viewRapport('${r.id}')"><td><span style="font-family:var(--mono);color:var(--blue);">${r.num||r.id}</span></td><td>${fmtDate(r.date)}</td><td>${r.type}</td><td>${r.lieu||'—'}</td><td>${r.agent||'—'}</td><td>${statusBadge(r.statut)}</td><td onclick="event.stopPropagation()">${canDelete()?`<button class="btn btn-danger btn-sm" onclick="deleteItem('rapports','${r.id}')">🗑️</button>`:''}</td></tr>`).join(''); renderActivity(items.slice(0,5)); }
+function renderSignalements(items) { counters.signalements=items.length; let badge=document.getElementById('badge-signalements'); if(items.length){badge.style.display='inline';badge.textContent=items.length;}else badge.style.display='none'; let tbody=document.getElementById('signalements-tbody'); if(!items.length){tbody.innerHTML='<tr><td colspan="7"><div class="empty-state"><div class="icon">🚨</div><div class="label">Aucun signalement</div></div></td></tr>';return;} tbody.innerHTML=items.map((s,i)=>`<tr onclick="viewSignalement('${s.id}')"><td><span style="font-family:var(--mono);color:var(--blue);">SIG-${String(i+1).padStart(4,'0')}</span></td><td>${fmtDate(s.date)}</td><td>${s.type}</td><td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${s.description||'—'}</td><td>${s.zone||'—'}</td><td><span class="badge ${s.priorite==='Urgent'||s.priorite==='Critique'?'badge-urgent':'badge-info'}">${s.priorite}</span></td><td onclick="event.stopPropagation()">${canDelete()?`<button class="btn btn-danger btn-sm" onclick="deleteItem('signalements','${s.id}')">🗑️</button>`:''}</td></tr>`).join(''); }
+function renderPlaintes(items) { counters.plaintes=items.length; document.getElementById('stat-plaintes').textContent=items.length; let badge=document.getElementById('badge-plaintes'); let pending=items.filter(p=>p.statut==='En attente').length; if(pending){badge.style.display='inline';badge.textContent=pending;}else badge.style.display='none'; let tbody=document.getElementById('plaintes-tbody'); if(!items.length){tbody.innerHTML='<tr><td colspan="7"><div class="empty-state"><div class="icon">⚖️</div><div class="label">Aucune plainte enregistrée</div></div></td></tr>';return;} tbody.innerHTML=items.map((p,i)=>`<tr onclick="viewPlainte('${p.id}')"><td><span style="font-family:var(--mono);color:var(--blue);">PL-${String(i+1).padStart(4,'0')}</span></td><td>${fmtDate(p.date)}</td><td>${p.plaignant||'—'}</td><td>${p.accuse||'—'}</td><td>${p.motif||'—'}</td><td>${plainteStatusBadge(p.statut)}</td><td onclick="event.stopPropagation()">${canDelete()?`<button class="btn btn-danger btn-sm" onclick="deleteItem('plaintes','${p.id}')">🗑️</button>`:''}</td></tr>`).join(''); }
+function renderSaisies(items) { counters.saisies=items.length; document.getElementById('stat-gav').textContent=items.length; let tbody=document.getElementById('saisies-tbody'); if(!items.length){tbody.innerHTML='<tr><td colspan="9"><div class="empty-state"><div class="icon">🔫</div><div class="label">Aucune saisie enregistrée</div></div></td></tr>';return;} tbody.innerHTML=items.map(s=>`<tr onclick="viewSaisie('${s.id}')"><td><span style="font-family:var(--mono);color:var(--blue);">${s.num||s.id}</span></td><td>${fmtDate(s.date)}</td><td>${s.categorie}</td><td>${s.objet||'—'}</td><td>${s.quantite||'—'}</td><td>${s.proprio||'—'}</td><td>${s.agent||'—'}</td><td>${s.dossier||'—'}</td><td onclick="event.stopPropagation()">${canDelete()?`<button class="btn btn-danger btn-sm" onclick="deleteItem('saisies','${s.id}')">🗑️</button>`:''}</td></tr>`).join(''); }
+function renderFiches(items) { counters.fiches=items.length; let tbody=document.getElementById('fiches-tbody'); if(!items.length){tbody.innerHTML='<tr><td colspan="7"><div class="empty-state"><div class="icon">👤</div><div class="label">Aucune fiche individu</div></div></td></tr>';return;} tbody.innerHTML=items.map(f=>`<tr onclick="viewFiche('${f.id}')"><td>${f.photos&&f.photos.length?`<img src="${f.photos[0]}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;">`:'—'}</td><td>${f.nom||'—'}</td><td>${f.naissance||'—'}</td><td>${f.nationalite||'—'}</td><td><span class="badge ${f.statut==='Dangereux'?'badge-urgent':f.statut==='Recherché'?'badge-open':'badge-neutral'}">${f.statut}</span></td><td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;">${f.antecedents||'—'}</td><td onclick="event.stopPropagation()">${canDelete()?`<button class="btn btn-danger btn-sm" onclick="deleteItem('fiches','${f.id}')">🗑️</button>`:''}</td></tr>`).join(''); }
+function renderVehicules(items) { counters.vehicules=items.length; let tbody=document.getElementById('vehicules-tbody'); if(!items.length){tbody.innerHTML='<tr><td colspan="8"><div class="empty-state"><div class="icon">🚗</div><div class="label">Aucun véhicule recherché</div></div></td></tr>';return;} tbody.innerHTML=items.map(v=>`<tr onclick="viewVehicule('${v.id}')"><td>${v.photos&&v.photos.length?`<img src="${v.photos[0]}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;">`:'—'}</td><td><span style="font-family:var(--mono);color:var(--cyan);">${v.plaque||'—'}</span></td><td>${v.modele||'—'}</td><td>${v.couleur||'—'}</td><td>${v.proprio||'—'}</td><td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;">${v.motif||'—'}</td><td>${fmtDate(v.createdAt)}</td><td onclick="event.stopPropagation()">${canDelete()?`<button class="btn btn-danger btn-sm" onclick="deleteItem('vehicules','${v.id}')">🗑️</button>`:''}</td></tr>`).join(''); }
+function renderAgents(items) { counters.agents=items.length; document.getElementById('stat-agents').textContent=items.length; let grid=document.getElementById('agents-grid'); if(!items.length){grid.innerHTML='<div style="grid-column:1/-1;"><div class="empty-state"><div class="icon">👮</div><div class="label">Aucun agent enregistré</div></div></div>';return;} grid.innerHTML=items.map(a=>`<div class="agent-card-big"><div class="av">👮</div><div class="name">${a.nom||'—'}</div><div class="grade">${a.grade||'—'}</div><div class="meta"><span>🔖 ${a.matricule||'—'}</span><span>🎮 ${a.pseudo||'—'}</span><span>📅 Depuis le ${a.dateEmbauche||'—'}</span><span>● <span class="badge ${a.statut==='Actif'?'badge-closed':a.statut==='Suspendu'?'badge-open':'badge-neutral'}">${a.statut}</span></span></div>${canDelete()?`<button class="btn btn-danger btn-sm" style="margin-top:10px;" onclick="deleteItem('agents','${a.id}')">🗑️ Supprimer</button>`:''}</div>`).join(''); }
+function renderActivity(items) { let container=document.getElementById('activity-container'); if(!items.length){container.innerHTML='<div class="empty-state"><div class="icon">📋</div><div class="label">Aucune activité pour le moment</div></div>';return;} container.innerHTML=`<div class="activity-list">${items.map(r=>`<div class="activity-item"><div class="activity-dot" style="background:var(--blue);"></div><div><div class="activity-text">Rapport ${r.num||''} — ${r.type||''} à ${r.lieu||'lieu inconnu'}</div><div class="activity-time">${fmtDate(r.date)} • Agent : ${r.agent||'—'}</div></div></div>`).join('')}</div>`; }
 
-function renderSiteAccessToggle() {
-  const toggle = document.getElementById('site-access-toggle');
-  const knob = document.getElementById('site-access-knob');
-  const label = document.getElementById('site-access-label');
-  if (!toggle) return;
-  if (siteAccessEnabled) {
-    toggle.style.background = 'var(--green)';
-    knob.style.left = '26px';
-    label.textContent = 'ACTIVÉ';
-    label.style.color = 'var(--green)';
-  } else {
-    toggle.style.background = '#a01f30';
-    knob.style.left = '3px';
-    label.textContent = 'DÉSACTIVÉ';
-    label.style.color = 'var(--red)';
-  }
-}
+async function saveRapport() { let num=`INT-${String(++counters.rapports).padStart(4,'0')}`; await fb.addDoc(fb.collection(db,'rapports'),{num,type:v('r-type'),statut:v('r-statut'),date:v('r-date'),lieu:v('r-lieu'),agent:v('r-agent'),personnes:v('r-personnes'),description:v('r-description'),suites:v('r-suites'),pieces:v('r-pieces'),priorite:v('r-priorite'),createdAt:new Date().toISOString(),createdBy:currentUser?.nom}); closeModal('modal-rapport'); toast('Rapport enregistré',`${num} créé`); resetForm(['r-type','r-statut','r-date','r-lieu','r-agent','r-personnes','r-description','r-suites','r-pieces','r-priorite']); }
+async function saveSignalement() { await fb.addDoc(fb.collection(db,'signalements'),{type:v('s-type'),priorite:v('s-priorite'),zone:v('s-zone'),date:v('s-date'),description:v('s-description'),createdAt:new Date().toISOString(),createdBy:currentUser?.nom}); closeModal('modal-signalement'); toast('Signalement enregistré',''); resetForm(['s-type','s-priorite','s-zone','s-date','s-description']); }
+async function savePlainte() { await fb.addDoc(fb.collection(db,'plaintes'),{plaignant:v('pl-plaignant'),accuse:v('pl-accuse'),date:v('pl-date'),motif:v('pl-motif'),statut:v('pl-statut'),gravite:v('pl-gravite'),description:v('pl-description'),preuves:v('pl-preuves'),createdAt:new Date().toISOString(),createdBy:currentUser?.nom}); closeModal('modal-plainte'); toast('Plainte déposée',''); resetForm(['pl-plaignant','pl-accuse','pl-date','pl-motif','pl-statut','pl-gravite','pl-description','pl-preuves']); }
+async function saveSaisie() { let num=`SAI-${String(++counters.saisies).padStart(4,'0')}`; await fb.addDoc(fb.collection(db,'saisies'),{num,categorie:v('sa-categorie'),date:v('sa-date'),objet:v('sa-objet'),quantite:v('sa-quantite'),proprio:v('sa-proprio'),agent:v('sa-agent'),dossier:v('sa-dossier'),lieu:v('sa-lieu'),description:v('sa-description'),createdAt:new Date().toISOString(),createdBy:currentUser?.nom}); closeModal('modal-saisie'); toast('Saisie enregistrée',`${num} créé`); resetForm(['sa-categorie','sa-date','sa-objet','sa-quantite','sa-proprio','sa-agent','sa-dossier','sa-lieu','sa-description']); }
+async function saveFiche() { let photos=[]; try{photos=await uploadPhotos('fi');}catch(e){} await fb.addDoc(fb.collection(db,'fiches'),{nom:v('fi-nom'),naissance:v('fi-naissance'),nationalite:v('fi-nationalite'),statut:v('fi-statut'),antecedents:v('fi-antecedents'),notes:v('fi-notes'),photos,createdAt:new Date().toISOString(),createdBy:currentUser?.nom}); closeModal('modal-fiche'); resetPhotoPreview('fi'); toast('Fiche enregistrée',''); resetForm(['fi-nom','fi-naissance','fi-nationalite','fi-statut','fi-antecedents','fi-notes']); }
+async function saveVehicule() { let photos=[]; try{photos=await uploadPhotos('v');}catch(e){} await fb.addDoc(fb.collection(db,'vehicules'),{plaque:v('v-plaque'),modele:v('v-modele'),couleur:v('v-couleur'),proprio:v('v-proprio'),motif:v('v-motif'),photos,createdAt:new Date().toISOString(),createdBy:currentUser?.nom}); closeModal('modal-vehicule'); resetPhotoPreview('v'); toast('Véhicule ajouté',''); resetForm(['v-plaque','v-modele','v-couleur','v-proprio','v-motif']); }
+async function saveAgent() { await fb.addDoc(fb.collection(db,'agents'),{nom:v('ag-nom'),pseudo:v('ag-pseudo'),grade:v('ag-grade'),matricule:v('ag-matricule'),statut:v('ag-statut'),dateEmbauche:v('ag-date'),notes:v('ag-notes'),createdAt:new Date().toISOString(),createdBy:currentUser?.nom}); closeModal('modal-agent'); toast('Agent ajouté',''); resetForm(['ag-nom','ag-pseudo','ag-grade','ag-matricule','ag-statut','ag-date','ag-notes']); }
 
-async function toggleSiteAccess() {
-  if (!db) return;
-  siteAccessEnabled = !siteAccessEnabled;
-  renderSiteAccessToggle();
-  await fb.setDoc(fb.doc(db, 'config', 'site'), { accessEnabled: siteAccessEnabled });
-  toast(
-    siteAccessEnabled ? '✅ Site ouvert' : '🔒 Site fermé',
-    siteAccessEnabled ? 'Les agents peuvent maintenant se connecter.' : 'Les connexions sont maintenant bloquées.',
-    siteAccessEnabled ? 'success' : 'warn'
-  );
-}
+function viewRapport(id){ showViewByFirebase('rapports',id,data=>{ document.getElementById('view-title').innerHTML=`📋 ${data.num||'Rapport'} — ${data.type}`; document.getElementById('view-body').innerHTML=`<div class="view-grid"><div class="view-field"><div class="view-field-label">N° Dossier</div><div class="view-field-value">${data.num||'—'}</div></div><div class="view-field"><div class="view-field-label">Statut</div><div class="view-field-value">${statusBadge(data.statut)}</div></div><div class="view-field"><div class="view-field-label">Type</div><div class="view-field-value">${data.type||'—'}</div></div><div class="view-field"><div class="view-field-label">Date</div><div class="view-field-value">${fmtDate(data.date)}</div></div><div class="view-field"><div class="view-field-label">Lieu</div><div class="view-field-value">${data.lieu||'—'}</div></div><div class="view-field"><div class="view-field-label">Agent</div><div class="view-field-value">${data.agent||'—'}</div></div><div class="view-field"><div class="view-field-label">Priorité</div><div class="view-field-value">${data.priorite||'—'}</div></div><div class="view-field"><div class="view-field-label">Personnes impliquées</div><div class="view-field-value">${data.personnes||'—'}</div></div></div><div class="view-field"><div class="view-field-label">Description</div><div class="view-field-value">${data.description||'—'}</div></div><div class="view-field"><div class="view-field-label">Suites données</div><div class="view-field-value">${data.suites||'—'}</div></div><div class="view-field"><div class="view-field-label">Pièces saisies</div><div class="view-field-value">${data.pieces||'—'}</div></div>`; openModal('modal-view'); }); }
+function viewSignalement(id){ showViewByFirebase('signalements',id,data=>{ document.getElementById('view-title').innerHTML=`🚨 Signalement — ${data.type}`; document.getElementById('view-body').innerHTML=`<div class="view-grid"><div class="view-field"><div class="view-field-label">Type</div><div class="view-field-value">${data.type}</div></div><div class="view-field"><div class="view-field-label">Priorité</div><div class="view-field-value">${data.priorite}</div></div><div class="view-field"><div class="view-field-label">Zone</div><div class="view-field-value">${data.zone||'—'}</div></div><div class="view-field"><div class="view-field-label">Date/Heure</div><div class="view-field-value">${fmtDate(data.date)}</div></div></div><div class="view-field"><div class="view-field-label">Description</div><div class="view-field-value">${data.description||'—'}</div></div>`; openModal('modal-view'); }); }
+function viewPlainte(id){ showViewByFirebase('plaintes',id,data=>{ document.getElementById('view-title').innerHTML=`⚖️ Plainte — ${data.motif}`; document.getElementById('view-body').innerHTML=`<div class="view-grid"><div class="view-field"><div class="view-field-label">Agent plaignant</div><div class="view-field-value">${data.plaignant||'—'}</div></div><div class="view-field"><div class="view-field-label">Agent mis en cause</div><div class="view-field-value">${data.accuse||'—'}</div></div><div class="view-field"><div class="view-field-label">Date des faits</div><div class="view-field-value">${fmtDate(data.date)}</div></div><div class="view-field"><div class="view-field-label">Motif</div><div class="view-field-value">${data.motif||'—'}</div></div><div class="view-field"><div class="view-field-label">Gravité</div><div class="view-field-value">${data.gravite||'—'}</div></div><div class="view-field"><div class="view-field-label">Statut</div><div class="view-field-value">${plainteStatusBadge(data.statut)}</div></div></div><div class="view-field"><div class="view-field-label">Description des faits</div><div class="view-field-value">${data.description||'—'}</div></div><div class="view-field"><div class="view-field-label">Preuves / Éléments</div><div class="view-field-value">${data.preuves||'—'}</div></div>`; document.getElementById('view-footer').innerHTML=`<button class="btn btn-ghost" onclick="closeModal('modal-view')">Fermer</button>${canDelete()?`<select class="form-select" id="plainte-status-change" style="max-width:180px;"><option value="En attente">En attente</option><option value="En cours">En cours</option><option value="Résolue">Résolue</option><option value="Classée sans suite">Classée sans suite</option></select><button class="btn btn-primary" onclick="updatePlainteStatus('${id}')">Changer statut</button>`:''}`; openModal('modal-view'); }); }
+async function updatePlainteStatus(id){ let newStatus = document.getElementById('plainte-status-change').value; await fb.updateDoc(fb.doc(db,'plaintes',id),{statut:newStatus}); closeModal('modal-view'); toast('Statut mis à jour',`Plainte : ${newStatus}`); }
+function viewFiche(id){ showViewByFirebase('fiches',id,data=>{ document.getElementById('view-title').innerHTML=`👤 Fiche — ${data.nom}`; document.getElementById('view-body').innerHTML=`${data.photos&&data.photos.length?`<div class="view-field"><div class="view-field-label">Photos</div><div class="view-photos">${data.photos.map(url=>`<img src="${url}" onclick="openLightbox('${url}')">`).join('')}</div></div>`:''}<div class="view-grid"><div class="view-field"><div class="view-field-label">Nom</div><div class="view-field-value">${data.nom||'—'}</div></div><div class="view-field"><div class="view-field-label">Date de naissance</div><div class="view-field-value">${data.naissance||'—'}</div></div><div class="view-field"><div class="view-field-label">Nationalité</div><div class="view-field-value">${data.nationalite||'—'}</div></div><div class="view-field"><div class="view-field-label">Statut</div><div class="view-field-value"><span class="badge ${data.statut==='Dangereux'?'badge-urgent':data.statut==='Recherché'?'badge-open':'badge-neutral'}">${data.statut}</span></div></div></div><div class="view-field"><div class="view-field-label">Antécédents</div><div class="view-field-value">${data.antecedents||'—'}</div></div><div class="view-field"><div class="view-field-label">Notes</div><div class="view-field-value">${data.notes||'—'}</div></div>`; document.getElementById('view-footer').innerHTML='<button class="btn btn-ghost" onclick="closeModal(\'modal-view\')">Fermer</button>'; openModal('modal-view'); }); }
+function viewVehicule(id){ showViewByFirebase('vehicules',id,data=>{ document.getElementById('view-title').innerHTML=`🚗 Véhicule — ${data.plaque}`; document.getElementById('view-body').innerHTML=`${data.photos&&data.photos.length?`<div class="view-field"><div class="view-field-label">Photos</div><div class="view-photos">${data.photos.map(url=>`<img src="${url}" onclick="openLightbox('${url}')">`).join('')}</div></div>`:''}<div class="view-grid"><div class="view-field"><div class="view-field-label">Plaque</div><div class="view-field-value" style="font-size:20px;">${data.plaque||'—'}</div></div><div class="view-field"><div class="view-field-label">Marque / Modèle</div><div class="view-field-value">${data.modele||'—'}</div></div><div class="view-field"><div class="view-field-label">Couleur</div><div class="view-field-value">${data.couleur||'—'}</div></div><div class="view-field"><div class="view-field-label">Propriétaire</div><div class="view-field-value">${data.proprio||'—'}</div></div></div><div class="view-field"><div class="view-field-label">Motif de recherche</div><div class="view-field-value">${data.motif||'—'}</div></div>`; document.getElementById('view-footer').innerHTML='<button class="btn btn-ghost" onclick="closeModal(\'modal-view\')">Fermer</button>'; openModal('modal-view'); }); }
+function viewSaisie(id){ showViewByFirebase('saisies',id,data=>{ document.getElementById('view-title').innerHTML=`🔫 ${data.num} — ${data.categorie}`; document.getElementById('view-body').innerHTML=`<div class="view-grid"><div class="view-field"><div class="view-field-label">N° Saisie</div><div class="view-field-value">${data.num||'—'}</div></div><div class="view-field"><div class="view-field-label">Date</div><div class="view-field-value">${fmtDate(data.date)}</div></div><div class="view-field"><div class="view-field-label">Catégorie</div><div class="view-field-value">${data.categorie}</div></div><div class="view-field"><div class="view-field-label">Objet(s)</div><div class="view-field-value">${data.objet||'—'}</div></div><div class="view-field"><div class="view-field-label">Quantité</div><div class="view-field-value">${data.quantite||'—'}</div></div><div class="view-field"><div class="view-field-label">Propriétaire</div><div class="view-field-value">${data.proprio||'—'}</div></div><div class="view-field"><div class="view-field-label">Agent</div><div class="view-field-value">${data.agent||'—'}</div></div><div class="view-field"><div class="view-field-label">Dossier lié</div><div class="view-field-value">${data.dossier||'—'}</div></div></div><div class="view-field"><div class="view-field-label">Description</div><div class="view-field-value">${data.description||'—'}</div></div>`; document.getElementById('view-footer').innerHTML='<button class="btn btn-ghost" onclick="closeModal(\'modal-view\')">Fermer</button>'; openModal('modal-view'); }); }
+async function showViewByFirebase(col,id,cb){ if(!db) return; let snap=await fb.getDoc(fb.doc(db,col,id)); if(snap.exists()) cb({id:snap.id,...snap.data()}); }
 
-async function revokeUser(key) {
-  await fb.updateDoc(fb.doc(db, 'users', key), { status: 'rejected' });
-  toast('Accès révoqué', 'L\'utilisateur ne peut plus se connecter.', 'warn');
-  loadAccessRequests();
-}
+function canDelete(){ return currentUser && ADMIN_GRADES.includes(currentUser.grade); }
+async function deleteItem(col,id){ if(!canDelete()) return toast('Accès refusé','Seuls directeurs','error'); if(!confirm('Confirmer ?')) return; await fb.deleteDoc(fb.doc(db,col,id)); toast('Supprimé',''); }
+async function confirmDelete(col,label){ if(!confirm(`Supprimer ${label} ? Irréversible.`)) return; let snap=await fb.getDocs(fb.collection(db,col)); await Promise.all(snap.docs.map(d=>fb.deleteDoc(fb.doc(db,col,d.id)))); toast('Suppression effectuée',`${col} vidé`); }
 
-// =================== FIREBASE LISTENERS ===================
-function initListeners() {
-  if (!db) return;
-  listenCollection('rapports', renderRapports);
-  listenCollection('signalements', renderSignalements);
-  listenCollection('saisies', renderSaisies);
-  listenCollection('fiches', renderFiches);
-  listenCollection('vehicules', renderVehicules);
-  listenCollection('agents', renderAgents);
-  listenCollection('plaintes', renderPlaintes);
-}
+function handlePhotoSelect(prefix,input){ let files=Array.from(input.files); photoFiles[prefix]=[...(photoFiles[prefix]||[]),...files]; let preview=document.getElementById(`${prefix}-photos-preview`); files.forEach(file=>{ let reader=new FileReader(); reader.onload=e=>{ let wrap=document.createElement('div'); wrap.className='photo-thumb-wrap'; wrap.innerHTML=`<img class="photo-thumb" src="${e.target.result}"><button class="photo-thumb-del" onclick="removePhotoPreview(this,'${prefix}')">×</button>`; preview.appendChild(wrap); }; reader.readAsDataURL(file); }); }
+function removePhotoPreview(btn,prefix){ let wrap=btn.parentElement; let idx=Array.from(wrap.parentElement.children).indexOf(wrap); photoFiles[prefix].splice(idx,1); wrap.remove(); }
+async function uploadPhotos(prefix){ let files=photoFiles[prefix]||[]; if(!files.length) return []; let urls=[]; for(let file of files){ let storageRef=fb.ref(storage,`photos/${prefix}_${Date.now()}_${file.name}`); let snap=await fb.uploadBytes(storageRef,file); let url=await fb.getDownloadURL(snap.ref); urls.push(url); } photoFiles[prefix]=[]; return urls; }
+function resetPhotoPreview(prefix){ photoFiles[prefix]=[]; let preview=document.getElementById(`${prefix}-photos-preview`); if(preview) preview.innerHTML=''; let input=document.getElementById(`${prefix}-photos-input`); if(input) input.value=''; }
 
-function listenCollection(col, cb) {
-  fb.onSnapshot(fb.collection(db, col), snap => {
-    const items = [];
-    snap.forEach(d => items.push({ id: d.id, ...d.data() }));
-    items.sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
-    cb(items);
-  });
-}
+function v(id){ let el=document.getElementById(id); return el?el.value:''; }
+function resetForm(ids){ ids.forEach(id=>{ let el=document.getElementById(id); if(el) el.value=''; }); }
+function fmtDate(d){ if(!d) return '—'; try{ return new Date(d).toLocaleString('fr-FR',{dateStyle:'short',timeStyle:'short'}); }catch(e){ return d; } }
+function statusBadge(s){ let map={'Ouvert':'badge-open','En cours':'badge-progress','Clôturé':'badge-closed'}; return `<span class="badge ${map[s]||'badge-neutral'}">${s||'—'}</span>`; }
+function plainteStatusBadge(s){ let map={'En attente':'badge-open','En cours':'badge-progress','Résolue':'badge-closed','Classée sans suite':'badge-neutral'}; return `<span class="badge ${map[s]||'badge-neutral'}">${s||'—'}</span>`; }
 
-// =================== STATS ===================
-function updateStats() {}
+function showPage(name,el){ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); document.getElementById('page-'+name).classList.add('active'); if(el) el.classList.add('active'); let titles={dashboard:'Tableau de bord',rapports:"Rapports d'intervention",signalements:'Signalements',plaintes:'Plaintes',saisies:'Saisies',fiches:'Fiches individus',vehicules:'Véhicules recherchés',agents:'Agents',gestion:'Gestion du site'}; document.getElementById('page-title').textContent=titles[name]||name; if(name==='gestion'&&canDelete()){ loadAccessRequests(); loadSiteAccessState(); } }
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+function openNewModal(){ openModal('modal-rapport'); }
+function openSignalementModal(){ openModal('modal-signalement'); }
+function openPlainteModal(){ let el=document.getElementById('pl-plaignant'); if(el&&currentUser) el.value=`${currentUser.prenom} ${currentUser.nom}`; openModal('modal-plainte'); }
+function openSaisieModal(){ openModal('modal-saisie'); }
+function openFicheModal(){ openModal('modal-fiche'); }
+function openVehiculeModal(){ openModal('modal-vehicule'); }
+function openAgentModal(){ openModal('modal-agent'); }
 
-// =================== PHOTO HANDLING ===================
-function handlePhotoSelect(prefix, input) {
-  const files = Array.from(input.files);
-  photoFiles[prefix] = [...(photoFiles[prefix] || []), ...files];
-  const preview = document.getElementById(`${prefix}-photos-preview`);
-  files.forEach(file => {
-    const reader = new FileReader();
-    reader.onload = e => {
-      const wrap = document.createElement('div');
-      wrap.className = 'photo-thumb-wrap';
-      wrap.innerHTML = `<img class="photo-thumb" src="${e.target.result}"><button class="photo-thumb-del" onclick="removePhotoPreview(this,'${prefix}')">×</button>`;
-      preview.appendChild(wrap);
-    };
-    reader.readAsDataURL(file);
-  });
-}
+function filterTable(tableId,query){ document.querySelectorAll(`#${tableId} tbody tr`).forEach(row=>{ row.style.display=row.textContent.toLowerCase().includes(query.toLowerCase())?'': 'none'; }); }
+function filterStatus(tableId,status){ document.querySelectorAll(`#${tableId} tbody tr`).forEach(row=>{ row.style.display=!status||row.textContent.includes(status)?'':'none'; }); document.querySelectorAll(`#${tableId}`).forEach(t=>{ t.closest('.table-wrap').querySelectorAll('.filter-btn').forEach(b=>{ b.classList.toggle('active',b.textContent===(status||'Tous')||(b.textContent==='Tous'&&!status)); }); }); }
 
-function removePhotoPreview(btn, prefix) {
-  const wrap = btn.parentElement;
-  const idx = Array.from(wrap.parentElement.children).indexOf(wrap);
-  photoFiles[prefix].splice(idx, 1);
-  wrap.remove();
-}
-
-async function uploadPhotos(prefix) {
-  const files = photoFiles[prefix] || [];
-  if (!files.length) return [];
-  const urls = [];
-  for (const file of files) {
-    const storageRef = fb.ref(storage, `photos/${prefix}_${Date.now()}_${file.name}`);
-    const snap = await fb.uploadBytes(storageRef, file);
-    const url = await fb.getDownloadURL(snap.ref);
-    urls.push(url);
-  }
-  photoFiles[prefix] = [];
-  return urls;
-}
-
-function resetPhotoPreview(prefix) {
-  photoFiles[prefix] = [];
-  const preview = document.getElementById(`${prefix}-photos-preview`);
-  if (preview) preview.innerHTML = '';
-  const input = document.getElementById(`${prefix}-photos-input`);
-  if (input) input.value = '';
-}
-
-// =================== RENDERERS ===================
-function renderRapports(items) {
-  counters.rapports = items.length;
-  document.getElementById('stat-rapports').textContent = items.length;
-  const tbody = document.getElementById('rapports-tbody');
-  if (!items.length) {
-    tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="icon">📋</div><div class="label">Aucun rapport enregistré</div></div></td></tr>';
-    return;
-  }
-  tbody.innerHTML = items.map(r => `
-    <tr onclick="viewRapport('${r.id}')">
-      <td><span style="font-family:var(--mono);color:var(--blue);">${r.num || r.id}</span></td>
-      <td>${fmtDate(r.date)}</td>
-      <td>${r.type}</td>
-      <td>${r.lieu || '—'}</td>
-      <td>${r.agent || '—'}</td>
-      <td>${statusBadge(r.statut)}</td>
-      <td onclick="event.stopPropagation()">
-        ${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('rapports','${r.id}')">🗑️</button>` : ''}
-      </td>
-    </tr>`).join('');
-  renderActivity(items.slice(0,5), 'rapport');
-}
-
-function renderSignalements(items) {
-  counters.signalements = items.length;
-  const badge = document.getElementById('badge-signalements');
-  if (items.length) { badge.style.display = 'inline'; badge.textContent = items.length; }
-  else badge.style.display = 'none';
-  const tbody = document.getElementById('signalements-tbody');
-  if (!items.length) {
-    tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="icon">🚨</div><div class="label">Aucun signalement</div></div></td></tr>';
-    return;
-  }
-  tbody.innerHTML = items.map((s, i) => `
-    <tr onclick="viewSignalement('${s.id}')">
-      <td><span style="font-family:var(--mono);color:var(--blue);">SIG-${String(i+1).padStart(4,'0')}</span></td>
-      <td>${fmtDate(s.date)}</td>
-      <td>${s.type}</td>
-      <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${s.description || '—'}</td>
-      <td>${s.zone || '—'}</td>
-      <td><span class="badge ${s.priorite === 'Urgent' || s.priorite === 'Critique' ? 'badge-urgent' : 'badge-info'}">${s.priorite}</span></td>
-      <td onclick="event.stopPropagation()">
-        ${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('signalements','${s.id}')">🗑️</button>` : ''}
-      </td>
-    </tr>`).join('');
-}
-
-function renderPlaintes(items) {
-  counters.plaintes = items.length;
-  document.getElementById('stat-plaintes').textContent = items.length;
-  const badge = document.getElementById('badge-plaintes');
-  const pending = items.filter(p => p.statut === 'En attente').length;
-  if (pending) { badge.style.display = 'inline'; badge.textContent = pending; }
-  else badge.style.display = 'none';
-  const tbody = document.getElementById('plaintes-tbody');
-  if (!items.length) {
-    tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="icon">⚖️</div><div class="label">Aucune plainte enregistrée</div></div></td></tr>';
-    return;
-  }
-  tbody.innerHTML = items.map((p, i) => `
-    <tr onclick="viewPlainte('${p.id}')">
-      <td><span style="font-family:var(--mono);color:var(--blue);">PL-${String(i+1).padStart(4,'0')}</span></td>
-      <td>${fmtDate(p.date)}</td>
-      <td>${p.plaignant || '—'}</td>
-      <td>${p.accuse || '—'}</td>
-      <td>${p.motif || '—'}</td>
-      <td>${plainteStatusBadge(p.statut)}</td>
-      <td onclick="event.stopPropagation()">
-        ${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('plaintes','${p.id}')">🗑️</button>` : ''}
-      </td>
-    </tr>`).join('');
-}
-
-function renderSaisies(items) {
-  counters.saisies = items.length;
-  document.getElementById('stat-gav').textContent = items.length;
-  const tbody = document.getElementById('saisies-tbody');
-  if (!items.length) {
-    tbody.innerHTML = '<tr><td colspan="9"><div class="empty-state"><div class="icon">🔫</div><div class="label">Aucune saisie enregistrée</div></div></td></tr>';
-    return;
-  }
-  tbody.innerHTML = items.map(s => `
-    <tr onclick="viewSaisie('${s.id}')">
-      <td><span style="font-family:var(--mono);color:var(--blue);">${s.num || s.id}</span></td>
-      <td>${fmtDate(s.date)}</td>
-      <td>${s.categorie}</td>
-      <td>${s.objet || '—'}</td>
-      <td>${s.quantite || '—'}</td>
-      <td>${s.proprio || '—'}</td>
-      <td>${s.agent || '—'}</td>
-      <td>${s.dossier || '—'}</td>
-      <td onclick="event.stopPropagation()">
-        ${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('saisies','${s.id}')">🗑️</button>` : ''}
-      </td>
-    </tr>`).join('');
-}
-
-function renderFiches(items) {
-  counters.fiches = items.length;
-  const tbody = document.getElementById('fiches-tbody');
-  if (!items.length) {
-    tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="icon">👤</div><div class="label">Aucune fiche individu</div></div></td></tr>';
-    return;
-  }
-  tbody.innerHTML = items.map(f => `
-    <tr onclick="viewFiche('${f.id}')">
-      <td>${f.photos && f.photos.length ? `<img src="${f.photos[0]}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;border:1px solid var(--border-bright);">` : '<span style="color:var(--text-muted);">—</span>'}</td>
-      <td>${f.nom || '—'}</td>
-      <td>${f.naissance || '—'}</td>
-      <td>${f.nationalite || '—'}</td>
-      <td><span class="badge ${f.statut === 'Dangereux' ? 'badge-urgent' : f.statut === 'Recherché' ? 'badge-open' : 'badge-neutral'}">${f.statut}</span></td>
-      <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${f.antecedents || '—'}</td>
-      <td onclick="event.stopPropagation()">
-        ${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('fiches','${f.id}')">🗑️</button>` : ''}
-      </td>
-    </tr>`).join('');
-}
-
-function renderVehicules(items) {
-  counters.vehicules = items.length;
-  const tbody = document.getElementById('vehicules-tbody');
-  if (!items.length) {
-    tbody.innerHTML = '<tr><td colspan="8"><div class="empty-state"><div class="icon">🚗</div><div class="label">Aucun véhicule recherché</div></div></td></tr>';
-    return;
-  }
-  tbody.innerHTML = items.map(v => `
-    <tr onclick="viewVehicule('${v.id}')">
-      <td>${v.photos && v.photos.length ? `<img src="${v.photos[0]}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;border:1px solid var(--border-bright);">` : '<span style="color:var(--text-muted);">—</span>'}</td>
-      <td><span style="font-family:var(--mono);color:var(--cyan);">${v.plaque || '—'}</span></td>
-      <td>${v.modele || '—'}</td>
-      <td>${v.couleur || '—'}</td>
-      <td>${v.proprio || '—'}</td>
-      <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${v.motif || '—'}</td>
-      <td>${fmtDate(v.createdAt)}</td>
-      <td onclick="event.stopPropagation()">
-        ${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('vehicules','${v.id}')">🗑️</button>` : ''}
-      </td>
-    </tr>`).join('');
-}
-
-function renderAgents(items) {
-  counters.agents = items.length;
-  document.getElementById('stat-agents').textContent = items.length;
-  const grid = document.getElementById('agents-grid');
-  if (!items.length) {
-    grid.innerHTML = '<div style="grid-column:1/-1;"><div class="empty-state"><div class="icon">👮</div><div class="label">Aucun agent enregistré</div></div></div>';
-    return;
-  }
-  grid.innerHTML = items.map(a => `
-    <div class="agent-card-big">
-      <div class="av">👮</div>
-      <div class="name">${a.nom || '—'}</div>
-      <div class="grade">${a.grade || '—'}</div>
-      <div class="meta">
-        <span>🔖 ${a.matricule || '—'}</span>
-        <span>🎮 ${a.pseudo || '—'}</span>
-        <span>📅 Depuis le ${a.dateEmbauche || '—'}</span>
-        <span>● <span class="badge ${a.statut === 'Actif' ? 'badge-closed' : a.statut === 'Suspendu' ? 'badge-open' : 'badge-neutral'}">${a.statut}</span></span>
-      </div>
-      ${canDelete() ? `<button class="btn btn-danger btn-sm" style="margin-top:10px;" onclick="deleteItem('agents','${a.id}')">🗑️ Supprimer</button>` : ''}
-    </div>`).join('');
-}
-
-function renderActivity(items, type) {
-  const container = document.getElementById('activity-container');
-  if (!items.length) {
-    container.innerHTML = '<div class="empty-state"><div class="icon">📋</div><div class="label">Aucune activité pour le moment</div></div>';
-    return;
-  }
-  container.innerHTML = `<div class="activity-list">${items.map(r => `
-    <div class="activity-item">
-      <div class="activity-dot" style="background:var(--blue);"></div>
-      <div>
-        <div class="activity-text">Rapport ${r.num || ''} — ${r.type || ''} à ${r.lieu || 'lieu inconnu'}</div>
-        <div class="activity-time">${fmtDate(r.date)} • Agent : ${r.agent || '—'}</div>
-      </div>
-    </div>`).join('')}</div>`;
-}
-
-// =================== SAVE FUNCTIONS ===================
-async function saveRapport() {
-  if (!db) return;
-  const num = `INT-${String(++counters.rapports).padStart(4,'0')}`;
-  await fb.addDoc(fb.collection(db, 'rapports'), {
-    num, type: v('r-type'), statut: v('r-statut'), date: v('r-date'),
-    lieu: v('r-lieu'), agent: v('r-agent'), personnes: v('r-personnes'),
-    description: v('r-description'), suites: v('r-suites'),
-    pieces: v('r-pieces'), priorite: v('r-priorite'),
-    createdAt: new Date().toISOString(), createdBy: currentUser?.nom
-  });
-  closeModal('modal-rapport');
-  toast('Rapport enregistré', `Dossier ${num} créé avec succès.`);
-  resetForm(['r-type','r-statut','r-date','r-lieu','r-agent','r-personnes','r-description','r-suites','r-pieces','r-priorite']);
-}
-
-async function saveSignalement() {
-  if (!db) return;
-  await fb.addDoc(fb.collection(db, 'signalements'), {
-    type: v('s-type'), priorite: v('s-priorite'), zone: v('s-zone'),
-    date: v('s-date'), description: v('s-description'),
-    createdAt: new Date().toISOString(), createdBy: currentUser?.nom
-  });
-  closeModal('modal-signalement');
-  toast('Signalement enregistré', 'Le signalement a été ajouté.');
-  resetForm(['s-type','s-priorite','s-zone','s-date','s-description']);
-}
-
-async function savePlainte() {
-  if (!db) return;
-  await fb.addDoc(fb.collection(db, 'plaintes'), {
-    plaignant: v('pl-plaignant'), accuse: v('pl-accuse'),
-    date: v('pl-date'), motif: v('pl-motif'), statut: v('pl-statut'),
-    gravite: v('pl-gravite'), description: v('pl-description'),
-    preuves: v('pl-preuves'),
-    createdAt: new Date().toISOString(), createdBy: currentUser?.nom
-  });
-  closeModal('modal-plainte');
-  toast('Plainte déposée', 'La plainte a été enregistrée.');
-  resetForm(['pl-plaignant','pl-accuse','pl-date','pl-motif','pl-statut','pl-gravite','pl-description','pl-preuves']);
-}
-
-async function saveSaisie() {
-  if (!db) return;
-  const num = `SAI-${String(++counters.saisies).padStart(4,'0')}`;
-  await fb.addDoc(fb.collection(db, 'saisies'), {
-    num, categorie: v('sa-categorie'), date: v('sa-date'),
-    objet: v('sa-objet'), quantite: v('sa-quantite'),
-    proprio: v('sa-proprio'), agent: v('sa-agent'),
-    dossier: v('sa-dossier'), lieu: v('sa-lieu'),
-    description: v('sa-description'),
-    createdAt: new Date().toISOString(), createdBy: currentUser?.nom
-  });
-  closeModal('modal-saisie');
-  toast('Saisie enregistrée', `Dossier ${num} créé.`);
-  resetForm(['sa-categorie','sa-date','sa-objet','sa-quantite','sa-proprio','sa-agent','sa-dossier','sa-lieu','sa-description']);
-}
-
-async function saveFiche() {
-  if (!db) return;
-  let photos = [];
-  try { photos = await uploadPhotos('fi'); } catch(e) { console.warn('Photo upload error', e); }
-  await fb.addDoc(fb.collection(db, 'fiches'), {
-    nom: v('fi-nom'), naissance: v('fi-naissance'),
-    nationalite: v('fi-nationalite'), statut: v('fi-statut'),
-    antecedents: v('fi-antecedents'), notes: v('fi-notes'),
-    photos,
-    createdAt: new Date().toISOString(), createdBy: currentUser?.nom
-  });
-  closeModal('modal-fiche');
-  resetPhotoPreview('fi');
-  toast('Fiche enregistrée', 'La fiche individu a été créée.');
-  resetForm(['fi-nom','fi-naissance','fi-nationalite','fi-statut','fi-antecedents','fi-notes']);
-}
-
-async function saveVehicule() {
-  if (!db) return;
-  let photos = [];
-  try { photos = await uploadPhotos('v'); } catch(e) { console.warn('Photo upload error', e); }
-  await fb.addDoc(fb.collection(db, 'vehicules'), {
-    plaque: v('v-plaque'), modele: v('v-modele'),
-    couleur: v('v-couleur'), proprio: v('v-proprio'),
-    motif: v('v-motif'), photos,
-    createdAt: new Date().toISOString(), createdBy: currentUser?.nom
-  });
-  closeModal('modal-vehicule');
-  resetPhotoPreview('v');
-  toast('Véhicule enregistré', 'Le véhicule a été ajouté à la liste.');
-  resetForm(['v-plaque','v-modele','v-couleur','v-proprio','v-motif']);
-}
-
-async function saveAgent() {
-  if (!db) return;
-  await fb.addDoc(fb.collection(db, 'agents'), {
-    nom: v('ag-nom'), pseudo: v('ag-pseudo'), grade: v('ag-grade'),
-    matricule: v('ag-matricule'), statut: v('ag-statut'),
-    dateEmbauche: v('ag-date'), notes: v('ag-notes'),
-    createdAt: new Date().toISOString(), createdBy: currentUser?.nom
-  });
-  closeModal('modal-agent');
-  toast('Agent ajouté', 'Le dossier agent a été créé.');
-  resetForm(['ag-nom','ag-pseudo','ag-grade','ag-matricule','ag-statut','ag-date','ag-notes']);
-}
-
-// =================== VIEW MODALS ===================
-function viewRapport(id) {
-  const row = getRowData('rapports-tbody', id);
-  // Fetch from firebase would be cleaner, but we'll find via table snapshot
-  // Instead we use onSnapshot cache - just show what's available in DOM data-id
-  showViewByFirebase('rapports', id, data => {
-    document.getElementById('view-title').innerHTML = `📋 ${data.num || 'Rapport'} — ${data.type}`;
-    document.getElementById('view-body').innerHTML = `
-      <div class="view-grid">
-        <div class="view-field"><div class="view-field-label">N° Dossier</div><div class="view-field-value" style="font-family:var(--mono);color:var(--blue);">${data.num || '—'}</div></div>
-        <div class="view-field"><div class="view-field-label">Statut</div><div class="view-field-value">${statusBadge(data.statut)}</div></div>
-        <div class="view-field"><div class="view-field-label">Type</div><div class="view-field-value">${data.type || '—'}</div></div>
-        <div class="view-field"><div class="view-field-label">Date</div><div class="view-field-value">${fmtDate(data.date)}</div></div>
-        <div class="view-field"><div class="view-field-label">Lieu</div><div class="view-field-value">${data.lieu || '—'}</div></div>
-        <div class="view-field"><div class="view-field-label">Agent</div><div class="view-field-value">${data.agent || '—'}</div></div>
-        <div class="view-field"><div class="view-field-label">Priorité</div><div class="view-field-value">${data.priorite || '—'}</div></div>
-        <div class="view-field"><div class="view-field-label">Personnes impliquées</div><div class="view-field-value">${data.personnes || '—'}</div></div>
-      </div>
-      <div class="view-field"><div class="view-field-label">Description</div><div class="view-field-value">${data.description || '—'}</div></div>
-      <div class="view-field"><div class="view-field-label">Suites données</div><div class="view-field-value">${data.suites || '—'}</div></div>
-      <div class="view-field"><div class="view-field-label">Pièces saisies</div><div class="view-field-value">${data.pieces || '—'}</div></div>`;
-    openModal('modal-view');
-  });
-}
-
-function viewSignalement(id) {
-  showViewByFirebase('signalements', id, data => {
-    document.getElementById('view-title').innerHTML = `🚨 Signalement — ${data.type}`;
-    document.getElementById('view-body').innerHTML = `
-      <div class="view-grid">
-        <div class="view-field"><div class="view-field-label">Type</div><div class="view-field-value">${data.type}</div></div>
-        <div class="view-field"><div class="view-field-label">Priorité</div><div class="view-field-value">${data.priorite}</div></div>
-        <div class="view-field"><div class="view-field-label">Zone</div><div class="view-field-value">${data.zone || '—'}</div></div>
-        <div class="view-field"><div class="view-field-label">Date/Heure</div><div class="view-field-value">${fmtDate(data.date)}</div></div>
-      </div>
-      <div class="view-field"><div class="view-field-label">Description</div><div class="view-field-value">${data.description || '—'}</div></div>`;
-    openModal('modal-view');
-  });
-}
-
-function viewPlainte(id) {
-  showViewByFirebase('plaintes', id, data => {
-    document.getElementById('view-title').innerHTML = `⚖️ Plainte — ${data.motif}`;
-    document.getElementById('view-body').innerHTML = `
-      <div class="view-grid">
-        <div class="view-field"><div class="view-field-label">Agent plaignant</div><div class="view-field-value">${data.plaignant || '—'}</div></div>
-        <div class="view-field"><div class="view-field-label">Agent mis en cause</div><div class="view-field-value" style="color:var(--red);">${data.accuse || '—'}</div></div>
-        <div class="view-field"><div class="view-field-label">Date des faits</div><div class="view-field-value">${fmtDate(data.date)}</div></div>
-        <div class="view-field"><div class="view-field-label">Motif</div><div class="view-field-value">${data.motif || '—'}</div></div>
-        <div class="view-field"><div class="view-field-label">Gravité</div><div class="view-field-value">${data.gravite || '—'}</div></div>
-        <div class="view-field"><div class="view-field-label">Statut</div><div class="view-field-value">${plainteStatusBadge(data.statut)}</div></div>
-      </div>
-      <div class="view-field"><div class="view-field-label">Description des faits</div><div class="view-field-value">${data.description || '—'}</div></div>
-      <div class="view-field"><div class="view-field-label">Preuves / Éléments</div><div class="view-field-value">${data.preuves || '—'}</div></div>`;
-    
-    const footer = document.getElementById('view-footer');
-    footer.innerHTML = `<button class="btn btn-ghost" onclick="closeModal('modal-view')">Fermer</button>`;
-    if (canDelete()) {
-      footer.innerHTML += `
-        <select class="form-select" id="plainte-status-change" style="max-width:180px;">
-          <option value="En attente">En attente</option>
-          <option value="En cours">En cours</option>
-          <option value="Résolue">Résolue</option>
-          <option value="Classée sans suite">Classée sans suite</option>
-        </select>
-        <button class="btn btn-primary" onclick="updatePlainteStatus('${id}')">Changer statut</button>`;
-    }
-    openModal('modal-view');
-  });
-}
-
-async function updatePlainteStatus(id) {
-  const newStatus = document.getElementById('plainte-status-change').value;
-  await fb.updateDoc(fb.doc(db, 'plaintes', id), { statut: newStatus });
-  closeModal('modal-view');
-  toast('Statut mis à jour', `Plainte marquée : ${newStatus}`);
-}
-
-function viewFiche(id) {
-  showViewByFirebase('fiches', id, data => {
-    document.getElementById('view-title').innerHTML = `👤 Fiche — ${data.nom}`;
-    document.getElementById('view-body').innerHTML = `
-      ${data.photos && data.photos.length ? `<div class="view-field"><div class="view-field-label">Photos</div><div class="view-photos">${data.photos.map(url => `<img src="${url}" onclick="openLightbox('${url}')" title="Cliquer pour agrandir">`).join('')}</div></div>` : ''}
-      <div class="view-grid">
-        <div class="view-field"><div class="view-field-label">Nom</div><div class="view-field-value">${data.nom || '—'}</div></div>
-        <div class="view-field"><div class="view-field-label">Date de naissance</div><div class="view-field-value">${data.naissance || '—'}</div></div>
-        <div class="view-field"><div class="view-field-label">Nationalité</div><div class="view-field-value">${data.nationalite || '—'}</div></div>
-        <div class="view-field"><div class="view-field-label">Statut</div><div class="view-field-value"><span class="badge ${data.statut === 'Dangereux' ? 'badge-urgent' : data.statut === 'Recherché' ? 'badge-open' : 'badge-neutral'}">${data.statut}</span></div></div>
-      </div>
-      <div class="view-field"><div class="view-field-label">Antécédents</div><div class="view-field-value">${data.antecedents || '—'}</div></div>
-      <div class="view-field"><div class="view-field-label">Notes</div><div class="view-field-value">${data.notes || '—'}</div></div>`;
-    document.getElementById('view-footer').innerHTML = '<button class="btn btn-ghost" onclick="closeModal(\'modal-view\')">Fermer</button>';
-    openModal('modal-view');
-  });
-}
-
-function viewVehicule(id) {
-  showViewByFirebase('vehicules', id, data => {
-    document.getElementById('view-title').innerHTML = `🚗 Véhicule — ${data.plaque}`;
-    document.getElementById('view-body').innerHTML = `
-      ${data.photos && data.photos.length ? `<div class="view-field"><div class="view-field-label">Photos</div><div class="view-photos">${data.photos.map(url => `<img src="${url}" onclick="openLightbox('${url}')" title="Cliquer pour agrandir">`).join('')}</div></div>` : ''}
-      <div class="view-grid">
-        <div class="view-field"><div class="view-field-label">Plaque</div><div class="view-field-value" style="font-family:var(--mono);color:var(--cyan);font-size:20px;">${data.plaque || '—'}</div></div>
-        <div class="view-field"><div class="view-field-label">Marque / Modèle</div><div class="view-field-value">${data.modele || '—'}</div></div>
-        <div class="view-field"><div class="view-field-label">Couleur</div><div class="view-field-value">${data.couleur || '—'}</div></div>
-        <div class="view-field"><div class="view-field-label">Propriétaire</div><div class="view-field-value">${data.proprio || '—'}</div></div>
-      </div>
-      <div class="view-field"><div class="view-field-label">Motif de recherche</div><div class="view-field-value">${data.motif || '—'}</div></div>`;
-    document.getElementById('view-footer').innerHTML = '<button class="btn btn-ghost" onclick="closeModal(\'modal-view\')">Fermer</button>';
-    openModal('modal-view');
-  });
-}
-
-function viewSaisie(id) {
-  showViewByFirebase('saisies', id, data => {
-    document.getElementById('view-title').innerHTML = `🔫 ${data.num} — ${data.categorie}`;
-    document.getElementById('view-body').innerHTML = `
-      <div class="view-grid">
-        <div class="view-field"><div class="view-field-label">N° Saisie</div><div class="view-field-value" style="font-family:var(--mono);color:var(--blue);">${data.num || '—'}</div></div>
-        <div class="view-field"><div class="view-field-label">Date</div><div class="view-field-value">${fmtDate(data.date)}</div></div>
-        <div class="view-field"><div class="view-field-label">Catégorie</div><div class="view-field-value">${data.categorie}</div></div>
-        <div class="view-field"><div class="view-field-label">Objet(s)</div><div class="view-field-value">${data.objet || '—'}</div></div>
-        <div class="view-field"><div class="view-field-label">Quantité</div><div class="view-field-value">${data.quantite || '—'}</div></div>
-        <div class="view-field"><div class="view-field-label">Propriétaire</div><div class="view-field-value">${data.proprio || '—'}</div></div>
-        <div class="view-field"><div class="view-field-label">Agent</div><div class="view-field-value">${data.agent || '—'}</div></div>
-        <div class="view-field"><div class="view-field-label">Dossier lié</div><div class="view-field-value">${data.dossier || '—'}</div></div>
-      </div>
-      <div class="view-field"><div class="view-field-label">Description</div><div class="view-field-value">${data.description || '—'}</div></div>`;
-    document.getElementById('view-footer').innerHTML = '<button class="btn btn-ghost" onclick="closeModal(\'modal-view\')">Fermer</button>';
-    openModal('modal-view');
-  });
-}
-
-async function showViewByFirebase(col, id, cb) {
-  if (!db) return;
-  try {
-    const snap = await fb.getDoc(fb.doc(db, col, id));
-    if (snap.exists()) cb({ id: snap.id, ...snap.data() });
-  } catch(e) { toast('Erreur', e.message, 'error'); }
-}
-
-// =================== DELETE ===================
-function canDelete() {
-  return currentUser && ADMIN_GRADES.includes(currentUser.grade);
-}
-
-async function deleteItem(col, id) {
-  if (!canDelete()) return toast('Accès refusé', 'Seuls les directeurs peuvent supprimer.', 'error');
-  if (!confirm('Confirmer la suppression ?')) return;
-  await fb.deleteDoc(fb.doc(db, col, id));
-  toast('Supprimé', 'L\'élément a été supprimé.');
-}
-
-async function confirmDelete(col, label) {
-  if (!confirm(`Voulez-vous vraiment supprimer ${label} ? Cette action est irréversible.`)) return;
-  try {
-    const snap = await fb.getDocs(fb.collection(db, col));
-    const batch = [];
-    snap.forEach(d => batch.push(fb.deleteDoc(fb.doc(db, col, d.id))));
-    await Promise.all(batch);
-    toast('Suppression effectuée', `Tous les éléments de "${col}" ont été supprimés.`);
-  } catch(e) { toast('Erreur', e.message, 'error'); }
-}
-
-// =================== LIGHTBOX ===================
-function openLightbox(url) {
-  document.getElementById('lightbox-img').src = url;
-  document.getElementById('lightbox').classList.add('open');
-}
-function closeLightbox() {
-  document.getElementById('lightbox').classList.remove('open');
-}
-
-// =================== HELPERS ===================
-function v(id) { const el = document.getElementById(id); return el ? el.value : ''; }
-
-function resetForm(ids) { ids.forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; }); }
-
-function fmtDate(d) {
-  if (!d) return '—';
-  try { return new Date(d).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' }); }
-  catch(e) { return d; }
-}
-
-function statusBadge(s) {
-  const map = { 'Ouvert': 'badge-open', 'En cours': 'badge-progress', 'Clôturé': 'badge-closed' };
-  return `<span class="badge ${map[s] || 'badge-neutral'}">${s || '—'}</span>`;
-}
-
-function plainteStatusBadge(s) {
-  const map = { 'En attente': 'badge-open', 'En cours': 'badge-progress', 'Résolue': 'badge-closed', 'Classée sans suite': 'badge-neutral' };
-  return `<span class="badge ${map[s] || 'badge-neutral'}">${s || '—'}</span>`;
-}
-
-// =================== NAVIGATION ===================
-function showPage(name, el) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('page-' + name).classList.add('active');
-  if (el) el.classList.add('active');
-  const titles = {
-    dashboard: 'Tableau de bord', rapports: "Rapports d'intervention",
-    signalements: 'Signalements', plaintes: 'Plaintes', saisies: 'Saisies',
-    fiches: 'Fiches individus', vehicules: 'Véhicules recherchés',
-    agents: 'Agents', gestion: 'Gestion du site'
-  };
-  document.getElementById('page-title').textContent = titles[name] || name;
-  if (name === 'gestion' && canDelete()) { loadAccessRequests(); loadSiteAccessState(); }
-}
-
-// =================== MODAL HELPERS ===================
-function openModal(id) { document.getElementById(id).classList.add('open'); }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-function openNewModal() { openModal('modal-rapport'); }
-function openSignalementModal() { openModal('modal-signalement'); }
-function openPlainteModal() {
-  // pre-fill plaignant with current user
-  const el = document.getElementById('pl-plaignant');
-  if (el && currentUser) el.value = `${currentUser.prenom} ${currentUser.nom}`;
-  openModal('modal-plainte');
-}
-function openSaisieModal() { openModal('modal-saisie'); }
-function openFicheModal() { openModal('modal-fiche'); }
-function openVehiculeModal() { openModal('modal-vehicule'); }
-function openAgentModal() { openModal('modal-agent'); }
-
-// =================== TABLE FILTER ===================
-function filterTable(tableId, query) {
-  const rows = document.querySelectorAll(`#${tableId} tbody tr`);
-  rows.forEach(row => {
-    row.style.display = row.textContent.toLowerCase().includes(query.toLowerCase()) ? '' : 'none';
-  });
-}
-
-function filterStatus(tableId, status) {
-  const rows = document.querySelectorAll(`#${tableId} tbody tr`);
-  rows.forEach(row => {
-    row.style.display = !status || row.textContent.includes(status) ? '' : 'none';
-  });
-  document.querySelectorAll(`#${tableId}`).forEach(t => {
-    t.closest('.table-wrap').querySelectorAll('.filter-btn').forEach(b => {
-      b.classList.toggle('active', b.textContent === (status || 'Tous') || b.textContent === 'Tous' && !status);
-    });
-  });
-}
-
-// =================== TOAST ===================
-function toast(title, msg, type = 'success') {
-  const el = document.createElement('div');
-  el.className = `toast ${type === 'error' ? 'error' : type === 'warn' ? 'warn' : ''}`;
-  el.innerHTML = `<strong>${title}</strong>${msg}`;
-  document.getElementById('toasts').appendChild(el);
-  setTimeout(() => el.remove(), 3100);
-}
+function openLightbox(url){ document.getElementById('lightbox-img').src=url; document.getElementById('lightbox').classList.add('open'); }
+function closeLightbox(){ document.getElementById('lightbox').classList.remove('open'); }
+function toast(title,msg,type='success'){ let el=document.createElement('div'); el.className=`toast ${type==='error'?'error':type==='warn'?'warn':''}`; el.innerHTML=`<strong>${title}</strong>${msg}`; document.getElementById('toasts').appendChild(el); setTimeout(()=>el.remove(),3100); }
 </script>
 </body>
 </html>
