@@ -5,32 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Police Municipale — Panneau de Commandement</title>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&family=Exo+2:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getDatabase, ref, set, push, onValue, remove, update, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-  import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyCGYQ7h7nkwegjLyLifsv29eiupnXRiC4w",
-    authDomain: "site-pmpurp.firebaseapp.com",
-    projectId: "site-pmpurp",
-    storageBucket: "site-pmpurp.firebasestorage.app",
-    messagingSenderId: "645801350661",
-    appId: "1:645801350661:web:e49fb3ec167dbc1b526e6c",
-    measurementId: "G-NMC3HGDH6R",
-    databaseURL: "https://site-pmpurp-default-rtdb.firebaseio.com/"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-  const storage = getStorage(app);
-
-  window.db = db;
-  window.storage = storage;
-  window.fb = { ref, set, push, onValue, remove, update, get, storageRef, uploadBytes, getDownloadURL };
-
-  window.dispatchEvent(new CustomEvent('firebase-ready'));
-</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
 
 <style>
   :root {
@@ -60,22 +37,15 @@
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
+
   body {
     background: var(--bg-deep);
     color: var(--text-primary);
     font-family: var(--body);
     font-size: 15px;
     min-height: 100vh;
-    overflow-x: hidden;
   }
-  body::before {
-    content:'';
-    position: fixed;
-    inset: 0;
-    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 4px);
-    pointer-events: none;
-    z-index: 1000;
-  }
+
   #login-screen {
     position: fixed; inset: 0;
     background: var(--bg-deep);
@@ -84,206 +54,95 @@
     align-items: center;
     justify-content: center;
   }
+
   .login-box {
     background: var(--bg-panel);
     border: 1px solid var(--border-bright);
     border-radius: 16px;
     padding: 40px;
-    width: 420px;
-    max-width: 95vw;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    width: 400px;
+    max-width: 90vw;
   }
+
   .login-logo { text-align: center; margin-bottom: 28px; }
-  .login-logo .icon { font-size: 48px; margin-bottom: 8px; }
+  .login-logo .icon { font-size: 48px; }
   .login-logo .title { font-family: var(--head); font-weight: 900; font-size: 18px; color: var(--blue); }
-  .login-tabs {
-    display: flex;
-    background: var(--bg-card);
-    border-radius: 8px;
-    padding: 4px;
-    margin-bottom: 24px;
-  }
-  .login-tab {
-    flex: 1;
-    padding: 8px;
-    text-align: center;
-    border-radius: 6px;
-    cursor: pointer;
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-muted);
-  }
-  .login-tab.active { background: var(--blue-dim); color: #fff; }
-  .login-form { display: flex; flex-direction: column; gap: 14px; }
-  .form-label {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 1.5px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    margin-bottom: 4px;
-  }
-  .form-input, .form-select, .form-textarea {
+
+  .form-input {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 6px;
     padding: 11px 14px;
     color: var(--text-primary);
-    font-family: var(--body);
-    font-size: 14px;
     width: 100%;
+    margin-bottom: 12px;
   }
-  .form-input:focus, .form-select:focus, .form-textarea:focus {
-    outline: none;
-    border-color: var(--blue);
-  }
+
   .login-btn {
+    width: 100%;
     padding: 12px;
     background: var(--blue);
     border: none;
     border-radius: 8px;
     color: #fff;
-    font-family: var(--head);
-    font-weight: 700;
+    font-weight: bold;
     cursor: pointer;
   }
+
   .app { display: flex; min-height: 100vh; }
-  .sidebar {
-    width: 260px;
-    background: var(--bg-panel);
-    border-right: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    height: 100vh;
-  }
-  .sidebar-logo { padding: 24px 20px; border-bottom: 1px solid var(--border); }
-  .logo-badge { display: flex; align-items: center; gap: 12px; }
-  .logo-icon {
-    width: 42px; height: 42px;
-    background: linear-gradient(135deg, var(--blue-dim), var(--blue));
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-  }
-  .logo-title { font-family: var(--head); font-weight: 900; font-size: 13px; color: var(--blue); }
-  .nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
-  .nav-section-label {
-    font-family: var(--mono);
-    font-size: 9px;
-    color: var(--text-muted);
-    padding: 12px 8px 6px;
-  }
-  .nav-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    color: var(--text-secondary);
-  }
-  .nav-item:hover { background: var(--bg-hover); color: var(--text-primary); }
+  .sidebar { width: 250px; background: var(--bg-panel); border-right: 1px solid var(--border); min-height: 100vh; }
+  .sidebar-logo { padding: 20px; border-bottom: 1px solid var(--border); }
+  .nav-item { padding: 12px 20px; cursor: pointer; }
+  .nav-item:hover { background: var(--bg-hover); }
   .nav-item.active { background: var(--blue-glow); color: var(--blue); }
-  .nav-item.admin-only { display: none; }
-  .sidebar-footer { padding: 16px 20px; border-top: 1px solid var(--border); }
-  .main { margin-left: 260px; flex: 1; }
-  .topbar {
-    background: var(--bg-panel);
-    border-bottom: 1px solid var(--border);
-    padding: 0 28px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .content { padding: 28px; }
+  .main { flex: 1; }
+  .topbar { background: var(--bg-panel); padding: 15px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; }
+  .content { padding: 20px; }
   .page { display: none; }
   .page.active { display: block; }
-  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
-  .stat-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 20px;
-  }
-  .stat-value { font-family: var(--head); font-size: 34px; font-weight: 900; }
-  .section-header { display: flex; justify-content: space-between; margin-bottom: 16px; }
-  .table-wrap { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; overflow-x: auto; }
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px; }
+  .stat-card { background: var(--bg-card); padding: 20px; border-radius: 10px; }
+  .stat-value { font-size: 32px; font-weight: bold; }
+  .btn { padding: 8px 16px; border-radius: 6px; cursor: pointer; border: none; }
+  .btn-primary { background: var(--blue); color: white; }
+  .btn-danger { background: var(--red-dim); color: white; }
+  .btn-sm { padding: 5px 10px; font-size: 12px; }
   table { width: 100%; border-collapse: collapse; }
-  th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); }
-  th { font-family: var(--mono); font-size: 10px; color: var(--text-muted); }
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 8px 18px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-family: var(--body);
-    font-weight: 700;
-    font-size: 13px;
-  }
-  .btn-primary { background: var(--blue); color: #fff; }
-  .btn-danger { background: var(--red-dim); color: #fff; }
-  .btn-ghost { background: transparent; color: var(--text-secondary); border: 1px solid var(--border); }
-  .btn-sm { padding: 5px 12px; font-size: 11px; }
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-family: var(--mono);
-    font-size: 10px;
-  }
-  .badge-open { background: rgba(255,61,90,0.12); color: var(--red); }
-  .badge-progress { background: rgba(255,140,42,0.12); color: var(--orange); }
-  .badge-closed { background: rgba(0,230,118,0.1); color: var(--green); }
+  th, td { padding: 10px; text-align: left; border-bottom: 1px solid var(--border); }
+  .badge { padding: 3px 8px; border-radius: 12px; font-size: 11px; }
+  .badge-open { background: rgba(255,61,90,0.2); color: var(--red); }
+  .badge-closed { background: rgba(0,230,118,0.2); color: var(--green); }
   .modal-overlay {
     display: none;
     position: fixed; inset: 0;
     background: rgba(0,0,0,0.7);
-    z-index: 200;
+    z-index: 1000;
     align-items: center;
     justify-content: center;
   }
   .modal-overlay.open { display: flex; }
   .modal {
     background: var(--bg-panel);
-    border: 1px solid var(--border-bright);
     border-radius: 12px;
-    width: 680px;
-    max-width: 95vw;
-    max-height: 90vh;
-    overflow-y: auto;
+    width: 500px;
+    max-width: 90vw;
+    padding: 20px;
   }
-  .modal-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; }
-  .modal-body { padding: 24px; }
-  .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; gap: 10px; justify-content: flex-end; }
-  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .form-group.span2 { grid-column: span 2; }
-  .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 500; }
   .toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
     background: var(--bg-panel);
+    padding: 12px 20px;
     border-left: 3px solid var(--green);
     border-radius: 8px;
-    padding: 12px 18px;
-    margin-top: 8px;
     animation: fadeOut 3s forwards;
   }
-  @keyframes fadeOut { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
-  .empty-state { text-align: center; padding: 40px; color: var(--text-muted); }
-  .agents-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
-  .agent-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 16px;
+  @keyframes fadeOut {
+    0% { opacity: 1; }
+    70% { opacity: 1; }
+    100% { opacity: 0; visibility: hidden; }
   }
-  .close-btn { background: none; border: none; color: var(--text-muted); font-size: 20px; cursor: pointer; }
 </style>
 </head>
 <body>
@@ -291,348 +150,875 @@
 <div id="login-screen">
   <div class="login-box">
     <div class="login-logo">
-      <span class="icon">🛡️</span>
+      <div class="icon">🛡️</div>
       <div class="title">Police Municipale</div>
-      <div class="sub" style="font-size:10px;color:var(--text-muted);">Panneau de Commandement</div>
     </div>
-    <div class="login-tabs">
-      <div class="login-tab active" onclick="switchTab('login')">Connexion</div>
-      <div class="login-tab" onclick="switchTab('register')">Demander l'accès</div>
-    </div>
-    <div id="login-form">
-      <div><div class="form-label">Prénom</div><input class="form-input" type="text" id="login-prenom"></div>
-      <div><div class="form-label">Nom</div><input class="form-input" type="text" id="login-nom"></div>
-      <div><div class="form-label">Mot de passe</div><input class="form-input" type="password" id="login-password"></div>
-      <button class="login-btn" onclick="doLogin()">Se connecter</button>
-    </div>
-    <div id="register-form" style="display:none;">
-      <div><div class="form-label">Prénom</div><input class="form-input" type="text" id="reg-prenom"></div>
-      <div><div class="form-label">Nom</div><input class="form-input" type="text" id="reg-nom"></div>
-      <div><div class="form-label">Pseudo Discord</div><input class="form-input" type="text" id="reg-pseudo"></div>
-      <div><div class="form-label">Mot de passe</div><input class="form-input" type="password" id="reg-password"></div>
-      <div><div class="form-label">Confirmer</div><input class="form-input" type="password" id="reg-password2"></div>
-      <div><div class="form-label">Grade</div><select class="form-input" id="reg-grade"><option>Gardien Stagiaire</option><option>Gardien Titulaire</option><option>Brigadier</option><option>Chef de Police</option><option>Directeur</option></select></div>
-      <button class="login-btn" onclick="doRegister()">Envoyer la demande</button>
-    </div>
-    <div id="login-pending" style="display:none;text-align:center;padding:20px;color:var(--orange);">⏳ Demande en attente de validation</div>
+    <input type="text" id="login-prenom" class="form-input" placeholder="Prénom">
+    <input type="text" id="login-nom" class="form-input" placeholder="Nom">
+    <input type="password" id="login-password" class="form-input" placeholder="Mot de passe">
+    <button class="login-btn" onclick="doLogin()">Se connecter</button>
+    <button class="login-btn" style="margin-top:10px;background:var(--orange);" onclick="showRegister()">Demander l'accès</button>
+  </div>
+</div>
+
+<div id="register-screen" style="display:none;position:fixed;inset:0;background:var(--bg-deep);z-index:9999;align-items:center;justify-content:center;">
+  <div class="login-box">
+    <div class="login-logo"><div class="icon">📝</div><div class="title">Demande d'accès</div></div>
+    <input type="text" id="reg-prenom" class="form-input" placeholder="Prénom">
+    <input type="text" id="reg-nom" class="form-input" placeholder="Nom">
+    <input type="text" id="reg-pseudo" class="form-input" placeholder="Pseudo Discord">
+    <input type="password" id="reg-password" class="form-input" placeholder="Mot de passe">
+    <input type="password" id="reg-password2" class="form-input" placeholder="Confirmer">
+    <select id="reg-grade" class="form-input">
+      <option>Gardien Stagiaire</option><option>Gardien Titulaire</option>
+      <option>Brigadier</option><option>Chef de Police</option>
+      <option>Directeur</option>
+    </select>
+    <button class="login-btn" onclick="doRegister()">Envoyer</button>
+    <button class="login-btn" style="margin-top:10px;background:var(--text-muted);" onclick="showLogin()">Retour</button>
   </div>
 </div>
 
 <div class="app" id="main-app" style="display:none;">
   <div class="sidebar">
-    <div class="sidebar-logo"><div class="logo-badge"><div class="logo-icon">🛡️</div><div class="logo-title">Police Municipale</div></div></div>
-    <nav class="nav">
-      <div class="nav-section-label">Principal</div>
-      <div class="nav-item active" onclick="showPage('dashboard')">📊 Tableau de bord</div>
-      <div class="nav-section-label">Opérations</div>
-      <div class="nav-item" onclick="showPage('rapports')">📋 Rapports</div>
-      <div class="nav-item" onclick="showPage('signalements')">🚨 Signalements</div>
-      <div class="nav-item" onclick="showPage('plaintes')">⚖️ Plaintes</div>
-      <div class="nav-item" onclick="showPage('saisies')">🔫 Saisies</div>
-      <div class="nav-section-label">Dossiers</div>
-      <div class="nav-item" onclick="showPage('fiches')">👤 Fiches</div>
-      <div class="nav-item" onclick="showPage('vehicules')">🚗 Véhicules</div>
-      <div class="nav-item" onclick="showPage('agents')">👮 Agents</div>
-      <div class="nav-item admin-only" onclick="showPage('gestion')">⚙️ Gestion</div>
-    </nav>
-    <div class="sidebar-footer">
-      <div id="user-info">👮 Agent</div>
-      <button class="btn btn-ghost btn-sm" style="width:100%;margin-top:10px;" onclick="logout()">Déconnexion</button>
+    <div class="sidebar-logo"><strong>🛡️ PM</strong></div>
+    <div class="nav-item active" onclick="showPage('dashboard')">📊 Tableau de bord</div>
+    <div class="nav-item" onclick="showPage('rapports')">📋 Rapports</div>
+    <div class="nav-item" onclick="showPage('signalements')">🚨 Signalements</div>
+    <div class="nav-item" onclick="showPage('plaintes')">⚖️ Plaintes</div>
+    <div class="nav-item" onclick="showPage('saisies')">🔫 Saisies</div>
+    <div class="nav-item" onclick="showPage('fiches')">👤 Fiches</div>
+    <div class="nav-item" onclick="showPage('vehicules')">🚗 Véhicules</div>
+    <div class="nav-item" onclick="showPage('agents')">👮 Agents</div>
+    <div class="nav-item admin-only" id="nav-gestion" onclick="showPage('gestion')">⚙️ Gestion</div>
+    <div style="position:absolute;bottom:20px;left:20px;">
+      <div id="user-name"></div>
+      <button class="btn btn-sm" onclick="logout()">Déconnexion</button>
     </div>
   </div>
   <div class="main">
-    <div class="topbar"><div class="page-title" id="page-title">Tableau de bord</div><button class="btn btn-primary btn-sm" onclick="openNewModal()">+ Nouveau</button></div>
+    <div class="topbar">
+      <div id="page-title">Tableau de bord</div>
+      <button class="btn btn-primary btn-sm" onclick="openNewModal()">+ Nouveau rapport</button>
+    </div>
     <div class="content">
       <div id="dashboard-page" class="page active">
         <div class="stats-grid">
-          <div class="stat-card"><div class="stat-value" id="stat-rapports">0</div><div>RAPPORTS</div></div>
-          <div class="stat-card"><div class="stat-value" id="stat-plaintes">0</div><div>PLAINTES</div></div>
-          <div class="stat-card"><div class="stat-value" id="stat-saisies">0</div><div>SAISIES</div></div>
-          <div class="stat-card"><div class="stat-value" id="stat-agents">0</div><div>AGENTS</div></div>
+          <div class="stat-card"><div class="stat-value" id="stat-rapports">0</div><div>Rapports</div></div>
+          <div class="stat-card"><div class="stat-value" id="stat-plaintes">0</div><div>Plaintes</div></div>
+          <div class="stat-card"><div class="stat-value" id="stat-saisies">0</div><div>Saisies</div></div>
+          <div class="stat-card"><div class="stat-value" id="stat-agents">0</div><div>Agents</div></div>
         </div>
-        <div class="section-header"><div class="section-title">Activité récente</div></div>
-        <div class="table-wrap"><div id="activity-list"></div></div>
+        <h3>Activité récente</h3>
+        <div id="activite-liste"></div>
       </div>
-      <div id="rapports-page" class="page"><div class="section-header"><div class="section-title">Rapports</div><button class="btn btn-primary btn-sm" onclick="openNewModal()">+ Nouveau</button></div><div class="table-wrap"><table style="width:100%"><thead><tr><th>N°</th><th>Date</th><th>Type</th><th>Lieu</th><th>Agent</th><th>Statut</th><th>Créé par</th><th>Actions</th></tr></thead><tbody id="rapports-list"></tbody></table></div></div>
-      <div id="signalements-page" class="page"><div class="section-header"><div class="section-title">Signalements</div><button class="btn btn-primary btn-sm" onclick="openSignalementModal()">+ Nouveau</button></div><div class="table-wrap"><table><thead><tr><th>N°</th><th>Date</th><th>Type</th><th>Zone</th><th>Priorité</th><th>Créé par</th><th>Actions</th></tr></thead><tbody id="signalements-list"></tbody></table></div></div>
-      <div id="plaintes-page" class="page"><div class="section-header"><div class="section-title">Plaintes</div><button class="btn btn-primary btn-sm" onclick="openPlainteModal()">+ Nouvelle</button></div><div class="table-wrap"><table><thead><tr><th>N°</th><th>Date</th><th>Plaignant</th><th>Accusé</th><th>Motif</th><th>Statut</th><th>Créé par</th><th>Actions</th></tr></thead><tbody id="plaintes-list"></tbody></table></div></div>
-      <div id="saisies-page" class="page"><div class="section-header"><div class="section-title">Saisies</div><button class="btn btn-primary btn-sm" onclick="openSaisieModal()">+ Nouvelle</button></div><div class="table-wrap"><table><thead><tr><th>N°</th><th>Date</th><th>Catégorie</th><th>Objet</th><th>Propriétaire</th><th>Agent</th><th>Créé par</th><th>Actions</th></tr></thead><tbody id="saisies-list"></tbody></table></div></div>
-      <div id="fiches-page" class="page"><div class="section-header"><div class="section-title">Fiches</div><button class="btn btn-primary btn-sm" onclick="openFicheModal()">+ Nouvelle</button></div><div class="table-wrap"><table><thead><tr><th>Nom</th><th>Naissance</th><th>Statut</th><th>Antécédents</th><th>Créé par</th><th>Actions</th></tr></thead><tbody id="fiches-list"></tbody></table></div></div>
-      <div id="vehicules-page" class="page"><div class="section-header"><div class="section-title">Véhicules recherchés</div><button class="btn btn-primary btn-sm" onclick="openVehiculeModal()">+ Ajouter</button></div><div class="table-wrap"><table><thead><tr><th>Plaque</th><th>Modèle</th><th>Couleur</th><th>Propriétaire</th><th>Motif</th><th>Créé par</th><th>Actions</th></tr></thead><tbody id="vehicules-list"></tbody></table></div></div>
-      <div id="agents-page" class="page"><div class="section-header"><div class="section-title">Agents</div><button class="btn btn-primary btn-sm" onclick="openAgentModal()">+ Ajouter</button></div><div class="agents-grid" id="agents-list"></div></div>
-      <div id="gestion-page" class="page"><div class="section-header"><div class="section-title">Gestion</div></div><div id="access-requests"></div><div id="approved-users"></div></div>
+      <div id="rapports-page" class="page">
+        <table style="width:100%">
+          <thead><tr><th>N°</th><th>Date</th><th>Type</th><th>Lieu</th><th>Agent</th><th>Statut</th><th>Créé par</th><th>Actions</th></tr></thead>
+          <tbody id="rapports-liste"></tbody>
+        </table>
+      </div>
+      <div id="signalements-page" class="page">
+        <table style="width:100%">
+          <thead><tr><th>N°</th><th>Date</th><th>Type</th><th>Zone</th><th>Priorité</th><th>Créé par</th><th>Actions</th></tr></thead>
+          <tbody id="signalements-liste"></tbody>
+        </table>
+      </div>
+      <div id="plaintes-page" class="page">
+        <table style="width:100%">
+          <thead><tr><th>N°</th><th>Date</th><th>Plaignant</th><th>Accusé</th><th>Motif</th><th>Statut</th><th>Créé par</th><th>Actions</th></tr></thead>
+          <tbody id="plaintes-liste"></tbody>
+        </table>
+      </div>
+      <div id="saisies-page" class="page">
+        <table style="width:100%">
+          <thead><tr><th>N°</th><th>Date</th><th>Catégorie</th><th>Objet</th><th>Propriétaire</th><th>Agent</th><th>Créé par</th><th>Actions</th></tr></thead>
+          <tbody id="saisies-liste"></tbody>
+        </table>
+      </div>
+      <div id="fiches-page" class="page">
+        <table style="width:100%">
+          <thead><tr><th>Nom</th><th>Naissance</th><th>Statut</th><th>Antécédents</th><th>Créé par</th><th>Actions</th></tr></thead>
+          <tbody id="fiches-liste"></tbody>
+        </table>
+      </div>
+      <div id="vehicules-page" class="page">
+        <table style="width:100%">
+          <thead><tr><th>Plaque</th><th>Modèle</th><th>Couleur</th><th>Propriétaire</th><th>Motif</th><th>Créé par</th><th>Actions</th></tr></thead>
+          <tbody id="vehicules-liste"></tbody>
+        </table>
+      </div>
+      <div id="agents-page" class="page">
+        <div id="agents-liste"></div>
+      </div>
+      <div id="gestion-page" class="page">
+        <h3>Demandes en attente</h3>
+        <div id="demandes-liste"></div>
+        <h3>Utilisateurs autorisés</h3>
+        <div id="utilisateurs-liste"></div>
+      </div>
     </div>
   </div>
 </div>
-<div class="toast-container" id="toasts"></div>
 
-<!-- Modales simplifiées -->
-<div id="modal" class="modal-overlay"><div class="modal"><div class="modal-header"><span id="modal-title">Titre</span><button class="close-btn" onclick="closeModal()">✕</button></div><div id="modal-body" class="modal-body"></div><div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal()">Annuler</button><button id="modal-save" class="btn btn-primary" onclick="saveCurrent()">Enregistrer</button></div></div></div>
+<div id="modal" class="modal-overlay">
+  <div class="modal">
+    <div style="display:flex;justify-content:space-between;margin-bottom:15px;">
+      <strong id="modal-title">Titre</strong>
+      <button onclick="closeModal()" style="background:none;border:none;color:white;font-size:20px;">✕</button>
+    </div>
+    <div id="modal-body"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
+      <button class="btn" onclick="closeModal()">Annuler</button>
+      <button id="modal-save" class="btn btn-primary">Enregistrer</button>
+    </div>
+  </div>
+</div>
 
 <script>
+// Configuration Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyCGYQ7h7nkwegjLyLifsv29eiupnXRiC4w",
+  authDomain: "site-pmpurp.firebaseapp.com",
+  projectId: "site-pmpurp",
+  storageBucket: "site-pmpurp.firebasestorage.app",
+  messagingSenderId: "645801350661",
+  appId: "1:645801350661:web:e49fb3ec167dbc1b526e6c",
+  databaseURL: "https://site-pmpurp-default-rtdb.firebaseio.com/"
+};
+
+// Initialiser Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const storage = firebase.storage();
+
 let currentUser = null;
-let db, fb;
+let currentEditId = null;
+let currentEditType = null;
 
-window.addEventListener('firebase-ready', () => {
-  db = window.db;
-  fb = window.fb;
-  console.log('Firebase prêt');
-  checkSession();
-  setInterval(() => {}, 1000);
-});
-
-async function hashPassword(pwd) {
-  const enc = new TextEncoder();
-  const hash = await crypto.subtle.digest('SHA-256', enc.encode(pwd));
-  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,'0')).join('');
-}
-
-function toast(msg, type='success') {
+// Fonctions utilitaires
+function toast(msg) {
   let t = document.createElement('div');
   t.className = 'toast';
   t.innerHTML = msg;
-  document.getElementById('toasts').appendChild(t);
+  document.body.appendChild(t);
   setTimeout(() => t.remove(), 3000);
 }
 
-function fmtDate(d) { return d ? new Date(d).toLocaleString('fr-FR') : '—'; }
+function fmtDate(d) {
+  if (!d) return '—';
+  try { return new Date(d).toLocaleString('fr-FR'); } catch(e) { return d; }
+}
 
-function canDelete() { return currentUser && ['Directeur', 'Directeur Adjoint'].includes(currentUser.grade); }
+function canDelete() {
+  return currentUser && ['Directeur', 'Directeur Adjoint'].includes(currentUser.grade);
+}
 
 function canEdit(item) {
   if (!currentUser) return false;
   return item.createdBy === `${currentUser.prenom} ${currentUser.nom}` || canDelete();
 }
 
+// Hashage mot de passe
+async function hashPassword(pwd) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(pwd);
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+// Affichage pages
 function showPage(page) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById(`${page}-page`).classList.add('active');
-  document.getElementById('page-title').textContent = page.charAt(0).toUpperCase() + page.slice(1);
+  document.getElementById(page + '-page').classList.add('active');
+  document.getElementById('page-title').innerHTML = page.charAt(0).toUpperCase() + page.slice(1);
 }
 
-function openModal(title, bodyHtml, saveCallback) {
-  document.getElementById('modal-title').textContent = title;
-  document.getElementById('modal-body').innerHTML = bodyHtml;
-  document.getElementById('modal-save').onclick = saveCallback;
-  document.getElementById('modal').classList.add('open');
+function showRegister() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('register-screen').style.display = 'flex';
 }
-function closeModal() { document.getElementById('modal').classList.remove('open'); }
+
+function showLogin() {
+  document.getElementById('register-screen').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+}
 
 // Authentification
-function switchTab(tab) {
-  document.getElementById('login-form').style.display = tab === 'login' ? 'block' : 'none';
-  document.getElementById('register-form').style.display = tab === 'register' ? 'block' : 'none';
-}
-
-function checkSession() {
-  let saved = localStorage.getItem('pm_session');
-  if (saved) {
-    try { loginUser(JSON.parse(saved), false); } catch(e) {}
-  }
-}
-
 async function doLogin() {
   let prenom = document.getElementById('login-prenom').value.trim();
   let nom = document.getElementById('login-nom').value.trim();
-  let pwd = document.getElementById('login-password').value;
-  if (!prenom || !nom || !pwd) return toast('Champs requis');
+  let password = document.getElementById('login-password').value;
+  
+  if (!prenom || !nom || !password) {
+    toast('Tous les champs sont requis');
+    return;
+  }
+  
   let key = `${prenom.toLowerCase()}_${nom.toLowerCase()}`;
-  let snap = await fb.get(fb.ref(db, `users/${key}`));
-  if (!snap.exists()) return toast('Compte inexistant');
-  let user = snap.val();
-  if (user.status === 'pending') return toast('Demande en attente');
-  if (user.status !== 'approved') return toast('Accès refusé');
-  let hashed = await hashPassword(pwd);
-  if (user.password !== hashed) return toast('Mot de passe incorrect');
-  loginUser({ ...user, id: key }, true);
-}
-
-function loginUser(user, save) {
-  currentUser = user;
-  if (save) localStorage.setItem('pm_session', JSON.stringify(user));
+  let snapshot = await db.ref('users/' + key).once('value');
+  let user = snapshot.val();
+  
+  if (!user) {
+    toast('Compte non trouvé');
+    return;
+  }
+  
+  if (user.status === 'pending') {
+    toast('Votre demande est en attente');
+    return;
+  }
+  
+  if (user.status !== 'approved') {
+    toast('Accès refusé');
+    return;
+  }
+  
+  let hashed = await hashPassword(password);
+  if (user.password !== hashed) {
+    toast('Mot de passe incorrect');
+    return;
+  }
+  
+  currentUser = { ...user, id: key };
+  localStorage.setItem('pm_session', JSON.stringify(currentUser));
+  
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('main-app').style.display = 'flex';
-  document.getElementById('user-info').innerHTML = `👮 ${user.prenom} ${user.nom}<br><small>${user.grade}</small>`;
-  if (canDelete()) document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'flex');
+  document.getElementById('user-name').innerHTML = `👮 ${user.prenom} ${user.nom}<br><small>${user.grade}</small>`;
+  
+  if (canDelete()) {
+    document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block');
+    loadAdminData();
+  }
+  
   loadAllData();
 }
 
 function logout() {
   localStorage.removeItem('pm_session');
   currentUser = null;
-  document.getElementById('login-screen').style.display = 'flex';
   document.getElementById('main-app').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('login-prenom').value = '';
+  document.getElementById('login-nom').value = '';
+  document.getElementById('login-password').value = '';
 }
 
 async function doRegister() {
   let prenom = document.getElementById('reg-prenom').value.trim();
   let nom = document.getElementById('reg-nom').value.trim();
   let pseudo = document.getElementById('reg-pseudo').value.trim();
-  let pwd = document.getElementById('reg-password').value;
-  let pwd2 = document.getElementById('reg-password2').value;
+  let password = document.getElementById('reg-password').value;
+  let password2 = document.getElementById('reg-password2').value;
   let grade = document.getElementById('reg-grade').value;
-  if (!prenom || !nom || !pseudo || !pwd) return toast('Tous les champs requis');
-  if (pwd !== pwd2) return toast('Mots de passe différents');
-  if (pwd.length < 4) return toast('Mot de passe trop court (min 4)');
+  
+  if (!prenom || !nom || !pseudo || !password) {
+    toast('Tous les champs sont requis');
+    return;
+  }
+  
+  if (password !== password2) {
+    toast('Les mots de passe ne correspondent pas');
+    return;
+  }
+  
+  if (password.length < 4) {
+    toast('Le mot de passe doit faire au moins 4 caractères');
+    return;
+  }
+  
   let key = `${prenom.toLowerCase()}_${nom.toLowerCase()}`;
-  let existing = await fb.get(fb.ref(db, `users/${key}`));
-  if (existing.exists()) return toast('Compte déjà existant');
-  await fb.set(fb.ref(db, `users/${key}`), {
-    prenom, nom, pseudo, grade, password: await hashPassword(pwd),
-    status: 'pending', createdAt: new Date().toISOString()
+  let existing = await db.ref('users/' + key).once('value');
+  
+  if (existing.exists()) {
+    toast('Ce compte existe déjà');
+    return;
+  }
+  
+  let hashedPassword = await hashPassword(password);
+  
+  await db.ref('users/' + key).set({
+    prenom, nom, pseudo, grade,
+    password: hashedPassword,
+    status: 'pending',
+    createdAt: new Date().toISOString()
   });
-  toast('Demande envoyée');
-  switchTab('login');
+  
+  toast('Demande envoyée !');
+  showLogin();
 }
 
 // Chargement des données
-let collections = ['rapports', 'signalements', 'plaintes', 'saisies', 'fiches', 'vehicules', 'agents'];
-
 function loadAllData() {
-  collections.forEach(col => {
-    fb.onValue(fb.ref(db, col), (snap) => {
-      let items = [];
-      let data = snap.val() || {};
-      for (let [id, val] of Object.entries(data)) items.push({ id, ...val });
-      items.sort((a,b) => (b.createdAt||'').localeCompare(a.createdAt||''));
-      renderCollection(col, items);
-    });
+  // Rapports
+  db.ref('rapports').on('value', (snapshot) => {
+    let items = [];
+    let data = snapshot.val() || {};
+    for (let id in data) items.push({ id, ...data[id] });
+    items.sort((a,b) => (b.createdAt||'').localeCompare(a.createdAt||''));
+    document.getElementById('stat-rapports').innerHTML = items.length;
+    
+    let html = '';
+    for (let r of items) {
+      html += `<tr>
+        <td>${r.num || r.id.slice(0,8)}</td>
+        <td>${fmtDate(r.date)}</td>
+        <td>${r.type || '—'}</td>
+        <td>${r.lieu || '—'}</td>
+        <td>${r.agent || '—'}</td>
+        <td><span class="badge ${r.statut === 'Ouvert' ? 'badge-open' : 'badge-closed'}">${r.statut || '—'}</span></td>
+        <td><small>${r.createdBy || '—'}</small></td>
+        <td>
+          ${canEdit(r) ? `<button class="btn btn-primary btn-sm" onclick="editItem('rapports','${r.id}')">✏️</button>` : ''}
+          ${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('rapports','${r.id}')">🗑️</button>` : ''}
+        </td>
+      </tr>`;
+    }
+    document.getElementById('rapports-liste').innerHTML = html || '<tr><td colspan="8">Aucun rapport</td></tr>';
+    
+    // Activité récente
+    let actHtml = '';
+    for (let i = 0; i < Math.min(5, items.length); i++) {
+      actHtml += `<div style="padding:10px;border-bottom:1px solid var(--border);">📋 ${items[i].type || 'Rapport'} - par ${items[i].createdBy || '—'}</div>`;
+    }
+    document.getElementById('activite-liste').innerHTML = actHtml || 'Aucune activité';
   });
-  if (canDelete()) loadAdminData();
-}
-
-function renderCollection(col, items) {
-  document.getElementById(`stat-${col === 'rapports' ? 'rapports' : col === 'plaintes' ? 'plaintes' : col === 'saisies' ? 'saisies' : col === 'agents' ? 'agents' : ''}`)?.textContent = items.length;
-  let tbody = document.getElementById(`${col}-list`);
-  if (!tbody) return;
-  if (!items.length) { tbody.innerHTML = '<tr><td colspan="10" class="empty-state">Aucune donnée</td></tr>'; return; }
   
-  if (col === 'rapports') {
-    tbody.innerHTML = items.map(r => `<tr>
-      <td>${r.num || r.id.slice(0,8)}</td><td>${fmtDate(r.date)}</td><td>${r.type||'—'}</td><td>${r.lieu||'—'}</td><td>${r.agent||'—'}</td>
-      <td><span class="badge ${r.statut === 'Ouvert' ? 'badge-open' : r.statut === 'En cours' ? 'badge-progress' : 'badge-closed'}">${r.statut||'—'}</span></td>
-      <td><small>${r.createdBy || '—'}</small></td>
-      <td>${canEdit(r) ? `<button class="btn btn-primary btn-sm" onclick="editItem('${col}','${r.id}')">✏️</button>` : ''} ${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('${col}','${r.id}')">🗑️</button>` : ''}</td>
-    </tr>`).join('');
-  } else if (col === 'signalements') {
-    tbody.innerHTML = items.map((s,i) => `<tr>
-      <td>SIG-${i+1}</td><td>${fmtDate(s.date)}</td><td>${s.type||'—'}</td><td>${s.zone||'—'}</td>
-      <td><span class="badge ${s.priorite === 'Urgent' ? 'badge-open' : 'badge-info'}">${s.priorite||'Normal'}</span></td>
-      <td><small>${s.createdBy || '—'}</small></td>
-      <td>${canEdit(s) ? `<button class="btn btn-primary btn-sm" onclick="editItem('${col}','${s.id}')">✏️</button>` : ''} ${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('${col}','${s.id}')">🗑️</button>` : ''}</td>
-    </tr>`).join('');
-  } else if (col === 'plaintes') {
-    tbody.innerHTML = items.map((p,i) => `<tr>
-      <td>PL-${i+1}</td><td>${fmtDate(p.date)}</td><td>${p.plaignant||'—'}</td><td>${p.accuse||'—'}</td><td>${p.motif||'—'}</td>
-      <td><span class="badge ${p.statut === 'En attente' ? 'badge-open' : p.statut === 'Résolue' ? 'badge-closed' : 'badge-progress'}">${p.statut||'—'}</span></td>
-      <td><small>${p.createdBy || '—'}</small></td>
-      <td>${canEdit(p) ? `<button class="btn btn-primary btn-sm" onclick="editItem('${col}','${p.id}')">✏️</button>` : ''} ${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('${col}','${p.id}')">🗑️</button>` : ''}</td>
-    </tr>`).join('');
-  } else if (col === 'saisies') {
-    tbody.innerHTML = items.map(s => `<tr>
-      <td>${s.num || s.id.slice(0,8)}</td><td>${fmtDate(s.date)}</td><td>${s.categorie||'—'}</td><td>${s.objet||'—'}</td><td>${s.proprio||'—'}</td><td>${s.agent||'—'}</td>
-      <td><small>${s.createdBy || '—'}</small></td>
-      <td>${canEdit(s) ? `<button class="btn btn-primary btn-sm" onclick="editItem('${col}','${s.id}')">✏️</button>` : ''} ${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('${col}','${s.id}')">🗑️</button>` : ''}</td>
-    </tr>`).join('');
-  } else if (col === 'fiches') {
-    tbody.innerHTML = items.map(f => `<tr>
-      <td>${f.nom||'—'}</td><td>${f.naissance||'—'}</td>
-      <td><span class="badge ${f.statut === 'Dangereux' ? 'badge-open' : 'badge-info'}">${f.statut||'—'}</span></td>
-      <td style="max-width:200px;overflow:hidden;">${(f.antecedents||'').substring(0,50)}...</td>
-      <td><small>${f.createdBy || '—'}</small></td>
-      <td>${canEdit(f) ? `<button class="btn btn-primary btn-sm" onclick="editItem('${col}','${f.id}')">✏️</button>` : ''} ${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('${col}','${f.id}')">🗑️</button>` : ''}</td>
-    </tr>`).join('');
-  } else if (col === 'vehicules') {
-    tbody.innerHTML = items.map(v => `<tr>
-      <td>${v.plaque||'—'}</td><td>${v.modele||'—'}</td><td>${v.couleur||'—'}</td><td>${v.proprio||'—'}</td><td style="max-width:150px;">${v.motif||'—'}</td>
-      <td><small>${v.createdBy || '—'}</small></td>
-      <td>${canEdit(v) ? `<button class="btn btn-primary btn-sm" onclick="editItem('${col}','${v.id}')">✏️</button>` : ''} ${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('${col}','${v.id}')">🗑️</button>` : ''}</td>
-    </tr>`).join('');
-  } else if (col === 'agents') {
-    let grid = document.getElementById('agents-list');
-    if (grid) grid.innerHTML = items.map(a => `<div class="agent-card"><div><strong>${a.nom}</strong><br>${a.grade}<br>${a.matricule||''}<br><small>Créé par: ${a.createdBy||'—'}</small></div>${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('agents','${a.id}')">🗑️</button>` : ''}</div>`).join('');
-  }
+  // Signalements
+  db.ref('signalements').on('value', (snapshot) => {
+    let items = [];
+    let data = snapshot.val() || {};
+    for (let id in data) items.push({ id, ...data[id] });
+    items.sort((a,b) => (b.createdAt||'').localeCompare(a.createdAt||''));
+    
+    let html = '';
+    for (let i=0; i<items.length; i++) {
+      let s = items[i];
+      html += `<tr>
+        <td>SIG-${i+1}</td>
+        <td>${fmtDate(s.date)}</td>
+        <td>${s.type || '—'}</td>
+        <td>${s.zone || '—'}</td>
+        <td><span class="badge ${s.priorite === 'Urgent' ? 'badge-open' : ''}">${s.priorite || 'Normal'}</span></td>
+        <td><small>${s.createdBy || '—'}</small></td>
+        <td>
+          ${canEdit(s) ? `<button class="btn btn-primary btn-sm" onclick="editItem('signalements','${s.id}')">✏️</button>` : ''}
+          ${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('signalements','${s.id}')">🗑️</button>` : ''}
+        </td>
+      </tr>`;
+    }
+    document.getElementById('signalements-liste').innerHTML = html || '<tr><td colspan="7">Aucun signalement</td></tr>';
+  });
   
-  if (col === 'rapports') {
-    let recent = items.slice(0,5);
-    document.getElementById('activity-list').innerHTML = recent.length ? recent.map(r => `<div style="padding:12px;border-bottom:1px solid var(--border);">📋 Rapport ${r.num} - ${r.type} - par ${r.createdBy || '—'}</div>`).join('') : '<div class="empty-state">Aucune activité</div>';
-  }
+  // Plaintes
+  db.ref('plaintes').on('value', (snapshot) => {
+    let items = [];
+    let data = snapshot.val() || {};
+    for (let id in data) items.push({ id, ...data[id] });
+    items.sort((a,b) => (b.createdAt||'').localeCompare(a.createdAt||''));
+    document.getElementById('stat-plaintes').innerHTML = items.length;
+    
+    let html = '';
+    for (let i=0; i<items.length; i++) {
+      let p = items[i];
+      html += `<tr>
+        <td>PL-${i+1}</td>
+        <td>${fmtDate(p.date)}</td>
+        <td>${p.plaignant || '—'}</td>
+        <td>${p.accuse || '—'}</td>
+        <td>${p.motif || '—'}</td>
+        <td><span class="badge ${p.statut === 'En attente' ? 'badge-open' : 'badge-closed'}">${p.statut || '—'}</span></td>
+        <td><small>${p.createdBy || '—'}</small></td>
+        <td>
+          ${canEdit(p) ? `<button class="btn btn-primary btn-sm" onclick="editItem('plaintes','${p.id}')">✏️</button>` : ''}
+          ${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('plaintes','${p.id}')">🗑️</button>` : ''}
+        </td>
+      </tr>`;
+    }
+    document.getElementById('plaintes-liste').innerHTML = html || '<tr><td colspan="8">Aucune plainte</td></tr>';
+  });
+  
+  // Saisies
+  db.ref('saisies').on('value', (snapshot) => {
+    let items = [];
+    let data = snapshot.val() || {};
+    for (let id in data) items.push({ id, ...data[id] });
+    items.sort((a,b) => (b.createdAt||'').localeCompare(a.createdAt||''));
+    document.getElementById('stat-saisies').innerHTML = items.length;
+    
+    let html = '';
+    for (let s of items) {
+      html += `<tr>
+        <td>${s.num || s.id.slice(0,8)}</td>
+        <td>${fmtDate(s.date)}</td>
+        <td>${s.categorie || '—'}</td>
+        <td>${s.objet || '—'}</td>
+        <td>${s.proprio || '—'}</td>
+        <td>${s.agent || '—'}</td>
+        <td><small>${s.createdBy || '—'}</small></td>
+        <td>
+          ${canEdit(s) ? `<button class="btn btn-primary btn-sm" onclick="editItem('saisies','${s.id}')">✏️</button>` : ''}
+          ${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('saisies','${s.id}')">🗑️</button>` : ''}
+        </td>
+      </tr>`;
+    }
+    document.getElementById('saisies-liste').innerHTML = html || '<tr><td colspan="8">Aucune saisie</td></tr>';
+  });
+  
+  // Fiches
+  db.ref('fiches').on('value', (snapshot) => {
+    let items = [];
+    let data = snapshot.val() || {};
+    for (let id in data) items.push({ id, ...data[id] });
+    items.sort((a,b) => (b.createdAt||'').localeCompare(a.createdAt||''));
+    
+    let html = '';
+    for (let f of items) {
+      html += `<tr>
+        <td>${f.nom || '—'}</td>
+        <td>${f.naissance || '—'}</td>
+        <td><span class="badge ${f.statut === 'Dangereux' ? 'badge-open' : ''}">${f.statut || '—'}</span></td>
+        <td style="max-width:200px;overflow:hidden;">${(f.antecedents||'').substring(0,50)}...</td>
+        <td><small>${f.createdBy || '—'}</small></td>
+        <td>
+          ${canEdit(f) ? `<button class="btn btn-primary btn-sm" onclick="editItem('fiches','${f.id}')">✏️</button>` : ''}
+          ${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('fiches','${f.id}')">🗑️</button>` : ''}
+        </td>
+      </tr>`;
+    }
+    document.getElementById('fiches-liste').innerHTML = html || '<tr><td colspan="6">Aucune fiche</td></tr>';
+  });
+  
+  // Véhicules
+  db.ref('vehicules').on('value', (snapshot) => {
+    let items = [];
+    let data = snapshot.val() || {};
+    for (let id in data) items.push({ id, ...data[id] });
+    items.sort((a,b) => (b.createdAt||'').localeCompare(a.createdAt||''));
+    
+    let html = '';
+    for (let v of items) {
+      html += `<tr>
+        <td>${v.plaque || '—'}</td>
+        <td>${v.modele || '—'}</td>
+        <td>${v.couleur || '—'}</td>
+        <td>${v.proprio || '—'}</td>
+        <td style="max-width:150px;">${v.motif || '—'}</td>
+        <td><small>${v.createdBy || '—'}</small></td>
+        <td>
+          ${canEdit(v) ? `<button class="btn btn-primary btn-sm" onclick="editItem('vehicules','${v.id}')">✏️</button>` : ''}
+          ${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('vehicules','${v.id}')">🗑️</button>` : ''}
+        </td>
+      </tr>`;
+    }
+    document.getElementById('vehicules-liste').innerHTML = html || '<tr><td colspan="7">Aucun véhicule</td></tr>';
+  });
+  
+  // Agents
+  db.ref('agents').on('value', (snapshot) => {
+    let items = [];
+    let data = snapshot.val() || {};
+    for (let id in data) items.push({ id, ...data[id] });
+    items.sort((a,b) => (b.createdAt||'').localeCompare(a.createdAt||''));
+    document.getElementById('stat-agents').innerHTML = items.length;
+    
+    let html = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:15px;">';
+    for (let a of items) {
+      html += `<div style="background:var(--bg-card);padding:15px;border-radius:10px;">
+        <strong>${a.nom || '—'}</strong><br>
+        Grade: ${a.grade || '—'}<br>
+        Matricule: ${a.matricule || '—'}<br>
+        <small>Créé par: ${a.createdBy || '—'}</small><br>
+        ${canDelete() ? `<button class="btn btn-danger btn-sm" style="margin-top:10px;" onclick="deleteItem('agents','${a.id}')">Supprimer</button>` : ''}
+      </div>`;
+    }
+    html += '</div>';
+    document.getElementById('agents-liste').innerHTML = html || 'Aucun agent';
+  });
 }
 
 // Administration
 async function loadAdminData() {
-  let users = await fb.get(fb.ref(db, 'users'));
-  let data = users.val() || {};
+  let snapshot = await db.ref('users').once('value');
+  let users = snapshot.val() || {};
   let pending = [], approved = [];
-  for (let [id, u] of Object.entries(data)) {
-    if (u.status === 'pending') pending.push({id, ...u});
-    else if (u.status === 'approved') approved.push({id, ...u});
+  
+  for (let id in users) {
+    if (users[id].status === 'pending') pending.push({ id, ...users[id] });
+    else if (users[id].status === 'approved') approved.push({ id, ...users[id] });
   }
-  document.getElementById('access-requests').innerHTML = `<div class="section-title">Demandes (${pending.length})</div>` + pending.map(u => `<div style="padding:10px;border-bottom:1px solid var(--border);">${u.prenom} ${u.nom} (${u.grade})<br><button class="btn btn-primary btn-sm" onclick="approveUser('${u.id}')">Accepter</button> <button class="btn btn-danger btn-sm" onclick="rejectUser('${u.id}')">Refuser</button></div>`).join('');
-  document.getElementById('approved-users').innerHTML = `<div class="section-title">Utilisateurs (${approved.length})</div>` + approved.map(u => `<div style="padding:10px;border-bottom:1px solid var(--border);">✅ ${u.prenom} ${u.nom} (${u.grade})<br><button class="btn btn-danger btn-sm" onclick="revokeUser('${u.id}')">Révoquer</button></div>`).join('');
+  
+  let demandesHtml = '';
+  for (let u of pending) {
+    demandesHtml += `<div style="padding:10px;border-bottom:1px solid var(--border);">
+      ${u.prenom} ${u.nom} (${u.grade}) - ${u.pseudo}
+      <button class="btn btn-primary btn-sm" onclick="approveUser('${u.id}')">Accepter</button>
+      <button class="btn btn-danger btn-sm" onclick="rejectUser('${u.id}')">Refuser</button>
+    </div>`;
+  }
+  document.getElementById('demandes-liste').innerHTML = demandesHtml || 'Aucune demande';
+  
+  let usersHtml = '';
+  for (let u of approved) {
+    usersHtml += `<div style="padding:10px;border-bottom:1px solid var(--border);">
+      ✅ ${u.prenom} ${u.nom} (${u.grade})
+      <button class="btn btn-danger btn-sm" onclick="revokeUser('${u.id}')">Révoquer</button>
+    </div>`;
+  }
+  document.getElementById('utilisateurs-liste').innerHTML = usersHtml || 'Aucun utilisateur';
 }
 
-window.approveUser = async (id) => { await fb.update(fb.ref(db, `users/${id}`), { status: 'approved', approvedAt: new Date().toISOString() }); toast('Utilisateur approuvé'); loadAdminData(); };
-window.rejectUser = async (id) => { await fb.update(fb.ref(db, `users/${id}`), { status: 'rejected' }); toast('Demande refusée'); loadAdminData(); };
-window.revokeUser = async (id) => { await fb.update(fb.ref(db, `users/${id}`), { status: 'rejected' }); toast('Accès révoqué'); loadAdminData(); };
+window.approveUser = async (id) => {
+  await db.ref('users/' + id).update({ status: 'approved', approvedAt: new Date().toISOString() });
+  toast('Utilisateur approuvé');
+  loadAdminData();
+};
+
+window.rejectUser = async (id) => {
+  await db.ref('users/' + id).update({ status: 'rejected' });
+  toast('Demande refusée');
+  loadAdminData();
+};
+
+window.revokeUser = async (id) => {
+  await db.ref('users/' + id).update({ status: 'rejected' });
+  toast('Accès révoqué');
+  loadAdminData();
+};
 
 // CRUD
-let currentEditId = null;
-let currentEditCol = null;
-
 function openNewModal() {
   currentEditId = null;
-  openModal('Nouveau rapport', `
-    <div class="form-grid"><div class="form-group"><label>Type</label><select id="r-type"><option>Intervention</option><option>Patrouille</option></select></div>
-    <div class="form-group"><label>Statut</label><select id="r-statut"><option>Ouvert</option><option>En cours</option><option>Clôturé</option></select></div>
-    <div class="form-group"><label>Date</label><input id="r-date" type="datetime-local"></div>
-    <div class="form-group"><label>Lieu</label><input id="r-lieu" placeholder="Lieu"></div>
-    <div class="form-group"><label>Agent</label><input id="r-agent" placeholder="Agent"></div>
-    <div class="form-group span2"><label>Description</label><textarea id="r-description"></textarea></div></div>
-  `, () => saveRapport());
+  document.getElementById('modal-title').innerHTML = 'Nouveau rapport';
+  document.getElementById('modal-body').innerHTML = `
+    <input id="r-type" class="form-input" placeholder="Type d'intervention">
+    <select id="r-statut" class="form-input">
+      <option>Ouvert</option><option>En cours</option><option>Clôturé</option>
+    </select>
+    <input id="r-date" type="datetime-local" class="form-input">
+    <input id="r-lieu" class="form-input" placeholder="Lieu">
+    <input id="r-agent" class="form-input" placeholder="Agent">
+    <textarea id="r-description" class="form-input" placeholder="Description" rows="3"></textarea>
+  `;
+  document.getElementById('modal-save').onclick = () => saveRapport();
+  document.getElementById('modal').classList.add('open');
 }
 
 async function saveRapport() {
-  let data = { num: `INT-${Date.now().slice(-6)}`, type: document.getElementById('r-type').value, statut: document.getElementById('r-statut').value, date: document.getElementById('r-date').value, lieu: document.getElementById('r-lieu').value, agent: document.getElementById('r-agent').value, description: document.getElementById('r-description').value, createdAt: new Date().toISOString(), createdBy: `${currentUser.prenom} ${currentUser.nom}`, createdById: currentUser.id };
-  if (currentEditId) await fb.update(fb.ref(db, `rapports/${currentEditId}`), { ...data, updatedAt: new Date().toISOString(), updatedBy: currentUser.prenom });
-  else await fb.push(fb.ref(db, 'rapports'), data);
-  closeModal(); toast(currentEditId ? 'Rapport modifié' : 'Rapport créé');
+  let data = {
+    num: `INT-${Date.now().slice(-6)}`,
+    type: document.getElementById('r-type').value,
+    statut: document.getElementById('r-statut').value,
+    date: document.getElementById('r-date').value,
+    lieu: document.getElementById('r-lieu').value,
+    agent: document.getElementById('r-agent').value,
+    description: document.getElementById('r-description').value,
+    createdAt: new Date().toISOString(),
+    createdBy: `${currentUser.prenom} ${currentUser.nom}`,
+    createdById: currentUser.id
+  };
+  
+  if (currentEditId) {
+    await db.ref('rapports/' + currentEditId).update({ ...data, updatedAt: new Date().toISOString() });
+    toast('Rapport modifié');
+  } else {
+    await db.ref('rapports').push(data);
+    toast('Rapport créé');
+  }
+  closeModal();
   currentEditId = null;
 }
 
-function openSignalementModal() { openModal('Nouveau signalement', `<div class="form-grid"><div class="form-group"><label>Type</label><input id="s-type"></div><div class="form-group"><label>Priorité</label><select id="s-priorite"><option>Normal</option><option>Urgent</option></select></div><div class="form-group"><label>Zone</label><input id="s-zone"></div><div class="form-group"><label>Date</label><input id="s-date" type="datetime-local"></div><div class="form-group span2"><label>Description</label><textarea id="s-description"></textarea></div></div>`, () => saveSignalement()); }
-async function saveSignalement() { let data = { type: document.getElementById('s-type').value, priorite: document.getElementById('s-priorite').value, zone: document.getElementById('s-zone').value, date: document.getElementById('s-date').value, description: document.getElementById('s-description').value, createdAt: new Date().toISOString(), createdBy: `${currentUser.prenom} ${currentUser.nom}`, createdById: currentUser.id }; if (currentEditId) await fb.update(fb.ref(db, `signalements/${currentEditId}`), { ...data, updatedAt: new Date().toISOString() }); else await fb.push(fb.ref(db, 'signalements'), data); closeModal(); toast('Signalement enregistré'); currentEditId = null; }
-
-function openPlainteModal() { openModal('Nouvelle plainte', `<div class="form-grid"><div class="form-group"><label>Plaignant</label><input id="p-plaignant" value="${currentUser.prenom} ${currentUser.nom}"></div><div class="form-group"><label>Accusé</label><input id="p-accuse"></div><div class="form-group"><label>Date</label><input id="p-date" type="datetime-local"></div><div class="form-group"><label>Motif</label><input id="p-motif"></div><div class="form-group"><label>Statut</label><select id="p-statut"><option>En attente</option><option>En cours</option><option>Résolue</option></select></div><div class="form-group span2"><label>Description</label><textarea id="p-description"></textarea></div></div>`, () => savePlainte()); }
-async function savePlainte() { let data = { plaignant: document.getElementById('p-plaignant').value, accuse: document.getElementById('p-accuse').value, date: document.getElementById('p-date').value, motif: document.getElementById('p-motif').value, statut: document.getElementById('p-statut').value, description: document.getElementById('p-description').value, createdAt: new Date().toISOString(), createdBy: `${currentUser.prenom} ${currentUser.nom}`, createdById: currentUser.id }; if (currentEditId) await fb.update(fb.ref(db, `plaintes/${currentEditId}`), { ...data, updatedAt: new Date().toISOString() }); else await fb.push(fb.ref(db, 'plaintes'), data); closeModal(); toast('Plainte enregistrée'); currentEditId = null; }
-
-function openSaisieModal() { openModal('Nouvelle saisie', `<div class="form-grid"><div class="form-group"><label>Catégorie</label><input id="sa-categorie"></div><div class="form-group"><label>Date</label><input id="sa-date" type="datetime-local"></div><div class="form-group"><label>Objet</label><input id="sa-objet"></div><div class="form-group"><label>Quantité</label><input id="sa-quantite"></div><div class="form-group"><label>Propriétaire</label><input id="sa-proprio"></div><div class="form-group"><label>Agent</label><input id="sa-agent"></div><div class="form-group span2"><label>Description</label><textarea id="sa-description"></textarea></div></div>`, () => saveSaisie()); }
-async function saveSaisie() { let data = { num: `SAI-${Date.now().slice(-6)}`, categorie: document.getElementById('sa-categorie').value, date: document.getElementById('sa-date').value, objet: document.getElementById('sa-objet').value, quantite: document.getElementById('sa-quantite').value, proprio: document.getElementById('sa-proprio').value, agent: document.getElementById('sa-agent').value, description: document.getElementById('sa-description').value, createdAt: new Date().toISOString(), createdBy: `${currentUser.prenom} ${currentUser.nom}`, createdById: currentUser.id }; if (currentEditId) await fb.update(fb.ref(db, `saisies/${currentEditId}`), { ...data, updatedAt: new Date().toISOString() }); else await fb.push(fb.ref(db, 'saisies'), data); closeModal(); toast('Saisie enregistrée'); currentEditId = null; }
-
-function openFicheModal() { openModal('Nouvelle fiche', `<div class="form-grid"><div class="form-group"><label>Nom</label><input id="f-nom"></div><div class="form-group"><label>Naissance</label><input id="f-naissance" type="date"></div><div class="form-group"><label>Nationalité</label><input id="f-nationalite"></div><div class="form-group"><label>Statut</label><select id="f-statut"><option>Fichier actif</option><option>Recherché</option><option>Dangereux</option></select></div><div class="form-group span2"><label>Antécédents</label><textarea id="f-antecedents"></textarea></div></div>`, () => saveFiche()); }
-async function saveFiche() { let data = { nom: document.getElementById('f-nom').value, naissance: document.getElementById('f-naissance').value, nationalite: document.getElementById('f-nationalite').value, statut: document.getElementById('f-statut').value, antecedents: document.getElementById('f-antecedents').value, createdAt: new Date().toISOString(), createdBy: `${currentUser.prenom} ${currentUser.nom}`, createdById: currentUser.id }; if (currentEditId) await fb.update(fb.ref(db, `fiches/${currentEditId}`), { ...data, updatedAt: new Date().toISOString() }); else await fb.push(fb.ref(db, 'fiches'), data); closeModal(); toast('Fiche enregistrée'); currentEditId = null; }
-
-function openVehiculeModal() { openModal('Nouveau véhicule', `<div class="form-grid"><div class="form-group"><label>Plaque</label><input id="v-plaque"></div><div class="form-group"><label>Modèle</label><input id="v-modele"></div><div class="form-group"><label>Couleur</label><input id="v-couleur"></div><div class="form-group"><label>Propriétaire</label><input id="v-proprio"></div><div class="form-group span2"><label>Motif</label><textarea id="v-motif"></textarea></div></div>`, () => saveVehicule()); }
-async function saveVehicule() { let data = { plaque: document.getElementById('v-plaque').value, modele: document.getElementById('v-modele').value, couleur: document.getElementById('v-couleur').value, proprio: document.getElementById('v-proprio').value, motif: document.getElementById('v-motif').value, createdAt: new Date().toISOString(), createdBy: `${currentUser.prenom} ${currentUser.nom}`, createdById: currentUser.id }; if (currentEditId) await fb.update(fb.ref(db, `vehicules/${currentEditId}`), { ...data, updatedAt: new Date().toISOString() }); else await fb.push(fb.ref(db, 'vehicules'), data); closeModal(); toast('Véhicule ajouté'); currentEditId = null; }
-
-function openAgentModal() { openModal('Nouvel agent', `<div class="form-grid"><div class="form-group"><label>Nom</label><input id="a-nom"></div><div class="form-group"><label>Grade</label><select id="a-grade"><option>Gardien</option><option>Brigadier</option><option>Chef</option><option>Directeur</option></select></div><div class="form-group"><label>Matricule</label><input id="a-matricule"></div><div class="form-group"><label>Statut</label><select id="a-statut"><option>Actif</option><option>Inactif</option></select></div></div>`, () => saveAgent()); }
-async function saveAgent() { let data = { nom: document.getElementById('a-nom').value, grade: document.getElementById('a-grade').value, matricule: document.getElementById('a-matricule').value, statut: document.getElementById('a-statut').value, createdAt: new Date().toISOString(), createdBy: `${currentUser.prenom} ${currentUser.nom}`, createdById: currentUser.id }; if (currentEditId) await fb.update(fb.ref(db, `agents/${currentEditId}`), { ...data, updatedAt: new Date().toISOString() }); else await fb.push(fb.ref(db, 'agents'), data); closeModal(); toast('Agent ajouté'); currentEditId = null; }
-
-async function editItem(col, id) {
-  currentEditCol = col; currentEditId = id;
-  let snap = await fb.get(fb.ref(db, `${col}/${id}`));
-  let data = snap.val();
-  if (!canEdit(data)) return toast('Vous ne pouvez pas modifier ce dossier');
-  if (col === 'rapports') openModal('Modifier rapport', `<div class="form-grid"><div class="form-group"><label>Type</label><input id="r-type" value="${data.type||''}"></div><div class="form-group"><label>Statut</label><select id="r-statut"><option ${data.statut==='Ouvert'?'selected':''}>Ouvert</option><option ${data.statut==='En cours'?'selected':''}>En cours</option><option ${data.statut==='Clôturé'?'selected':''}>Clôturé</option></select></div><div class="form-group"><label>Date</label><input id="r-date" type="datetime-local" value="${data.date||''}"></div><div class="form-group"><label>Lieu</label><input id="r-lieu" value="${data.lieu||''}"></div><div class="form-group"><label>Agent</label><input id="r-agent" value="${data.agent||''}"></div><div class="form-group span2"><label>Description</label><textarea id="r-description">${data.description||''}</textarea></div></div>`, () => saveRapport());
-  else if (col === 'signalements') openModal('Modifier signalement', `<div class="form-grid"><div class="form-group"><label>Type</label><input id="s-type" value="${data.type||''}"></div><div class="form-group"><label>Priorité</label><select id="s-priorite"><option ${data.priorite==='Normal'?'selected':''}>Normal</option><option ${data.priorite==='Urgent'?'selected':''}>Urgent</option></select></div><div class="form-group"><label>Zone</label><input id="s-zone" value="${data.zone||''}"></div><div class="form-group"><label>Date</label><input id="s-date" type="datetime-local" value="${data.date||''}"></div><div class="form-group span2"><label>Description</label><textarea id="s-description">${data.description||''}</textarea></div></div>`, () => saveSignalement());
-  else toast('Édition non implémentée pour ce type');
+async function editItem(type, id) {
+  currentEditType = type;
+  currentEditId = id;
+  
+  let snapshot = await db.ref(`${type}/${id}`).once('value');
+  let data = snapshot.val();
+  
+  if (!canEdit(data)) {
+    toast('Vous ne pouvez pas modifier ce dossier');
+    return;
+  }
+  
+  if (type === 'rapports') {
+    document.getElementById('modal-title').innerHTML = 'Modifier le rapport';
+    document.getElementById('modal-body').innerHTML = `
+      <input id="r-type" class="form-input" value="${data.type || ''}" placeholder="Type">
+      <select id="r-statut" class="form-input">
+        <option ${data.statut === 'Ouvert' ? 'selected' : ''}>Ouvert</option>
+        <option ${data.statut === 'En cours' ? 'selected' : ''}>En cours</option>
+        <option ${data.statut === 'Clôturé' ? 'selected' : ''}>Clôturé</option>
+      </select>
+      <input id="r-date" type="datetime-local" class="form-input" value="${data.date || ''}">
+      <input id="r-lieu" class="form-input" value="${data.lieu || ''}" placeholder="Lieu">
+      <input id="r-agent" class="form-input" value="${data.agent || ''}" placeholder="Agent">
+      <textarea id="r-description" class="form-input" placeholder="Description" rows="3">${data.description || ''}</textarea>
+    `;
+    document.getElementById('modal-save').onclick = () => saveRapport();
+    document.getElementById('modal').classList.add('open');
+  } else if (type === 'signalements') {
+    document.getElementById('modal-title').innerHTML = 'Modifier le signalement';
+    document.getElementById('modal-body').innerHTML = `
+      <input id="s-type" class="form-input" value="${data.type || ''}" placeholder="Type">
+      <select id="s-priorite" class="form-input">
+        <option ${data.priorite === 'Normal' ? 'selected' : ''}>Normal</option>
+        <option ${data.priorite === 'Urgent' ? 'selected' : ''}>Urgent</option>
+      </select>
+      <input id="s-zone" class="form-input" value="${data.zone || ''}" placeholder="Zone">
+      <input id="s-date" type="datetime-local" class="form-input" value="${data.date || ''}">
+      <textarea id="s-description" class="form-input" placeholder="Description" rows="3">${data.description || ''}</textarea>
+    `;
+    document.getElementById('modal-save').onclick = () => saveSignalement();
+    document.getElementById('modal').classList.add('open');
+  }
 }
 
-async function deleteItem(col, id) {
-  if (!canDelete()) return toast('Permission refusée');
+async function saveSignalement() {
+  let data = {
+    type: document.getElementById('s-type').value,
+    priorite: document.getElementById('s-priorite').value,
+    zone: document.getElementById('s-zone').value,
+    date: document.getElementById('s-date').value,
+    description: document.getElementById('s-description').value,
+    updatedAt: new Date().toISOString(),
+    updatedBy: `${currentUser.prenom} ${currentUser.nom}`
+  };
+  
+  await db.ref('signalements/' + currentEditId).update(data);
+  toast('Signalement modifié');
+  closeModal();
+  currentEditId = null;
+}
+
+function openSignalementModal() {
+  currentEditId = null;
+  document.getElementById('modal-title').innerHTML = 'Nouveau signalement';
+  document.getElementById('modal-body').innerHTML = `
+    <input id="s-type" class="form-input" placeholder="Type de signalement">
+    <select id="s-priorite" class="form-input">
+      <option>Normal</option><option>Urgent</option>
+    </select>
+    <input id="s-zone" class="form-input" placeholder="Zone">
+    <input id="s-date" type="datetime-local" class="form-input">
+    <textarea id="s-description" class="form-input" placeholder="Description" rows="3"></textarea>
+  `;
+  document.getElementById('modal-save').onclick = () => createSignalement();
+  document.getElementById('modal').classList.add('open');
+}
+
+async function createSignalement() {
+  let data = {
+    type: document.getElementById('s-type').value,
+    priorite: document.getElementById('s-priorite').value,
+    zone: document.getElementById('s-zone').value,
+    date: document.getElementById('s-date').value,
+    description: document.getElementById('s-description').value,
+    createdAt: new Date().toISOString(),
+    createdBy: `${currentUser.prenom} ${currentUser.nom}`,
+    createdById: currentUser.id
+  };
+  await db.ref('signalements').push(data);
+  toast('Signalement créé');
+  closeModal();
+}
+
+function openPlainteModal() {
+  currentEditId = null;
+  document.getElementById('modal-title').innerHTML = 'Nouvelle plainte';
+  document.getElementById('modal-body').innerHTML = `
+    <input id="p-plaignant" class="form-input" value="${currentUser.prenom} ${currentUser.nom}">
+    <input id="p-accuse" class="form-input" placeholder="Agent mis en cause">
+    <input id="p-date" type="datetime-local" class="form-input">
+    <input id="p-motif" class="form-input" placeholder="Motif">
+    <select id="p-statut" class="form-input">
+      <option>En attente</option><option>En cours</option><option>Résolue</option>
+    </select>
+    <textarea id="p-description" class="form-input" placeholder="Description" rows="3"></textarea>
+  `;
+  document.getElementById('modal-save').onclick = () => createPlainte();
+  document.getElementById('modal').classList.add('open');
+}
+
+async function createPlainte() {
+  let data = {
+    plaignant: document.getElementById('p-plaignant').value,
+    accuse: document.getElementById('p-accuse').value,
+    date: document.getElementById('p-date').value,
+    motif: document.getElementById('p-motif').value,
+    statut: document.getElementById('p-statut').value,
+    description: document.getElementById('p-description').value,
+    createdAt: new Date().toISOString(),
+    createdBy: `${currentUser.prenom} ${currentUser.nom}`,
+    createdById: currentUser.id
+  };
+  await db.ref('plaintes').push(data);
+  toast('Plainte déposée');
+  closeModal();
+}
+
+function openSaisieModal() {
+  currentEditId = null;
+  document.getElementById('modal-title').innerHTML = 'Nouvelle saisie';
+  document.getElementById('modal-body').innerHTML = `
+    <input id="sa-categorie" class="form-input" placeholder="Catégorie">
+    <input id="sa-date" type="datetime-local" class="form-input">
+    <input id="sa-objet" class="form-input" placeholder="Objet saisi">
+    <input id="sa-quantite" class="form-input" placeholder="Quantité">
+    <input id="sa-proprio" class="form-input" placeholder="Propriétaire">
+    <input id="sa-agent" class="form-input" placeholder="Agent">
+    <textarea id="sa-description" class="form-input" placeholder="Description" rows="3"></textarea>
+  `;
+  document.getElementById('modal-save').onclick = () => createSaisie();
+  document.getElementById('modal').classList.add('open');
+}
+
+async function createSaisie() {
+  let data = {
+    num: `SAI-${Date.now().slice(-6)}`,
+    categorie: document.getElementById('sa-categorie').value,
+    date: document.getElementById('sa-date').value,
+    objet: document.getElementById('sa-objet').value,
+    quantite: document.getElementById('sa-quantite').value,
+    proprio: document.getElementById('sa-proprio').value,
+    agent: document.getElementById('sa-agent').value,
+    description: document.getElementById('sa-description').value,
+    createdAt: new Date().toISOString(),
+    createdBy: `${currentUser.prenom} ${currentUser.nom}`,
+    createdById: currentUser.id
+  };
+  await db.ref('saisies').push(data);
+  toast('Saisie enregistrée');
+  closeModal();
+}
+
+function openFicheModal() {
+  currentEditId = null;
+  document.getElementById('modal-title').innerHTML = 'Nouvelle fiche';
+  document.getElementById('modal-body').innerHTML = `
+    <input id="f-nom" class="form-input" placeholder="Nom complet">
+    <input id="f-naissance" type="date" class="form-input">
+    <input id="f-nationalite" class="form-input" placeholder="Nationalité">
+    <select id="f-statut" class="form-input">
+      <option>Fichier actif</option><option>Recherché</option><option>Dangereux</option>
+    </select>
+    <textarea id="f-antecedents" class="form-input" placeholder="Antécédents" rows="3"></textarea>
+  `;
+  document.getElementById('modal-save').onclick = () => createFiche();
+  document.getElementById('modal').classList.add('open');
+}
+
+async function createFiche() {
+  let data = {
+    nom: document.getElementById('f-nom').value,
+    naissance: document.getElementById('f-naissance').value,
+    nationalite: document.getElementById('f-nationalite').value,
+    statut: document.getElementById('f-statut').value,
+    antecedents: document.getElementById('f-antecedents').value,
+    createdAt: new Date().toISOString(),
+    createdBy: `${currentUser.prenom} ${currentUser.nom}`,
+    createdById: currentUser.id
+  };
+  await db.ref('fiches').push(data);
+  toast('Fiche créée');
+  closeModal();
+}
+
+function openVehiculeModal() {
+  currentEditId = null;
+  document.getElementById('modal-title').innerHTML = 'Nouveau véhicule';
+  document.getElementById('modal-body').innerHTML = `
+    <input id="v-plaque" class="form-input" placeholder="Plaque">
+    <input id="v-modele" class="form-input" placeholder="Modèle">
+    <input id="v-couleur" class="form-input" placeholder="Couleur">
+    <input id="v-proprio" class="form-input" placeholder="Propriétaire">
+    <textarea id="v-motif" class="form-input" placeholder="Motif de recherche" rows="3"></textarea>
+  `;
+  document.getElementById('modal-save').onclick = () => createVehicule();
+  document.getElementById('modal').classList.add('open');
+}
+
+async function createVehicule() {
+  let data = {
+    plaque: document.getElementById('v-plaque').value,
+    modele: document.getElementById('v-modele').value,
+    couleur: document.getElementById('v-couleur').value,
+    proprio: document.getElementById('v-proprio').value,
+    motif: document.getElementById('v-motif').value,
+    createdAt: new Date().toISOString(),
+    createdBy: `${currentUser.prenom} ${currentUser.nom}`,
+    createdById: currentUser.id
+  };
+  await db.ref('vehicules').push(data);
+  toast('Véhicule ajouté');
+  closeModal();
+}
+
+function openAgentModal() {
+  currentEditId = null;
+  document.getElementById('modal-title').innerHTML = 'Nouvel agent';
+  document.getElementById('modal-body').innerHTML = `
+    <input id="a-nom" class="form-input" placeholder="Nom complet">
+    <input id="a-pseudo" class="form-input" placeholder="Pseudo Discord">
+    <select id="a-grade" class="form-input">
+      <option>Gardien</option><option>Brigadier</option><option>Chef</option><option>Directeur</option>
+    </select>
+    <input id="a-matricule" class="form-input" placeholder="Matricule">
+    <select id="a-statut" class="form-input">
+      <option>Actif</option><option>Inactif</option>
+    </select>
+  `;
+  document.getElementById('modal-save').onclick = () => createAgent();
+  document.getElementById('modal').classList.add('open');
+}
+
+async function createAgent() {
+  let data = {
+    nom: document.getElementById('a-nom').value,
+    pseudo: document.getElementById('a-pseudo').value,
+    grade: document.getElementById('a-grade').value,
+    matricule: document.getElementById('a-matricule').value,
+    statut: document.getElementById('a-statut').value,
+    createdAt: new Date().toISOString(),
+    createdBy: `${currentUser.prenom} ${currentUser.nom}`,
+    createdById: currentUser.id
+  };
+  await db.ref('agents').push(data);
+  toast('Agent ajouté');
+  closeModal();
+}
+
+async function deleteItem(type, id) {
+  if (!canDelete()) {
+    toast('Permission refusée');
+    return;
+  }
   if (!confirm('Supprimer définitivement ?')) return;
-  await fb.remove(fb.ref(db, `${col}/${id}`));
+  await db.ref(`${type}/${id}`).remove();
   toast('Supprimé');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  currentEditId = null;
+}
+
+// Vérifier session sauvegardée
+let saved = localStorage.getItem('pm_session');
+if (saved) {
+  try {
+    let user = JSON.parse(saved);
+    currentUser = user;
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('main-app').style.display = 'flex';
+    document.getElementById('user-name').innerHTML = `👮 ${user.prenom} ${user.nom}<br><small>${user.grade}</small>`;
+    if (canDelete()) {
+      document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block');
+      loadAdminData();
+    }
+    loadAllData();
+  } catch(e) {}
 }
 </script>
 </body>
