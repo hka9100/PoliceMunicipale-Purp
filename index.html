@@ -806,12 +806,24 @@
         <div class="section-header"><div class="section-title">Activité récente</div></div>
         <div class="table-wrap"><div id="activity-container"><div class="empty-state"><div class="icon">📋</div><div class="label">Aucune activité pour le moment</div></div></div></div>
       </div>
-      <div class="page" id="page-rapports"><div class="section-header"><div class="section-title">Rapports d'intervention</div><button class="btn btn-primary btn-sm" onclick="openNewModal()">+ Nouveau rapport</button></div><div class="table-wrap"><div class="search-bar"><input class="search-input" type="text" placeholder="🔍 Rechercher..." oninput="filterTable('rapports-table', this.value)"><button class="filter-btn active" onclick="filterStatus('rapports-table','')">Tous</button><button class="filter-btn" onclick="filterStatus('rapports-table','Ouvert')">Ouverts</button><button class="filter-btn" onclick="filterStatus('rapports-table','En cours')">En cours</button><button class="filter-btn" onclick="filterStatus('rapports-table','Clôturé')">Clôturés</button></div><table id="rapports-table"><thead><tr><th>N° DOSSIER</th><th>DATE</th><th>TYPE</th><th>LIEU</th><th>AGENT</th><th>STATUT</th><th>ACTIONS</th></tr></thead><tbody id="rapports-tbody"><tr><td colspan="7"><div class="empty-state"><div class="icon">📋</div><div class="label">Aucun rapport enregistré</div></div></td></tr></tbody></table></div></div>
-      <div class="page" id="page-signalements"><div class="section-header"><div class="section-title">Signalements</div><button class="btn btn-primary btn-sm" onclick="openSignalementModal()">+ Nouveau signalement</button></div><div class="table-wrap"><div class="search-bar"><input class="search-input" type="text" placeholder="🔍 Rechercher..." oninput="filterTable('signalements-table', this.value)"><button class="filter-btn" onclick="filterStatus('signalements-table','Urgent')">Urgents</button></div><table id="signalements-table"><thead><tr><th>N°</th><th>DATE/HEURE</th><th>TYPE</th><th>DESCRIPTION</th><th>ZONE</th><th>PRIORITÉ</th><th>ACTIONS</th></tr></thead><tbody id="signalements-tbody"><tr><td colspan="7"><div class="empty-state"><div class="icon">🚨</div><div class="label">Aucun signalement</div></div></td></tr></tbody></table></div></div>
-      <div class="page" id="page-plaintes"><div class="section-header"><div class="section-title">Plaintes</div><button class="btn btn-primary btn-sm" onclick="openPlainteModal()">+ Déposer une plainte</button></div><div class="table-wrap"><div class="search-bar"><input class="search-input" type="text" placeholder="🔍 Rechercher..." oninput="filterTable('plaintes-table', this.value)"><button class="filter-btn active" onclick="filterStatus('plaintes-table','')">Toutes</button><button class="filter-btn" onclick="filterStatus('plaintes-table','En attente')">En attente</button><button class="filter-btn" onclick="filterStatus('plaintes-table','En cours')">En cours</button><button class="filter-btn" onclick="filterStatus('plaintes-table','Résolue')">Résolues</button></div><table id="plaintes-table"><thead><tr><th>N° PLAINTE</th><th>DATE</th><th>PLAIGNANT</th><th>AGENT MIS EN CAUSE</th><th>MOTIF</th><th>STATUT</th><th>ACTIONS</th></tr></thead><tbody id="plaintes-tbody"><tr><td colspan="7"><div class="empty-state"><div class="icon">⚖️</div><div class="label">Aucune plainte enregistrée</div></div></td></tr></tbody></table></div></div>
-      <div class="page" id="page-saisies"><div class="section-header"><div class="section-title">Saisies</div><button class="btn btn-primary btn-sm" onclick="openSaisieModal()">+ Nouvelle saisie</button></div><div class="table-wrap"><div class="search-bar"><input class="search-input" type="text" placeholder="🔍 Rechercher..." oninput="filterTable('saisies-table', this.value)"><button class="filter-btn" onclick="filterStatus('saisies-table','Arme')">Armes</button><button class="filter-btn" onclick="filterStatus('saisies-table','Stupéfiants')">Stupéfiants</button><button class="filter-btn" onclick="filterStatus('saisies-table','Véhicule')">Véhicules</button></div><table id="saisies-table"><thead><tr><th>N° SAISIE</th><th>DATE</th><th>CATÉGORIE</th><th>OBJET(S)</th><th>QUANTITÉ</th><th>PROPRIÉTAIRE</th><th>AGENT</th><th>DOSSIER LIÉ</th><th>ACTIONS</th></tr></thead><tbody id="saisies-tbody"><tr><td colspan="9"><div class="empty-state"><div class="icon">🔫</div><div class="label">Aucune saisie enregistrée</div></div></td></tr></tbody></table></div></div>
-      <div class="page" id="page-fiches"><div class="section-header"><div class="section-title">Fiches individus</div><button class="btn btn-primary btn-sm" onclick="openFicheModal()">+ Nouvelle fiche</button></div><div class="table-wrap"><div class="search-bar"><input class="search-input" type="text" placeholder="🔍 Rechercher..." oninput="filterTable('fiches-table', this.value)"><button class="filter-btn" onclick="filterStatus('fiches-table','Recherché')">Recherchés</button><button class="filter-btn" onclick="filterStatus('fiches-table','Dangereux')">Dangereux</button></div><table id="fiches-table"><thead><tr><th>PHOTO</th><th>NOM PRÉNOM</th><th>DATE NAISS.</th><th>NATIONALITÉ</th><th>STATUT</th><th>ANTÉCÉDENTS</th><th>ACTIONS</th></tr></thead><tbody id="fiches-tbody"><tr><td colspan="7"><div class="empty-state"><div class="icon">👤</div><div class="label">Aucune fiche individu</div></div></td></tr></tbody></table></div></div>
-      <div class="page" id="page-vehicules"><div class="section-header"><div class="section-title">Véhicules recherchés</div><button class="btn btn-primary btn-sm" onclick="openVehiculeModal()">+ Ajouter véhicule</button></div><div class="table-wrap"><div class="search-bar"><input class="search-input" type="text" placeholder="🔍 Plaque, modèle..." oninput="filterTable('vehicules-table', this.value)"></div><table id="vehicules-table"><thead><tr><th>PHOTO</th><th>PLAQUE</th><th>MARQUE/MODÈLE</th><th>COULEUR</th><th>PROPRIÉTAIRE</th><th>MOTIF</th><th>DATE AJOUT</th><th>ACTIONS</th></tr></thead><tbody id="vehicules-tbody"><tr><td colspan="8"><div class="empty-state"><div class="icon">🚗</div><div class="label">Aucun véhicule recherché</div></div></td></tr></tbody></table></div></div>
+      <div class="page" id="page-rapports"><div class="section-header"><div class="section-title">Rapports d'intervention</div><button class="btn btn-primary btn-sm" onclick="openNewModal()">+ Nouveau rapport</button></div><div class="table-wrap"><div class="search-bar"><input class="search-input" type="text" placeholder="🔍 Rechercher..." oninput="filterTable('rapports-table', this.value)"><button class="filter-btn active" onclick="filterStatus('rapports-table','')">Tous</button><button class="filter-btn" onclick="filterStatus('rapports-table','Ouvert')">Ouverts</button><button class="filter-btn" onclick="filterStatus('rapports-table','En cours')">En cours</button><button class="filter-btn" onclick="filterStatus('rapports-table','Clôturé')">Clôturés</button></div><table id="rapports-table"><thead>
+          <tr><th>N° DOSSIER</th><th>DATE</th><th>TYPE</th><th>LIEU</th><th>AGENT</th><th>STATUT</th><th>CRÉÉ PAR</th><th>ACTIONS</th></tr>
+        </thead><tbody id="rapports-tbody"><tr><td colspan="8"><div class="empty-state"><div class="icon">📋</div><div class="label">Aucun rapport enregistré</div></div></td></tr></tbody></table></div></div>
+      <div class="page" id="page-signalements"><div class="section-header"><div class="section-title">Signalements</div><button class="btn btn-primary btn-sm" onclick="openSignalementModal()">+ Nouveau signalement</button></div><div class="table-wrap"><div class="search-bar"><input class="search-input" type="text" placeholder="🔍 Rechercher..." oninput="filterTable('signalements-table', this.value)"><button class="filter-btn" onclick="filterStatus('signalements-table','Urgent')">Urgents</button></div><table id="signalements-table"><thead>
+          <tr><th>N°</th><th>DATE/HEURE</th><th>TYPE</th><th>DESCRIPTION</th><th>ZONE</th><th>PRIORITÉ</th><th>CRÉÉ PAR</th><th>ACTIONS</th></tr>
+        </thead><tbody id="signalements-tbody"><tr><td colspan="8"><div class="empty-state"><div class="icon">🚨</div><div class="label">Aucun signalement</div></div></td></tr></tbody></table></div></div>
+      <div class="page" id="page-plaintes"><div class="section-header"><div class="section-title">Plaintes</div><button class="btn btn-primary btn-sm" onclick="openPlainteModal()">+ Déposer une plainte</button></div><div class="table-wrap"><div class="search-bar"><input class="search-input" type="text" placeholder="🔍 Rechercher..." oninput="filterTable('plaintes-table', this.value)"><button class="filter-btn active" onclick="filterStatus('plaintes-table','')">Toutes</button><button class="filter-btn" onclick="filterStatus('plaintes-table','En attente')">En attente</button><button class="filter-btn" onclick="filterStatus('plaintes-table','En cours')">En cours</button><button class="filter-btn" onclick="filterStatus('plaintes-table','Résolue')">Résolues</button></div><table id="plaintes-table"><thead>
+          <tr><th>N° PLAINTE</th><th>DATE</th><th>PLAIGNANT</th><th>AGENT MIS EN CAUSE</th><th>MOTIF</th><th>STATUT</th><th>CRÉÉ PAR</th><th>ACTIONS</th></tr>
+        </thead><tbody id="plaintes-tbody"><tr><td colspan="8"><div class="empty-state"><div class="icon">⚖️</div><div class="label">Aucune plainte enregistrée</div></div></td></tr></tbody></table></div></div>
+      <div class="page" id="page-saisies"><div class="section-header"><div class="section-title">Saisies</div><button class="btn btn-primary btn-sm" onclick="openSaisieModal()">+ Nouvelle saisie</button></div><div class="table-wrap"><div class="search-bar"><input class="search-input" type="text" placeholder="🔍 Rechercher..." oninput="filterTable('saisies-table', this.value)"><button class="filter-btn" onclick="filterStatus('saisies-table','Arme')">Armes</button><button class="filter-btn" onclick="filterStatus('saisies-table','Stupéfiants')">Stupéfiants</button><button class="filter-btn" onclick="filterStatus('saisies-table','Véhicule')">Véhicules</button></div><table id="saisies-table"><thead>
+          <tr><th>N° SAISIE</th><th>DATE</th><th>CATÉGORIE</th><th>OBJET(S)</th><th>QUANTITÉ</th><th>PROPRIÉTAIRE</th><th>AGENT</th><th>DOSSIER LIÉ</th><th>CRÉÉ PAR</th><th>ACTIONS</th></tr>
+        </thead><tbody id="saisies-tbody"><tr><td colspan="10"><div class="empty-state"><div class="icon">🔫</div><div class="label">Aucune saisie enregistrée</div></div></td></tr></tbody></table></div></div>
+      <div class="page" id="page-fiches"><div class="section-header"><div class="section-title">Fiches individus</div><button class="btn btn-primary btn-sm" onclick="openFicheModal()">+ Nouvelle fiche</button></div><div class="table-wrap"><div class="search-bar"><input class="search-input" type="text" placeholder="🔍 Rechercher..." oninput="filterTable('fiches-table', this.value)"><button class="filter-btn" onclick="filterStatus('fiches-table','Recherché')">Recherchés</button><button class="filter-btn" onclick="filterStatus('fiches-table','Dangereux')">Dangereux</button></div><table id="fiches-table"><thead>
+          <tr><th>PHOTO</th><th>NOM PRÉNOM</th><th>DATE NAISS.</th><th>NATIONALITÉ</th><th>STATUT</th><th>ANTÉCÉDENTS</th><th>CRÉÉ PAR</th><th>ACTIONS</th></tr>
+        </thead><tbody id="fiches-tbody"><tr><td colspan="8"><div class="empty-state"><div class="icon">👤</div><div class="label">Aucune fiche individu</div></div></td></tr></tbody></table></div></div>
+      <div class="page" id="page-vehicules"><div class="section-header"><div class="section-title">Véhicules recherchés</div><button class="btn btn-primary btn-sm" onclick="openVehiculeModal()">+ Ajouter véhicule</button></div><div class="table-wrap"><div class="search-bar"><input class="search-input" type="text" placeholder="🔍 Plaque, modèle..." oninput="filterTable('vehicules-table', this.value)"></div><table id="vehicules-table"><thead>
+          <tr><th>PHOTO</th><th>PLAQUE</th><th>MARQUE/MODÈLE</th><th>COULEUR</th><th>PROPRIÉTAIRE</th><th>MOTIF</th><th>DATE AJOUT</th><th>CRÉÉ PAR</th><th>ACTIONS</th></tr>
+        </thead><tbody id="vehicules-tbody"><tr><td colspan="9"><div class="empty-state"><div class="icon">🚗</div><div class="label">Aucun véhicule recherché</div></div></td></tr></tbody></table></div></div>
       <div class="page" id="page-agents"><div class="section-header"><div class="section-title">Gestion des agents</div><button class="btn btn-primary btn-sm" onclick="openAgentModal()">+ Ajouter agent</button></div><div class="agents-grid" id="agents-grid"><div style="grid-column:1/-1;"><div class="empty-state"><div class="icon">👮</div><div class="label">Aucun agent enregistré</div></div></div></div></div>
       <div class="page" id="page-gestion">
         <div class="section-header"><div class="section-title">Gestion du site</div></div>
@@ -907,6 +919,13 @@ function canDelete() {
   return currentUser && ADMIN_GRADES.includes(currentUser.grade);
 }
 
+function canEditItem(item) {
+  if (!currentUser) return false;
+  const isCreator = item.createdBy === `${currentUser.prenom} ${currentUser.nom}` || item.createdById === currentUser.id;
+  const isAdmin = ADMIN_GRADES.includes(currentUser.grade);
+  return isCreator || isAdmin;
+}
+
 function v(id) {
   let el = document.getElementById(id);
   return el ? el.value : '';
@@ -955,6 +974,35 @@ function openModal(id) {
 function closeModal(id) {
   let modal = document.getElementById(id);
   if (modal) modal.classList.remove('open');
+  // Réinitialiser les boutons de modification
+  if (id === 'modal-rapport') {
+    let saveBtn = document.querySelector('#modal-rapport .btn-primary');
+    if (saveBtn && saveBtn.textContent !== '💾 Enregistrer') {
+      saveBtn.textContent = '💾 Enregistrer';
+      saveBtn.onclick = () => saveRapport();
+    }
+  }
+  if (id === 'modal-signalement') {
+    let saveBtn = document.querySelector('#modal-signalement .btn-primary');
+    if (saveBtn && saveBtn.textContent !== '💾 Enregistrer') {
+      saveBtn.textContent = '💾 Enregistrer';
+      saveBtn.onclick = () => saveSignalement();
+    }
+  }
+  if (id === 'modal-plainte') {
+    let saveBtn = document.querySelector('#modal-plainte .btn-primary');
+    if (saveBtn && saveBtn.textContent !== '💾 Déposer la plainte') {
+      saveBtn.textContent = '💾 Déposer la plainte';
+      saveBtn.onclick = () => savePlainte();
+    }
+  }
+  if (id === 'modal-saisie') {
+    let saveBtn = document.querySelector('#modal-saisie .btn-primary');
+    if (saveBtn && saveBtn.textContent !== '💾 Enregistrer la saisie') {
+      saveBtn.textContent = '💾 Enregistrer la saisie';
+      saveBtn.onclick = () => saveSaisie();
+    }
+  }
 }
 
 function openLightbox(url) {
@@ -1625,7 +1673,7 @@ function initListeners() {
   });
 }
 
-// Rendu des données
+// Rendu des données avec affichage du créateur et bouton modifier
 function renderRapports(items) {
   counters.rapports = items.length;
   let statRapports = document.getElementById('stat-rapports');
@@ -1635,21 +1683,28 @@ function renderRapports(items) {
   if (!tbody) return;
   
   if (!items.length) {
-    tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="icon">📋</div><div class="label">Aucun rapport enregistré</div></div></td></tr>';
+    tbody.innerHTML = '<tr><td colspan="8"><div class="empty-state"><div class="icon">📋</div><div class="label">Aucun rapport enregistré</div></div></td></tr>';
     return;
   }
   
-  tbody.innerHTML = items.map(r => `
-    <tr onclick="viewRapport('${r.id}')">
-      <td><span style="font-family:var(--mono);color:var(--blue);">${r.num || r.id.slice(0, 8)}</span></td>
-      <td>${fmtDate(r.date)}</td>
-      <td>${r.type || '—'}</td>
-      <td>${r.lieu || '—'}</td>
-      <td>${r.agent || '—'}</td>
-      <td>${statusBadge(r.statut)}</td>
-      <td onclick="event.stopPropagation()">${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('rapports','${r.id}')">🗑️</button>` : ''}</td>
-    </tr>
-  `).join('');
+  tbody.innerHTML = items.map(r => {
+    const canEditItem = canEditItem(r);
+    return `
+      <tr onclick="viewRapport('${r.id}')">
+        <td><span style="font-family:var(--mono);color:var(--blue);">${r.num || r.id.slice(0, 8)}</span></td>
+        <td>${fmtDate(r.date)}</td>
+        <td>${r.type || '—'}</td>
+        <td>${r.lieu || '—'}</td>
+        <td>${r.agent || '—'}</td>
+        <td>${statusBadge(r.statut)}</td>
+        <td style="font-size:11px; color:var(--text-muted);">👤 ${r.createdBy || '—'}</td>
+        <td onclick="event.stopPropagation()">
+          ${canEditItem ? `<button class="btn btn-primary btn-sm" onclick="editRapport('${r.id}')" style="margin-right:5px;">✏️ Modifier</button>` : ''}
+          ${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('rapports','${r.id}')">🗑️</button>` : ''}
+        </td>
+      </tr>
+    `;
+  }).join('');
   
   let activityContainer = document.getElementById('activity-container');
   if (activityContainer) {
@@ -1662,7 +1717,7 @@ function renderRapports(items) {
           <div class="activity-dot" style="background:var(--blue);"></div>
           <div>
             <div class="activity-text">Rapport ${r.num || ''} — ${r.type || ''} à ${r.lieu || 'lieu inconnu'}</div>
-            <div class="activity-time">${fmtDate(r.date)} • Agent : ${r.agent || '—'}</div>
+            <div class="activity-time">${fmtDate(r.date)} • Agent : ${r.agent || '—'} • Créé par : ${r.createdBy || '—'}</div>
           </div>
         </div>
       `).join('')}</div>`;
@@ -1686,21 +1741,28 @@ function renderSignalements(items) {
   if (!tbody) return;
   
   if (!items.length) {
-    tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="icon">🚨</div><div class="label">Aucun signalement</div></div></td></tr>';
+    tbody.innerHTML = '<tr><td colspan="8"><div class="empty-state"><div class="icon">🚨</div><div class="label">Aucun signalement</div></div></td></tr>';
     return;
   }
   
-  tbody.innerHTML = items.map((s, i) => `
-    <tr onclick="viewSignalement('${s.id}')">
-      <td><span style="font-family:var(--mono);color:var(--blue);">SIG-${String(i + 1).padStart(4, '0')}</span></td>
-      <td>${fmtDate(s.date)}</td>
-      <td>${s.type || '—'}</td>
-      <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${s.description || '—'}</td>
-      <td>${s.zone || '—'}</td>
-      <td><span class="badge ${s.priorite === 'Urgent' || s.priorite === 'Critique' ? 'badge-urgent' : 'badge-info'}">${s.priorite || 'Normal'}</span></td>
-      <td onclick="event.stopPropagation()">${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('signalements','${s.id}')">🗑️</button>` : ''}</td>
-    </tr>
-  `).join('');
+  tbody.innerHTML = items.map((s, i) => {
+    const canEditItem = canEditItem(s);
+    return `
+      <tr onclick="viewSignalement('${s.id}')">
+        <td><span style="font-family:var(--mono);color:var(--blue);">SIG-${String(i + 1).padStart(4, '0')}</span></td>
+        <td>${fmtDate(s.date)}</td>
+        <td>${s.type || '—'}</td>
+        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${s.description || '—'}</td>
+        <td>${s.zone || '—'}</td>
+        <td><span class="badge ${s.priorite === 'Urgent' || s.priorite === 'Critique' ? 'badge-urgent' : 'badge-info'}">${s.priorite || 'Normal'}</span></td>
+        <td style="font-size:11px; color:var(--text-muted);">👤 ${s.createdBy || '—'}</td>
+        <td onclick="event.stopPropagation()">
+          ${canEditItem ? `<button class="btn btn-primary btn-sm" onclick="editSignalement('${s.id}')" style="margin-right:5px;">✏️ Modifier</button>` : ''}
+          ${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('signalements','${s.id}')">🗑️</button>` : ''}
+        </td>
+      </tr>
+    `;
+  }).join('');
 }
 
 function renderPlaintes(items) {
@@ -1723,21 +1785,28 @@ function renderPlaintes(items) {
   if (!tbody) return;
   
   if (!items.length) {
-    tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="icon">⚖️</div><div class="label">Aucune plainte enregistrée</div></div></td></tr>';
+    tbody.innerHTML = '<tr><td colspan="8"><div class="empty-state"><div class="icon">⚖️</div><div class="label">Aucune plainte enregistrée</div></div></td></tr>';
     return;
   }
   
-  tbody.innerHTML = items.map((p, i) => `
-    <tr onclick="viewPlainte('${p.id}')">
-      <td><span style="font-family:var(--mono);color:var(--blue);">PL-${String(i + 1).padStart(4, '0')}</span></td>
-      <td>${fmtDate(p.date)}</td>
-      <td>${p.plaignant || '—'}</td>
-      <td>${p.accuse || '—'}</td>
-      <td>${p.motif || '—'}</td>
-      <td>${plainteStatusBadge(p.statut)}</td>
-      <td onclick="event.stopPropagation()">${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('plaintes','${p.id}')">🗑️</button>` : ''}</td>
-    </tr>
-  `).join('');
+  tbody.innerHTML = items.map((p, i) => {
+    const canEditItem = canEditItem(p);
+    return `
+      <tr onclick="viewPlainte('${p.id}')">
+        <td><span style="font-family:var(--mono);color:var(--blue);">PL-${String(i + 1).padStart(4, '0')}</span></td>
+        <td>${fmtDate(p.date)}</td>
+        <td>${p.plaignant || '—'}</td>
+        <td>${p.accuse || '—'}</td>
+        <td>${p.motif || '—'}</td>
+        <td>${plainteStatusBadge(p.statut)}</td>
+        <td style="font-size:11px; color:var(--text-muted);">👤 ${p.createdBy || '—'}</td>
+        <td onclick="event.stopPropagation()">
+          ${canEditItem ? `<button class="btn btn-primary btn-sm" onclick="editPlainte('${p.id}')" style="margin-right:5px;">✏️ Modifier</button>` : ''}
+          ${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('plaintes','${p.id}')">🗑️</button>` : ''}
+        </td>
+      </tr>
+    `;
+  }).join('');
 }
 
 function renderSaisies(items) {
@@ -1749,23 +1818,30 @@ function renderSaisies(items) {
   if (!tbody) return;
   
   if (!items.length) {
-    tbody.innerHTML = '<tr><td colspan="9"><div class="empty-state"><div class="icon">🔫</div><div class="label">Aucune saisie enregistrée</div></div>NonNull</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="10"><div class="empty-state"><div class="icon">🔫</div><div class="label">Aucune saisie enregistrée</div></div></td></tr>';
     return;
   }
   
-  tbody.innerHTML = items.map(s => `
-    <tr onclick="viewSaisie('${s.id}')">
-      <td><span style="font-family:var(--mono);color:var(--blue);">${s.num || s.id.slice(0, 8)}</span></td>
-      <td>${fmtDate(s.date)}</td>
-      <td>${s.categorie || '—'}</td>
-      <td>${s.objet || '—'}</td>
-      <td>${s.quantite || '—'}</td>
-      <td>${s.proprio || '—'}</td>
-      <td>${s.agent || '—'}</td>
-      <td>${s.dossier || '—'}</td>
-      <td onclick="event.stopPropagation()">${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('saisies','${s.id}')">🗑️</button>` : ''}</td>
-    </tr>
-  `).join('');
+  tbody.innerHTML = items.map(s => {
+    const canEditItem = canEditItem(s);
+    return `
+      <tr onclick="viewSaisie('${s.id}')">
+        <td><span style="font-family:var(--mono);color:var(--blue);">${s.num || s.id.slice(0, 8)}</span></td>
+        <td>${fmtDate(s.date)}</td>
+        <td>${s.categorie || '—'}</td>
+        <td>${s.objet || '—'}</td>
+        <td>${s.quantite || '—'}</td>
+        <td>${s.proprio || '—'}</td>
+        <td>${s.agent || '—'}</td>
+        <td>${s.dossier || '—'}</td>
+        <td style="font-size:11px; color:var(--text-muted);">👤 ${s.createdBy || '—'}</td>
+        <td onclick="event.stopPropagation()">
+          ${canEditItem ? `<button class="btn btn-primary btn-sm" onclick="editSaisie('${s.id}')" style="margin-right:5px;">✏️ Modifier</button>` : ''}
+          ${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('saisies','${s.id}')">🗑️</button>` : ''}
+        </td>
+      </tr>
+    `;
+  }).join('');
 }
 
 function renderFiches(items) {
@@ -1774,21 +1850,28 @@ function renderFiches(items) {
   if (!tbody) return;
   
   if (!items.length) {
-    tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="icon">👤</div><div class="label">Aucune fiche individu</div></div>NonNull</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="8"><div class="empty-state"><div class="icon">👤</div><div class="label">Aucune fiche individu</div></div></td></tr>';
     return;
   }
   
-  tbody.innerHTML = items.map(f => `
-    <tr onclick="viewFiche('${f.id}')">
-      <td>${f.photos && f.photos.length ? `<img src="${f.photos[0]}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;">` : '—'}</td>
-      <td>${f.nom || '—'}</td>
-      <td>${f.naissance || '—'}</td>
-      <td>${f.nationalite || '—'}</td>
-      <td><span class="badge ${f.statut === 'Dangereux' ? 'badge-urgent' : f.statut === 'Recherché' ? 'badge-open' : 'badge-neutral'}">${f.statut || '—'}</span></td>
-      <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;">${f.antecedents || '—'}</td>
-      <td onclick="event.stopPropagation()">${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('fiches','${f.id}')">🗑️</button>` : ''}</td>
-    </tr>
-  `).join('');
+  tbody.innerHTML = items.map(f => {
+    const canEditItem = canEditItem(f);
+    return `
+      <tr onclick="viewFiche('${f.id}')">
+        <td>${f.photos && f.photos.length ? `<img src="${f.photos[0]}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;">` : '—'}</td>
+        <td>${f.nom || '—'}</td>
+        <td>${f.naissance || '—'}</td>
+        <td>${f.nationalite || '—'}</td>
+        <td><span class="badge ${f.statut === 'Dangereux' ? 'badge-urgent' : f.statut === 'Recherché' ? 'badge-open' : 'badge-neutral'}">${f.statut || '—'}</span></td>
+        <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;">${f.antecedents || '—'}</td>
+        <td style="font-size:11px; color:var(--text-muted);">👤 ${f.createdBy || '—'}</td>
+        <td onclick="event.stopPropagation()">
+          ${canEditItem ? `<button class="btn btn-primary btn-sm" onclick="editFiche('${f.id}')" style="margin-right:5px;">✏️ Modifier</button>` : ''}
+          ${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('fiches','${f.id}')">🗑️</button>` : ''}
+        </td>
+      </tr>
+    `;
+  }).join('');
 }
 
 function renderVehicules(items) {
@@ -1797,22 +1880,29 @@ function renderVehicules(items) {
   if (!tbody) return;
   
   if (!items.length) {
-    tbody.innerHTML = '<tr><td colspan="8"><div class="empty-state"><div class="icon">🚗</div><div class="label">Aucun véhicule recherché</div></div>NonNull</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="9"><div class="empty-state"><div class="icon">🚗</div><div class="label">Aucun véhicule recherché</div></div></td></tr>';
     return;
   }
   
-  tbody.innerHTML = items.map(v => `
-    <tr onclick="viewVehicule('${v.id}')">
-      <td>${v.photos && v.photos.length ? `<img src="${v.photos[0]}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;">` : '—'}</td>
-      <td><span style="font-family:var(--mono);color:var(--cyan);">${v.plaque || '—'}</span></td>
-      <td>${v.modele || '—'}</td>
-      <td>${v.couleur || '—'}</td>
-      <td>${v.proprio || '—'}</td>
-      <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;">${v.motif || '—'}</td>
-      <td>${fmtDate(v.createdAt)}</td>
-      <td onclick="event.stopPropagation()">${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('vehicules','${v.id}')">🗑️</button>` : ''}</td>
-    </tr>
-  `).join('');
+  tbody.innerHTML = items.map(v => {
+    const canEditItem = canEditItem(v);
+    return `
+      <tr onclick="viewVehicule('${v.id}')">
+        <td>${v.photos && v.photos.length ? `<img src="${v.photos[0]}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;">` : '—'}</td>
+        <td><span style="font-family:var(--mono);color:var(--cyan);">${v.plaque || '—'}</span></td>
+        <td>${v.modele || '—'}</td>
+        <td>${v.couleur || '—'}</td>
+        <td>${v.proprio || '—'}</td>
+        <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;">${v.motif || '—'}</td>
+        <td>${fmtDate(v.createdAt)}</td>
+        <td style="font-size:11px; color:var(--text-muted);">👤 ${v.createdBy || '—'}</td>
+        <td onclick="event.stopPropagation()">
+          ${canEditItem ? `<button class="btn btn-primary btn-sm" onclick="editVehicule('${v.id}')" style="margin-right:5px;">✏️ Modifier</button>` : ''}
+          ${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('vehicules','${v.id}')">🗑️</button>` : ''}
+        </td>
+      </tr>
+    `;
+  }).join('');
 }
 
 function renderAgents(items) {
@@ -1838,13 +1928,14 @@ function renderAgents(items) {
         <span>🎮 ${a.pseudo || '—'}</span>
         <span>📅 Depuis le ${a.dateEmbauche || '—'}</span>
         <span>● <span class="badge ${a.statut === 'Actif' ? 'badge-closed' : a.statut === 'Suspendu' ? 'badge-open' : 'badge-neutral'}">${a.statut || '—'}</span></span>
+        <span>👤 Créé par : ${a.createdBy || '—'}</span>
       </div>
       ${canDelete() ? `<button class="btn btn-danger btn-sm" style="margin-top:10px;" onclick="deleteItem('agents','${a.id}')">🗑️ Supprimer</button>` : ''}
     </div>
   `).join('');
 }
 
-// CRUD Operations
+// Fonctions de sauvegarde avec créateur
 async function saveRapport() { 
   try {
     let num = `INT-${String(Date.now()).slice(-6)}`;
@@ -1853,7 +1944,9 @@ async function saveRapport() {
       num, type: v('r-type'), statut: v('r-statut'), date: v('r-date'), lieu: v('r-lieu'),
       agent: v('r-agent'), personnes: v('r-personnes'), description: v('r-description'),
       suites: v('r-suites'), pieces: v('r-pieces'), priorite: v('r-priorite'),
-      createdAt: new Date().toISOString(), createdBy: currentUser?.nom
+      createdAt: new Date().toISOString(),
+      createdBy: currentUser ? `${currentUser.prenom} ${currentUser.nom}` : 'Inconnu',
+      createdById: currentUser ? currentUser.id : null
     });
     closeModal('modal-rapport'); 
     toast('Rapport enregistré', `${num} créé avec succès sur Firebase`); 
@@ -1866,7 +1959,10 @@ async function saveSignalement() {
     let newRef = fb.push(fb.ref(db, 'signalements'));
     await fb.set(newRef, {
       type: v('s-type'), priorite: v('s-priorite'), zone: v('s-zone'), date: v('s-date'),
-      description: v('s-description'), createdAt: new Date().toISOString(), createdBy: currentUser?.nom
+      description: v('s-description'), 
+      createdAt: new Date().toISOString(),
+      createdBy: currentUser ? `${currentUser.prenom} ${currentUser.nom}` : 'Inconnu',
+      createdById: currentUser ? currentUser.id : null
     });
     closeModal('modal-signalement'); 
     toast('Signalement enregistré','Données sauvegardées sur Firebase'); 
@@ -1880,7 +1976,10 @@ async function savePlainte() {
     await fb.set(newRef, {
       plaignant: v('pl-plaignant'), accuse: v('pl-accuse'), date: v('pl-date'), motif: v('pl-motif'),
       statut: v('pl-statut'), gravite: v('pl-gravite'), description: v('pl-description'),
-      preuves: v('pl-preuves'), createdAt: new Date().toISOString(), createdBy: currentUser?.nom
+      preuves: v('pl-preuves'), 
+      createdAt: new Date().toISOString(),
+      createdBy: currentUser ? `${currentUser.prenom} ${currentUser.nom}` : 'Inconnu',
+      createdById: currentUser ? currentUser.id : null
     });
     closeModal('modal-plainte'); 
     toast('Plainte déposée','Sauvegardée sur Firebase'); 
@@ -1895,7 +1994,10 @@ async function saveSaisie() {
     await fb.set(newRef, {
       num, categorie: v('sa-categorie'), date: v('sa-date'), objet: v('sa-objet'), quantite: v('sa-quantite'),
       proprio: v('sa-proprio'), agent: v('sa-agent'), dossier: v('sa-dossier'), lieu: v('sa-lieu'),
-      description: v('sa-description'), createdAt: new Date().toISOString(), createdBy: currentUser?.nom
+      description: v('sa-description'), 
+      createdAt: new Date().toISOString(),
+      createdBy: currentUser ? `${currentUser.prenom} ${currentUser.nom}` : 'Inconnu',
+      createdById: currentUser ? currentUser.id : null
     });
     closeModal('modal-saisie'); 
     toast('Saisie enregistrée', `${num} créé sur Firebase`); 
@@ -1923,7 +2025,9 @@ async function saveFiche() {
     await fb.set(newRef, {
       nom: nom, naissance: v('fi-naissance'), nationalite: v('fi-nationalite'), statut: v('fi-statut'),
       antecedents: v('fi-antecedents'), notes: v('fi-notes'), photos: photos,
-      createdAt: new Date().toISOString(), createdBy: currentUser?.nom
+      createdAt: new Date().toISOString(),
+      createdBy: currentUser ? `${currentUser.prenom} ${currentUser.nom}` : 'Inconnu',
+      createdById: currentUser ? currentUser.id : null
     });
     closeModal('modal-fiche'); 
     resetPhotoPreview('fi'); 
@@ -1946,7 +2050,10 @@ async function saveVehicule() {
     let newRef = fb.push(fb.ref(db, 'vehicules'));
     await fb.set(newRef, {
       plaque: v('v-plaque'), modele: v('v-modele'), couleur: v('v-couleur'), proprio: v('v-proprio'),
-      motif: v('v-motif'), photos: photos, createdAt: new Date().toISOString(), createdBy: currentUser?.nom
+      motif: v('v-motif'), photos: photos, 
+      createdAt: new Date().toISOString(),
+      createdBy: currentUser ? `${currentUser.prenom} ${currentUser.nom}` : 'Inconnu',
+      createdById: currentUser ? currentUser.id : null
     });
     closeModal('modal-vehicule'); 
     resetPhotoPreview('v'); 
@@ -1961,12 +2068,337 @@ async function saveAgent() {
     await fb.set(newRef, {
       nom: v('ag-nom'), pseudo: v('ag-pseudo'), grade: v('ag-grade'), matricule: v('ag-matricule'),
       statut: v('ag-statut'), dateEmbauche: v('ag-date'), notes: v('ag-notes'),
-      createdAt: new Date().toISOString(), createdBy: currentUser?.nom
+      createdAt: new Date().toISOString(),
+      createdBy: currentUser ? `${currentUser.prenom} ${currentUser.nom}` : 'Inconnu',
+      createdById: currentUser ? currentUser.id : null
     });
     closeModal('modal-agent'); 
     toast('Agent ajouté','Sauvegardé sur Firebase'); 
     resetForm(['ag-nom','ag-pseudo','ag-grade','ag-matricule','ag-statut','ag-date','ag-notes']);
   } catch(e) { toast('Erreur Firebase', e.message, 'error'); }
+}
+
+// Fonctions de modification
+async function editRapport(id) {
+  let snap = await fb.get(fb.ref(db, `rapports/${id}`));
+  let data = snap.val();
+  if (!data) return;
+  
+  if (!canEditItem(data)) {
+    toast('Accès refusé', 'Vous ne pouvez pas modifier ce dossier', 'error');
+    return;
+  }
+  
+  document.getElementById('r-type').value = data.type || '';
+  document.getElementById('r-statut').value = data.statut || '';
+  document.getElementById('r-date').value = data.date || '';
+  document.getElementById('r-lieu').value = data.lieu || '';
+  document.getElementById('r-agent').value = data.agent || '';
+  document.getElementById('r-personnes').value = data.personnes || '';
+  document.getElementById('r-description').value = data.description || '';
+  document.getElementById('r-suites').value = data.suites || '';
+  document.getElementById('r-pieces').value = data.pieces || '';
+  document.getElementById('r-priorite').value = data.priorite || '';
+  
+  window.editId = id;
+  openModal('modal-rapport');
+  
+  let saveBtn = document.querySelector('#modal-rapport .btn-primary');
+  if (saveBtn) {
+    saveBtn.textContent = '💾 Mettre à jour';
+    saveBtn.onclick = () => updateRapport(id);
+  }
+}
+
+async function updateRapport(id) {
+  try {
+    await fb.update(fb.ref(db, `rapports/${id}`), {
+      type: v('r-type'),
+      statut: v('r-statut'),
+      date: v('r-date'),
+      lieu: v('r-lieu'),
+      agent: v('r-agent'),
+      personnes: v('r-personnes'),
+      description: v('r-description'),
+      suites: v('r-suites'),
+      pieces: v('r-pieces'),
+      priorite: v('r-priorite'),
+      updatedAt: new Date().toISOString(),
+      updatedBy: currentUser ? `${currentUser.prenom} ${currentUser.nom}` : 'Inconnu'
+    });
+    closeModal('modal-rapport');
+    toast('Rapport modifié', 'Les modifications ont été sauvegardées', 'success');
+  } catch(e) {
+    toast('Erreur', e.message, 'error');
+  }
+}
+
+async function editSignalement(id) {
+  let snap = await fb.get(fb.ref(db, `signalements/${id}`));
+  let data = snap.val();
+  if (!data) return;
+  
+  if (!canEditItem(data)) {
+    toast('Accès refusé', 'Vous ne pouvez pas modifier ce dossier', 'error');
+    return;
+  }
+  
+  document.getElementById('s-type').value = data.type || '';
+  document.getElementById('s-priorite').value = data.priorite || '';
+  document.getElementById('s-zone').value = data.zone || '';
+  document.getElementById('s-date').value = data.date || '';
+  document.getElementById('s-description').value = data.description || '';
+  
+  window.editId = id;
+  openModal('modal-signalement');
+  
+  let saveBtn = document.querySelector('#modal-signalement .btn-primary');
+  if (saveBtn) {
+    saveBtn.textContent = '💾 Mettre à jour';
+    saveBtn.onclick = () => updateSignalement(id);
+  }
+}
+
+async function updateSignalement(id) {
+  try {
+    await fb.update(fb.ref(db, `signalements/${id}`), {
+      type: v('s-type'),
+      priorite: v('s-priorite'),
+      zone: v('s-zone'),
+      date: v('s-date'),
+      description: v('s-description'),
+      updatedAt: new Date().toISOString(),
+      updatedBy: currentUser ? `${currentUser.prenom} ${currentUser.nom}` : 'Inconnu'
+    });
+    closeModal('modal-signalement');
+    toast('Signalement modifié', 'Les modifications ont été sauvegardées', 'success');
+  } catch(e) {
+    toast('Erreur', e.message, 'error');
+  }
+}
+
+async function editPlainte(id) {
+  let snap = await fb.get(fb.ref(db, `plaintes/${id}`));
+  let data = snap.val();
+  if (!data) return;
+  
+  if (!canEditItem(data)) {
+    toast('Accès refusé', 'Vous ne pouvez pas modifier ce dossier', 'error');
+    return;
+  }
+  
+  document.getElementById('pl-plaignant').value = data.plaignant || '';
+  document.getElementById('pl-accuse').value = data.accuse || '';
+  document.getElementById('pl-date').value = data.date || '';
+  document.getElementById('pl-motif').value = data.motif || '';
+  document.getElementById('pl-statut').value = data.statut || '';
+  document.getElementById('pl-gravite').value = data.gravite || '';
+  document.getElementById('pl-description').value = data.description || '';
+  document.getElementById('pl-preuves').value = data.preuves || '';
+  
+  window.editId = id;
+  openModal('modal-plainte');
+  
+  let saveBtn = document.querySelector('#modal-plainte .btn-primary');
+  if (saveBtn) {
+    saveBtn.textContent = '💾 Mettre à jour';
+    saveBtn.onclick = () => updatePlainte(id);
+  }
+}
+
+async function updatePlainte(id) {
+  try {
+    await fb.update(fb.ref(db, `plaintes/${id}`), {
+      plaignant: v('pl-plaignant'),
+      accuse: v('pl-accuse'),
+      date: v('pl-date'),
+      motif: v('pl-motif'),
+      statut: v('pl-statut'),
+      gravite: v('pl-gravite'),
+      description: v('pl-description'),
+      preuves: v('pl-preuves'),
+      updatedAt: new Date().toISOString(),
+      updatedBy: currentUser ? `${currentUser.prenom} ${currentUser.nom}` : 'Inconnu'
+    });
+    closeModal('modal-plainte');
+    toast('Plainte modifiée', 'Les modifications ont été sauvegardées', 'success');
+  } catch(e) {
+    toast('Erreur', e.message, 'error');
+  }
+}
+
+async function editSaisie(id) {
+  let snap = await fb.get(fb.ref(db, `saisies/${id}`));
+  let data = snap.val();
+  if (!data) return;
+  
+  if (!canEditItem(data)) {
+    toast('Accès refusé', 'Vous ne pouvez pas modifier ce dossier', 'error');
+    return;
+  }
+  
+  document.getElementById('sa-categorie').value = data.categorie || '';
+  document.getElementById('sa-date').value = data.date || '';
+  document.getElementById('sa-objet').value = data.objet || '';
+  document.getElementById('sa-quantite').value = data.quantite || '';
+  document.getElementById('sa-proprio').value = data.proprio || '';
+  document.getElementById('sa-agent').value = data.agent || '';
+  document.getElementById('sa-dossier').value = data.dossier || '';
+  document.getElementById('sa-lieu').value = data.lieu || '';
+  document.getElementById('sa-description').value = data.description || '';
+  
+  window.editId = id;
+  openModal('modal-saisie');
+  
+  let saveBtn = document.querySelector('#modal-saisie .btn-primary');
+  if (saveBtn) {
+    saveBtn.textContent = '💾 Mettre à jour';
+    saveBtn.onclick = () => updateSaisie(id);
+  }
+}
+
+async function updateSaisie(id) {
+  try {
+    await fb.update(fb.ref(db, `saisies/${id}`), {
+      categorie: v('sa-categorie'),
+      date: v('sa-date'),
+      objet: v('sa-objet'),
+      quantite: v('sa-quantite'),
+      proprio: v('sa-proprio'),
+      agent: v('sa-agent'),
+      dossier: v('sa-dossier'),
+      lieu: v('sa-lieu'),
+      description: v('sa-description'),
+      updatedAt: new Date().toISOString(),
+      updatedBy: currentUser ? `${currentUser.prenom} ${currentUser.nom}` : 'Inconnu'
+    });
+    closeModal('modal-saisie');
+    toast('Saisie modifiée', 'Les modifications ont été sauvegardées', 'success');
+  } catch(e) {
+    toast('Erreur', e.message, 'error');
+  }
+}
+
+async function editFiche(id) {
+  let snap = await fb.get(fb.ref(db, `fiches/${id}`));
+  let data = snap.val();
+  if (!data) return;
+  
+  if (!canEditItem(data)) {
+    toast('Accès refusé', 'Vous ne pouvez pas modifier ce dossier', 'error');
+    return;
+  }
+  
+  document.getElementById('fi-nom').value = data.nom || '';
+  document.getElementById('fi-naissance').value = data.naissance || '';
+  document.getElementById('fi-nationalite').value = data.nationalite || '';
+  document.getElementById('fi-statut').value = data.statut || '';
+  document.getElementById('fi-antecedents').value = data.antecedents || '';
+  document.getElementById('fi-notes').value = data.notes || '';
+  
+  window.editId = id;
+  openModal('modal-fiche');
+  
+  let saveBtn = document.querySelector('#modal-fiche .btn-primary');
+  if (saveBtn) {
+    saveBtn.textContent = '💾 Mettre à jour';
+    saveBtn.onclick = () => updateFiche(id);
+  }
+}
+
+async function updateFiche(id) {
+  try {
+    let photos = [];
+    if(photoFiles['fi'] && photoFiles['fi'].length > 0) {
+      try {
+        photos = await uploadPhotos('fi');
+      } catch(e) {
+        console.error('Erreur upload photos:', e);
+      }
+    }
+    
+    let updateData = {
+      nom: v('fi-nom'),
+      naissance: v('fi-naissance'),
+      nationalite: v('fi-nationalite'),
+      statut: v('fi-statut'),
+      antecedents: v('fi-antecedents'),
+      notes: v('fi-notes'),
+      updatedAt: new Date().toISOString(),
+      updatedBy: currentUser ? `${currentUser.prenom} ${currentUser.nom}` : 'Inconnu'
+    };
+    
+    if (photos.length > 0) {
+      updateData.photos = photos;
+    }
+    
+    await fb.update(fb.ref(db, `fiches/${id}`), updateData);
+    closeModal('modal-fiche');
+    resetPhotoPreview('fi');
+    toast('Fiche modifiée', 'Les modifications ont été sauvegardées', 'success');
+  } catch(e) {
+    toast('Erreur', e.message, 'error');
+  }
+}
+
+async function editVehicule(id) {
+  let snap = await fb.get(fb.ref(db, `vehicules/${id}`));
+  let data = snap.val();
+  if (!data) return;
+  
+  if (!canEditItem(data)) {
+    toast('Accès refusé', 'Vous ne pouvez pas modifier ce dossier', 'error');
+    return;
+  }
+  
+  document.getElementById('v-plaque').value = data.plaque || '';
+  document.getElementById('v-modele').value = data.modele || '';
+  document.getElementById('v-couleur').value = data.couleur || '';
+  document.getElementById('v-proprio').value = data.proprio || '';
+  document.getElementById('v-motif').value = data.motif || '';
+  
+  window.editId = id;
+  openModal('modal-vehicule');
+  
+  let saveBtn = document.querySelector('#modal-vehicule .btn-primary');
+  if (saveBtn) {
+    saveBtn.textContent = '💾 Mettre à jour';
+    saveBtn.onclick = () => updateVehicule(id);
+  }
+}
+
+async function updateVehicule(id) {
+  try {
+    let photos = [];
+    if(photoFiles['v'] && photoFiles['v'].length > 0) {
+      try {
+        photos = await uploadPhotos('v');
+      } catch(e) {
+        console.error('Erreur upload photos:', e);
+      }
+    }
+    
+    let updateData = {
+      plaque: v('v-plaque'),
+      modele: v('v-modele'),
+      couleur: v('v-couleur'),
+      proprio: v('v-proprio'),
+      motif: v('v-motif'),
+      updatedAt: new Date().toISOString(),
+      updatedBy: currentUser ? `${currentUser.prenom} ${currentUser.nom}` : 'Inconnu'
+    };
+    
+    if (photos.length > 0) {
+      updateData.photos = photos;
+    }
+    
+    await fb.update(fb.ref(db, `vehicules/${id}`), updateData);
+    closeModal('modal-vehicule');
+    resetPhotoPreview('v');
+    toast('Véhicule modifié', 'Les modifications ont été sauvegardées', 'success');
+  } catch(e) {
+    toast('Erreur', e.message, 'error');
+  }
 }
 
 // Fonctions de visualisation
@@ -1989,6 +2421,8 @@ async function viewRapport(id) {
     <div class="view-field"><div class="view-field-label">Description</div><div class="view-field-value">${data.description || '—'}</div></div>
     <div class="view-field"><div class="view-field-label">Suites données</div><div class="view-field-value">${data.suites || '—'}</div></div>
     <div class="view-field"><div class="view-field-label">Pièces saisies</div><div class="view-field-value">${data.pieces || '—'}</div></div>
+    <div class="view-field"><div class="view-field-label">Créé par</div><div class="view-field-value">👤 ${data.createdBy || '—'} ${data.createdAt ? `le ${fmtDate(data.createdAt)}` : ''}</div></div>
+    ${data.updatedBy ? `<div class="view-field"><div class="view-field-label">Dernière modification</div><div class="view-field-value">✏️ par ${data.updatedBy} le ${fmtDate(data.updatedAt)}</div></div>` : ''}
   `;
   document.getElementById('view-footer').innerHTML = '<button class="btn btn-ghost" onclick="closeModal(\'modal-view\')">Fermer</button>';
   openModal('modal-view');
@@ -2007,6 +2441,8 @@ async function viewSignalement(id) {
       <div class="view-field"><div class="view-field-label">Date/Heure</div><div class="view-field-value">${fmtDate(data.date)}</div></div>
     </div>
     <div class="view-field"><div class="view-field-label">Description</div><div class="view-field-value">${data.description || '—'}</div></div>
+    <div class="view-field"><div class="view-field-label">Créé par</div><div class="view-field-value">👤 ${data.createdBy || '—'} ${data.createdAt ? `le ${fmtDate(data.createdAt)}` : ''}</div></div>
+    ${data.updatedBy ? `<div class="view-field"><div class="view-field-label">Dernière modification</div><div class="view-field-value">✏️ par ${data.updatedBy} le ${fmtDate(data.updatedAt)}</div></div>` : ''}
   `;
   document.getElementById('view-footer').innerHTML = '<button class="btn btn-ghost" onclick="closeModal(\'modal-view\')">Fermer</button>';
   openModal('modal-view');
@@ -2028,6 +2464,8 @@ async function viewPlainte(id) {
     </div>
     <div class="view-field"><div class="view-field-label">Description des faits</div><div class="view-field-value">${data.description || '—'}</div></div>
     <div class="view-field"><div class="view-field-label">Preuves / Éléments</div><div class="view-field-value">${data.preuves || '—'}</div></div>
+    <div class="view-field"><div class="view-field-label">Créé par</div><div class="view-field-value">👤 ${data.createdBy || '—'} ${data.createdAt ? `le ${fmtDate(data.createdAt)}` : ''}</div></div>
+    ${data.updatedBy ? `<div class="view-field"><div class="view-field-label">Dernière modification</div><div class="view-field-value">✏️ par ${data.updatedBy} le ${fmtDate(data.updatedAt)}</div></div>` : ''}
   `;
   document.getElementById('view-footer').innerHTML = `
     <button class="btn btn-ghost" onclick="closeModal('modal-view')">Fermer</button>
@@ -2071,6 +2509,8 @@ async function viewFiche(id) {
     </div>
     <div class="view-field"><div class="view-field-label">Antécédents</div><div class="view-field-value">${data.antecedents || '—'}</div></div>
     <div class="view-field"><div class="view-field-label">Notes</div><div class="view-field-value">${data.notes || '—'}</div></div>
+    <div class="view-field"><div class="view-field-label">Créé par</div><div class="view-field-value">👤 ${data.createdBy || '—'} ${data.createdAt ? `le ${fmtDate(data.createdAt)}` : ''}</div></div>
+    ${data.updatedBy ? `<div class="view-field"><div class="view-field-label">Dernière modification</div><div class="view-field-value">✏️ par ${data.updatedBy} le ${fmtDate(data.updatedAt)}</div></div>` : ''}
   `;
   document.getElementById('view-footer').innerHTML = '<button class="btn btn-ghost" onclick="closeModal(\'modal-view\')">Fermer</button>';
   openModal('modal-view');
@@ -2095,6 +2535,8 @@ async function viewVehicule(id) {
       <div class="view-field"><div class="view-field-label">Propriétaire</div><div class="view-field-value">${data.proprio || '—'}</div></div>
     </div>
     <div class="view-field"><div class="view-field-label">Motif de recherche</div><div class="view-field-value">${data.motif || '—'}</div></div>
+    <div class="view-field"><div class="view-field-label">Créé par</div><div class="view-field-value">👤 ${data.createdBy || '—'} ${data.createdAt ? `le ${fmtDate(data.createdAt)}` : ''}</div></div>
+    ${data.updatedBy ? `<div class="view-field"><div class="view-field-label">Dernière modification</div><div class="view-field-value">✏️ par ${data.updatedBy} le ${fmtDate(data.updatedAt)}</div></div>` : ''}
   `;
   document.getElementById('view-footer').innerHTML = '<button class="btn btn-ghost" onclick="closeModal(\'modal-view\')">Fermer</button>';
   openModal('modal-view');
@@ -2117,6 +2559,8 @@ async function viewSaisie(id) {
       <div class="view-field"><div class="view-field-label">Dossier lié</div><div class="view-field-value">${data.dossier || '—'}</div></div>
     </div>
     <div class="view-field"><div class="view-field-label">Description</div><div class="view-field-value">${data.description || '—'}</div></div>
+    <div class="view-field"><div class="view-field-label">Créé par</div><div class="view-field-value">👤 ${data.createdBy || '—'} ${data.createdAt ? `le ${fmtDate(data.createdAt)}` : ''}</div></div>
+    ${data.updatedBy ? `<div class="view-field"><div class="view-field-label">Dernière modification</div><div class="view-field-value">✏️ par ${data.updatedBy} le ${fmtDate(data.updatedAt)}</div></div>` : ''}
   `;
   document.getElementById('view-footer').innerHTML = '<button class="btn btn-ghost" onclick="closeModal(\'modal-view\')">Fermer</button>';
   openModal('modal-view');
