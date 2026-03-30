@@ -5,10 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Police Municipale — Panneau de Commandement</title>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&family=Exo+2:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-<!-- Firebase avec Realtime Database -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getDatabase, ref, set, push, onValue, remove, update, get, child } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+  import { getDatabase, ref, set, push, onValue, remove, update, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
   import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
   const firebaseConfig = {
@@ -28,13 +27,12 @@
 
   window.db = db;
   window.storage = storage;
-  window.firebaseAPI = { ref, set, push, onValue, remove, update, get, child, storageRef, uploadBytes, getDownloadURL };
+  window.fb = { ref, set, push, onValue, remove, update, get, storageRef, uploadBytes, getDownloadURL };
 
-  window.dispatchEvent(new CustomEvent('firebase-ready', { detail: { db, storage } }));
+  window.dispatchEvent(new CustomEvent('firebase-ready'));
 </script>
 
 <style>
-  /* ... TOUS VOS STYLES EXISTANTS ... */
   :root {
     --bg-deep: #080c12;
     --bg-base: #0d1520;
@@ -61,124 +59,7 @@
     --body: 'Rajdhani', sans-serif;
   }
 
-  /* Ajout des styles GSI */
-  .gsi-dashboard {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    margin-bottom: 28px;
-  }
-
-  .gsi-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 20px;
-    transition: border-color 0.2s;
-  }
-
-  .gsi-card:hover {
-    border-color: var(--border-bright);
-  }
-
-  .gsi-card-title {
-    font-family: var(--head);
-    font-weight: 700;
-    font-size: 16px;
-    margin-bottom: 16px;
-    color: var(--blue);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 10px;
-  }
-
-  .status-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .status-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px;
-    background: var(--bg-panel);
-    border-radius: 8px;
-    border-left: 3px solid var(--blue);
-  }
-
-  .status-label {
-    font-weight: 600;
-    font-size: 14px;
-  }
-
-  .status-value {
-    font-family: var(--mono);
-    font-size: 13px;
-    padding: 4px 12px;
-    border-radius: 20px;
-    background: var(--bg-card);
-  }
-
-  .status-value.online {
-    color: var(--green);
-  }
-
-  .status-value.offline {
-    color: var(--red);
-  }
-
-  .status-value.maintenance {
-    color: var(--orange);
-  }
-
-  .effectif-table {
-    width: 100%;
-    margin-top: 10px;
-  }
-
-  .effectif-table th, .effectif-table td {
-    padding: 8px;
-    text-align: left;
-    font-size: 13px;
-  }
-
-  .effectif-table th {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--text-muted);
-    border-bottom: 1px solid var(--border);
-  }
-
-  .effectif-badge {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    margin-right: 6px;
-  }
-
-  .effectif-badge.present { background: var(--green); }
-  .effectif-badge.absent { background: var(--red); }
-  .effectif-badge.service { background: var(--orange); }
-  .effectif-badge.conge { background: var(--blue); }
-
-  .gsi-actions {
-    margin-top: 16px;
-    display: flex;
-    gap: 10px;
-    justify-content: flex-end;
-  }
-
-  .modal-sm {
-    max-width: 450px;
-  }
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   body {
     background: var(--bg-deep);
     color: var(--text-primary);
@@ -187,7 +68,6 @@
     min-height: 100vh;
     overflow-x: hidden;
   }
-
   body::before {
     content:'';
     position: fixed;
@@ -196,17 +76,6 @@
     pointer-events: none;
     z-index: 1000;
   }
-
-  body::after {
-    content:'';
-    position: fixed;
-    inset: 0;
-    background-image: linear-gradient(rgba(45,143,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(45,143,255,0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
-    z-index: 0;
-  }
-
   #login-screen {
     position: fixed; inset: 0;
     background: var(--bg-deep);
@@ -214,58 +83,26 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
-    gap: 0;
   }
-
   .login-box {
     background: var(--bg-panel);
     border: 1px solid var(--border-bright);
     border-radius: 16px;
-    padding: 40px 44px;
-    width: 450px;
+    padding: 40px;
+    width: 420px;
     max-width: 95vw;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(45,143,255,0.08);
-    animation: slideUp 0.3s ease;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
   }
-
-  .login-logo {
-    text-align: center;
-    margin-bottom: 28px;
-  }
-
-  .login-logo .icon {
-    font-size: 48px;
-    display: block;
-    margin-bottom: 8px;
-    filter: drop-shadow(0 0 16px rgba(45,143,255,0.5));
-  }
-
-  .login-logo .title {
-    font-family: var(--head);
-    font-weight: 900;
-    font-size: 18px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--blue);
-  }
-
-  .login-logo .sub {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--text-muted);
-    letter-spacing: 1.5px;
-  }
-
+  .login-logo { text-align: center; margin-bottom: 28px; }
+  .login-logo .icon { font-size: 48px; margin-bottom: 8px; }
+  .login-logo .title { font-family: var(--head); font-weight: 900; font-size: 18px; color: var(--blue); }
   .login-tabs {
     display: flex;
-    gap: 0;
     background: var(--bg-card);
     border-radius: 8px;
     padding: 4px;
     margin-bottom: 24px;
   }
-
   .login-tab {
     flex: 1;
     padding: 8px;
@@ -274,20 +111,11 @@
     cursor: pointer;
     font-family: var(--mono);
     font-size: 11px;
-    letter-spacing: 1px;
     color: var(--text-muted);
-    transition: all 0.2s;
-    text-transform: uppercase;
   }
-
-  .login-tab.active {
-    background: var(--blue-dim);
-    color: #fff;
-  }
-
+  .login-tab.active { background: var(--blue-dim); color: #fff; }
   .login-form { display: flex; flex-direction: column; gap: 14px; }
-
-  .login-form .form-label {
+  .form-label {
     font-family: var(--mono);
     font-size: 10px;
     letter-spacing: 1.5px;
@@ -295,8 +123,7 @@
     text-transform: uppercase;
     margin-bottom: 4px;
   }
-
-  .login-form .form-input {
+  .form-input, .form-select, .form-textarea {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 6px;
@@ -305,17 +132,12 @@
     font-family: var(--body);
     font-size: 14px;
     width: 100%;
-    transition: border-color 0.2s, box-shadow 0.2s;
   }
-
-  .login-form .form-input:focus {
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
     outline: none;
     border-color: var(--blue);
-    box-shadow: 0 0 0 3px rgba(45,143,255,0.1);
   }
-
   .login-btn {
-    margin-top: 6px;
     padding: 12px;
     background: var(--blue);
     border: none;
@@ -323,100 +145,37 @@
     color: #fff;
     font-family: var(--head);
     font-weight: 700;
-    font-size: 14px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
     cursor: pointer;
-    transition: all 0.2s;
-    box-shadow: 0 0 20px rgba(45,143,255,0.3);
   }
-
-  .login-btn:hover { background: #3d9fff; box-shadow: 0 0 30px rgba(45,143,255,0.5); }
-
-  .login-pending {
-    display: none;
-    text-align: center;
-    padding: 20px;
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--orange);
-  }
-
-  .app { display: flex; min-height: 100vh; position: relative; z-index: 1; }
-
+  .app { display: flex; min-height: 100vh; }
   .sidebar {
     width: 260px;
-    min-height: 100vh;
     background: var(--bg-panel);
     border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
     position: fixed;
-    top: 0; left: 0;
-    z-index: 100;
+    height: 100vh;
   }
-
-  .sidebar-logo {
-    padding: 24px 20px;
-    border-bottom: 1px solid var(--border);
-    position: relative;
-  }
-
+  .sidebar-logo { padding: 24px 20px; border-bottom: 1px solid var(--border); }
   .logo-badge { display: flex; align-items: center; gap: 12px; }
-
   .logo-icon {
     width: 42px; height: 42px;
     background: linear-gradient(135deg, var(--blue-dim), var(--blue));
     border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px;
-    box-shadow: 0 0 20px var(--blue-glow);
-  }
-
-  .logo-text { line-height: 1.2; }
-  .logo-title {
-    font-family: var(--head);
-    font-weight: 900;
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: var(--blue);
-  }
-  .logo-sub {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--text-muted);
-    letter-spacing: 1px;
-  }
-
-  .status-bar {
-    margin: 12px 20px 0;
     display: flex;
     align-items: center;
-    gap: 6px;
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--green);
+    justify-content: center;
+    font-size: 22px;
   }
-  .status-dot {
-    width: 6px; height: 6px;
-    background: var(--green);
-    border-radius: 50%;
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse { 0%,100%{ opacity:1; } 50%{ opacity:0.3; } }
-
+  .logo-title { font-family: var(--head); font-weight: 900; font-size: 13px; color: var(--blue); }
   .nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
-
   .nav-section-label {
     font-family: var(--mono);
     font-size: 9px;
-    letter-spacing: 2px;
     color: var(--text-muted);
-    text-transform: uppercase;
     padding: 12px 8px 6px;
   }
-
   .nav-item {
     display: flex;
     align-items: center;
@@ -424,64 +183,13 @@
     padding: 10px 12px;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
     color: var(--text-secondary);
-    transition: all 0.15s;
-    border: 1px solid transparent;
-    margin-bottom: 2px;
-    position: relative;
   }
-
-  .nav-item:hover { background: var(--bg-hover); color: var(--text-primary); border-color: var(--border); }
-
-  .nav-item.active {
-    background: var(--blue-glow);
-    color: var(--blue);
-    border-color: var(--blue-dim);
-  }
-
-  .nav-item.active::before {
-    content:'';
-    position: absolute;
-    left: -12px;
-    top: 50%; transform: translateY(-50%);
-    width: 3px; height: 24px;
-    background: var(--blue);
-    border-radius: 0 2px 2px 0;
-  }
-
+  .nav-item:hover { background: var(--bg-hover); color: var(--text-primary); }
+  .nav-item.active { background: var(--blue-glow); color: var(--blue); }
   .nav-item.admin-only { display: none; }
-
-  .nav-icon { font-size: 16px; width: 20px; text-align: center; }
-
-  .nav-badge {
-    margin-left: auto;
-    background: var(--red);
-    color: #fff;
-    font-family: var(--mono);
-    font-size: 10px;
-    padding: 1px 6px;
-    border-radius: 10px;
-    font-weight: 700;
-  }
-
   .sidebar-footer { padding: 16px 20px; border-top: 1px solid var(--border); }
-
-  .agent-card { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-  .agent-avatar {
-    width: 34px; height: 34px;
-    background: linear-gradient(135deg, #1a3a5c, var(--blue-dim));
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 14px;
-    border: 2px solid var(--border-bright);
-  }
-  .agent-name { font-weight: 700; font-size: 13px; }
-  .agent-role { font-family: var(--mono); font-size: 10px; color: var(--blue); }
-
-  .main { margin-left: 260px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
-
+  .main { margin-left: 260px; flex: 1; }
   .topbar {
     background: var(--bg-panel);
     border-bottom: 1px solid var(--border);
@@ -490,133 +198,38 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 50;
   }
-
-  .page-title { font-family: var(--head); font-weight: 700; font-size: 18px; letter-spacing: 0.5px; }
-
-  .topbar-right { display: flex; align-items: center; gap: 16px; }
-
-  .clock { font-family: var(--mono); font-size: 13px; color: var(--text-secondary); }
-
+  .content { padding: 28px; }
+  .page { display: none; }
+  .page.active { display: block; }
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+  .stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .stat-value { font-family: var(--head); font-size: 34px; font-weight: 900; }
+  .section-header { display: flex; justify-content: space-between; margin-bottom: 16px; }
+  .table-wrap { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { font-family: var(--mono); font-size: 10px; color: var(--text-muted); }
   .btn {
     display: inline-flex;
     align-items: center;
     gap: 7px;
     padding: 8px 18px;
     border-radius: 6px;
-    border: none;
     cursor: pointer;
     font-family: var(--body);
     font-weight: 700;
     font-size: 13px;
-    letter-spacing: 0.5px;
-    transition: all 0.15s;
-    text-transform: uppercase;
   }
-
-  .btn-primary { background: var(--blue); color: #fff; box-shadow: 0 0 20px rgba(45,143,255,0.3); }
-  .btn-primary:hover { background: #3d9fff; box-shadow: 0 0 30px rgba(45,143,255,0.5); }
-
-  .btn-danger { background: var(--red-dim); color: #fff; border: 1px solid var(--red); }
-  .btn-danger:hover { background: var(--red); }
-
+  .btn-primary { background: var(--blue); color: #fff; }
+  .btn-danger { background: var(--red-dim); color: #fff; }
   .btn-ghost { background: transparent; color: var(--text-secondary); border: 1px solid var(--border); }
-  .btn-ghost:hover { border-color: var(--border-bright); color: var(--text-primary); background: var(--bg-hover); }
-
   .btn-sm { padding: 5px 12px; font-size: 11px; }
-
-  .content { padding: 28px; flex: 1; }
-
-  .page { display: none; animation: fadeIn 0.2s ease; }
-  .page.active { display: block; }
-  @keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
-
-  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
-
-  .stat-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 20px;
-    position: relative;
-    overflow: hidden;
-    transition: border-color 0.2s;
-  }
-  .stat-card:hover { border-color: var(--border-bright); }
-  .stat-card::after { content:''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
-  .stat-card.blue::after { background: linear-gradient(90deg, transparent, var(--blue), transparent); }
-  .stat-card.red::after { background: linear-gradient(90deg, transparent, var(--red), transparent); }
-  .stat-card.orange::after { background: linear-gradient(90deg, transparent, var(--orange), transparent); }
-  .stat-card.green::after { background: linear-gradient(90deg, transparent, var(--green), transparent); }
-
-  .stat-icon { font-size: 24px; margin-bottom: 10px; opacity: 0.8; }
-  .stat-value { font-family: var(--head); font-size: 34px; font-weight: 900; line-height: 1; margin-bottom: 4px; }
-  .stat-label { font-family: var(--mono); font-size: 10px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; }
-
-  .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-
-  .section-title {
-    font-family: var(--head);
-    font-weight: 700;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .section-title::before { content:''; display: inline-block; width: 3px; height: 18px; background: var(--blue); border-radius: 2px; }
-
-  .table-wrap { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
-
-  .search-bar { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-
-  .search-input {
-    background: var(--bg-panel);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 8px 14px;
-    color: var(--text-primary);
-    font-family: var(--body);
-    font-size: 13px;
-    width: 260px;
-    transition: border-color 0.2s;
-  }
-  .search-input:focus { outline: none; border-color: var(--blue); }
-
-  .filter-btn {
-    padding: 8px 14px;
-    background: var(--bg-panel);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    color: var(--text-secondary);
-    cursor: pointer;
-    font-family: var(--body);
-    font-size: 12px;
-    font-weight: 600;
-    transition: all 0.15s;
-  }
-  .filter-btn:hover, .filter-btn.active { border-color: var(--blue); color: var(--blue); background: var(--blue-glow); }
-
-  table { width: 100%; border-collapse: collapse; }
-  thead th {
-    padding: 10px 16px;
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    text-align: left;
-    border-bottom: 1px solid var(--border);
-    background: var(--bg-panel);
-    white-space: nowrap;
-  }
-  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; cursor: pointer; }
-  tbody tr:last-child { border-bottom: none; }
-  tbody tr:hover { background: var(--bg-hover); }
-  td { padding: 12px 16px; font-size: 14px; }
-
   .badge {
     display: inline-flex;
     align-items: center;
@@ -625,20 +238,10 @@
     border-radius: 20px;
     font-family: var(--mono);
     font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    white-space: nowrap;
   }
-  .badge::before { content:'●'; font-size: 7px; }
-  .badge-open { background: rgba(255,61,90,0.12); color: var(--red); border: 1px solid rgba(255,61,90,0.3); }
-  .badge-progress { background: rgba(255,140,42,0.12); color: var(--orange); border: 1px solid rgba(255,140,42,0.3); }
-  .badge-closed { background: rgba(0,230,118,0.1); color: var(--green); border: 1px solid rgba(0,230,118,0.25); }
-  .badge-urgent { background: rgba(255,61,90,0.2); color: #ff6b82; border: 1px solid var(--red); animation: blink 1.2s infinite; }
-  .badge-info { background: rgba(45,143,255,0.12); color: var(--blue); border: 1px solid rgba(45,143,255,0.3); }
-  .badge-neutral { background: rgba(255,255,255,0.05); color: var(--text-secondary); border: 1px solid var(--border); }
-  @keyframes blink { 0%,100%{opacity:1}50%{opacity:0.6} }
-
+  .badge-open { background: rgba(255,61,90,0.12); color: var(--red); }
+  .badge-progress { background: rgba(255,140,42,0.12); color: var(--orange); }
+  .badge-closed { background: rgba(0,230,118,0.1); color: var(--green); }
   .modal-overlay {
     display: none;
     position: fixed; inset: 0;
@@ -646,10 +249,8 @@
     z-index: 200;
     align-items: center;
     justify-content: center;
-    backdrop-filter: blur(4px);
   }
   .modal-overlay.open { display: flex; }
-
   .modal {
     background: var(--bg-panel);
     border: 1px solid var(--border-bright);
@@ -658,158 +259,381 @@
     max-width: 95vw;
     max-height: 90vh;
     overflow-y: auto;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(45,143,255,0.1);
-    animation: slideUp 0.2s ease;
   }
-
-  .modal.modal-sm {
-    width: 450px;
-  }
-
-  @keyframes slideUp { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
-
-  .modal-header {
-    padding: 20px 24px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .modal-title { font-family: var(--head); font-weight: 700; font-size: 17px; display: flex; align-items: center; gap: 10px; }
-
-  .close-btn { background: none; border: none; color: var(--text-muted); font-size: 20px; cursor: pointer; padding: 4px 8px; border-radius: 4px; transition: color 0.15s; }
-  .close-btn:hover { color: var(--text-primary); }
-
+  .modal-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; }
   .modal-body { padding: 24px; }
   .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; gap: 10px; justify-content: flex-end; }
-
   .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .form-grid.full { grid-template-columns: 1fr; }
-  .form-group { display: flex; flex-direction: column; gap: 6px; }
   .form-group.span2 { grid-column: span 2; }
-
-  .form-label { font-family: var(--mono); font-size: 10px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; }
-
-  .form-input, .form-select, .form-textarea {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 10px 14px;
-    color: var(--text-primary);
-    font-family: var(--body);
-    font-size: 14px;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    width: 100%;
-  }
-  .form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(45,143,255,0.1); }
-  .form-textarea { resize: vertical; min-height: 90px; line-height: 1.5; }
-
-  .photo-upload-zone {
-    border: 2px dashed var(--border-bright);
-    border-radius: 8px;
-    padding: 20px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    background: var(--bg-card);
-  }
-  .photo-upload-zone:hover { border-color: var(--blue); background: var(--blue-glow); }
-  .photo-upload-zone input[type=file] { display: none; }
-  .photo-preview-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-  .photo-thumb {
-    width: 80px; height: 80px;
-    object-fit: cover;
-    border-radius: 6px;
-    border: 1px solid var(--border-bright);
-  }
-  .photo-thumb-wrap { position: relative; display: inline-block; }
-  .photo-thumb-del {
-    position: absolute;
-    top: -4px; right: -4px;
-    background: var(--red);
-    color: #fff;
-    border: none;
-    border-radius: 50%;
-    width: 18px; height: 18px;
-    cursor: pointer;
-    font-size: 11px;
-    display: flex; align-items: center; justify-content: center;
-  }
-
-  .view-field { margin-bottom: 16px; }
-  .view-field-label { font-family: var(--mono); font-size: 10px; letter-spacing: 1.5px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
-  .view-field-value { font-size: 14px; line-height: 1.5; color: var(--text-primary); }
-  .view-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .view-photos { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
-  .view-photos img { width: 100px; height: 100px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border-bright); cursor: pointer; }
-
-  .agents-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; margin-top: 20px; }
-  .agent-card-big {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 20px;
-    transition: border-color 0.2s, transform 0.15s;
-    cursor: pointer;
-  }
-  .agent-card-big:hover { border-color: var(--border-bright); transform: translateY(-2px); }
-  .agent-card-big .av { width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, #1a3a5c, var(--blue-dim)); display: flex; align-items: center; justify-content: center; font-size: 22px; border: 2px solid var(--border-bright); margin-bottom: 12px; }
-  .agent-card-big .name { font-weight: 700; font-size: 15px; margin-bottom: 3px; }
-  .agent-card-big .grade { font-family: var(--mono); font-size: 11px; color: var(--blue); margin-bottom: 10px; }
-  .agent-card-big .meta { font-size: 12px; color: var(--text-secondary); display: flex; flex-direction: column; gap: 4px; }
-
-  .activity-list { display: flex; flex-direction: column; }
-  .activity-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border); }
-  .activity-item:last-child { border-bottom: none; }
-  .activity-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
-  .activity-text { font-size: 13px; line-height: 1.5; }
-  .activity-time { font-family: var(--mono); font-size: 10px; color: var(--text-muted); margin-top: 2px; }
-
-  .gestion-section { margin-bottom: 32px; }
-  .gestion-title { font-family: var(--head); font-weight: 700; font-size: 15px; margin-bottom: 14px; color: var(--blue); display: flex; align-items: center; gap: 8px; }
-  .gestion-title::before { content:''; display: inline-block; width: 3px; height: 16px; background: var(--blue); border-radius: 2px; }
-
-  .access-request-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 14px 18px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 10px;
-  }
-  .access-request-card .info { flex: 1; }
-  .access-request-card .name { font-weight: 700; font-size: 14px; }
-  .access-request-card .sub { font-size: 12px; color: var(--text-secondary); font-family: var(--mono); }
-  .access-request-card .actions { display: flex; gap: 8px; }
-
-  .danger-bar {
-    background: rgba(255,61,90,0.06);
-    border: 1px solid rgba(255,61,90,0.25);
-    border-radius: 8px;
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 13px;
-    color: #ff8899;
-    margin-bottom: 12px;
-  }
-
-  .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 500; display: flex; flex-direction: column; gap: 8px; }
+  .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 500; }
   .toast {
     background: var(--bg-panel);
-    border: 1px solid var(--border-bright);
     border-left: 3px solid var(--green);
     border-radius: 8px;
     padding: 12px 18px;
-    font-size: 13px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-    animation: toastIn 0.25s ease, toastOut 0.25s ease 2.75s forwards;
-    max-width: 320px;
+    margin-top: 8px;
+    animation: fadeOut 3s forwards;
   }
-  .toast.error { border-left-color: var(--red); }
-  .toast.warn { border-left-color: var(--orange); }
-  @keyframes toastIn { from{opacity:0;transform:translateX(10px)} to{opacity:
+  @keyframes fadeOut { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
+  .empty-state { text-align: center; padding: 40px; color: var(--text-muted); }
+  .agents-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
+  .agent-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .close-btn { background: none; border: none; color: var(--text-muted); font-size: 20px; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <span class="icon">🛡️</span>
+      <div class="title">Police Municipale</div>
+      <div class="sub" style="font-size:10px;color:var(--text-muted);">Panneau de Commandement</div>
+    </div>
+    <div class="login-tabs">
+      <div class="login-tab active" onclick="switchTab('login')">Connexion</div>
+      <div class="login-tab" onclick="switchTab('register')">Demander l'accès</div>
+    </div>
+    <div id="login-form">
+      <div><div class="form-label">Prénom</div><input class="form-input" type="text" id="login-prenom"></div>
+      <div><div class="form-label">Nom</div><input class="form-input" type="text" id="login-nom"></div>
+      <div><div class="form-label">Mot de passe</div><input class="form-input" type="password" id="login-password"></div>
+      <button class="login-btn" onclick="doLogin()">Se connecter</button>
+    </div>
+    <div id="register-form" style="display:none;">
+      <div><div class="form-label">Prénom</div><input class="form-input" type="text" id="reg-prenom"></div>
+      <div><div class="form-label">Nom</div><input class="form-input" type="text" id="reg-nom"></div>
+      <div><div class="form-label">Pseudo Discord</div><input class="form-input" type="text" id="reg-pseudo"></div>
+      <div><div class="form-label">Mot de passe</div><input class="form-input" type="password" id="reg-password"></div>
+      <div><div class="form-label">Confirmer</div><input class="form-input" type="password" id="reg-password2"></div>
+      <div><div class="form-label">Grade</div><select class="form-input" id="reg-grade"><option>Gardien Stagiaire</option><option>Gardien Titulaire</option><option>Brigadier</option><option>Chef de Police</option><option>Directeur</option></select></div>
+      <button class="login-btn" onclick="doRegister()">Envoyer la demande</button>
+    </div>
+    <div id="login-pending" style="display:none;text-align:center;padding:20px;color:var(--orange);">⏳ Demande en attente de validation</div>
+  </div>
+</div>
+
+<div class="app" id="main-app" style="display:none;">
+  <div class="sidebar">
+    <div class="sidebar-logo"><div class="logo-badge"><div class="logo-icon">🛡️</div><div class="logo-title">Police Municipale</div></div></div>
+    <nav class="nav">
+      <div class="nav-section-label">Principal</div>
+      <div class="nav-item active" onclick="showPage('dashboard')">📊 Tableau de bord</div>
+      <div class="nav-section-label">Opérations</div>
+      <div class="nav-item" onclick="showPage('rapports')">📋 Rapports</div>
+      <div class="nav-item" onclick="showPage('signalements')">🚨 Signalements</div>
+      <div class="nav-item" onclick="showPage('plaintes')">⚖️ Plaintes</div>
+      <div class="nav-item" onclick="showPage('saisies')">🔫 Saisies</div>
+      <div class="nav-section-label">Dossiers</div>
+      <div class="nav-item" onclick="showPage('fiches')">👤 Fiches</div>
+      <div class="nav-item" onclick="showPage('vehicules')">🚗 Véhicules</div>
+      <div class="nav-item" onclick="showPage('agents')">👮 Agents</div>
+      <div class="nav-item admin-only" onclick="showPage('gestion')">⚙️ Gestion</div>
+    </nav>
+    <div class="sidebar-footer">
+      <div id="user-info">👮 Agent</div>
+      <button class="btn btn-ghost btn-sm" style="width:100%;margin-top:10px;" onclick="logout()">Déconnexion</button>
+    </div>
+  </div>
+  <div class="main">
+    <div class="topbar"><div class="page-title" id="page-title">Tableau de bord</div><button class="btn btn-primary btn-sm" onclick="openNewModal()">+ Nouveau</button></div>
+    <div class="content">
+      <div id="dashboard-page" class="page active">
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-value" id="stat-rapports">0</div><div>RAPPORTS</div></div>
+          <div class="stat-card"><div class="stat-value" id="stat-plaintes">0</div><div>PLAINTES</div></div>
+          <div class="stat-card"><div class="stat-value" id="stat-saisies">0</div><div>SAISIES</div></div>
+          <div class="stat-card"><div class="stat-value" id="stat-agents">0</div><div>AGENTS</div></div>
+        </div>
+        <div class="section-header"><div class="section-title">Activité récente</div></div>
+        <div class="table-wrap"><div id="activity-list"></div></div>
+      </div>
+      <div id="rapports-page" class="page"><div class="section-header"><div class="section-title">Rapports</div><button class="btn btn-primary btn-sm" onclick="openNewModal()">+ Nouveau</button></div><div class="table-wrap"><table style="width:100%"><thead><tr><th>N°</th><th>Date</th><th>Type</th><th>Lieu</th><th>Agent</th><th>Statut</th><th>Créé par</th><th>Actions</th></tr></thead><tbody id="rapports-list"></tbody></table></div></div>
+      <div id="signalements-page" class="page"><div class="section-header"><div class="section-title">Signalements</div><button class="btn btn-primary btn-sm" onclick="openSignalementModal()">+ Nouveau</button></div><div class="table-wrap"><table><thead><tr><th>N°</th><th>Date</th><th>Type</th><th>Zone</th><th>Priorité</th><th>Créé par</th><th>Actions</th></tr></thead><tbody id="signalements-list"></tbody></table></div></div>
+      <div id="plaintes-page" class="page"><div class="section-header"><div class="section-title">Plaintes</div><button class="btn btn-primary btn-sm" onclick="openPlainteModal()">+ Nouvelle</button></div><div class="table-wrap"><table><thead><tr><th>N°</th><th>Date</th><th>Plaignant</th><th>Accusé</th><th>Motif</th><th>Statut</th><th>Créé par</th><th>Actions</th></tr></thead><tbody id="plaintes-list"></tbody></table></div></div>
+      <div id="saisies-page" class="page"><div class="section-header"><div class="section-title">Saisies</div><button class="btn btn-primary btn-sm" onclick="openSaisieModal()">+ Nouvelle</button></div><div class="table-wrap"><table><thead><tr><th>N°</th><th>Date</th><th>Catégorie</th><th>Objet</th><th>Propriétaire</th><th>Agent</th><th>Créé par</th><th>Actions</th></tr></thead><tbody id="saisies-list"></tbody></table></div></div>
+      <div id="fiches-page" class="page"><div class="section-header"><div class="section-title">Fiches</div><button class="btn btn-primary btn-sm" onclick="openFicheModal()">+ Nouvelle</button></div><div class="table-wrap"><table><thead><tr><th>Nom</th><th>Naissance</th><th>Statut</th><th>Antécédents</th><th>Créé par</th><th>Actions</th></tr></thead><tbody id="fiches-list"></tbody></table></div></div>
+      <div id="vehicules-page" class="page"><div class="section-header"><div class="section-title">Véhicules recherchés</div><button class="btn btn-primary btn-sm" onclick="openVehiculeModal()">+ Ajouter</button></div><div class="table-wrap"><table><thead><tr><th>Plaque</th><th>Modèle</th><th>Couleur</th><th>Propriétaire</th><th>Motif</th><th>Créé par</th><th>Actions</th></tr></thead><tbody id="vehicules-list"></tbody></table></div></div>
+      <div id="agents-page" class="page"><div class="section-header"><div class="section-title">Agents</div><button class="btn btn-primary btn-sm" onclick="openAgentModal()">+ Ajouter</button></div><div class="agents-grid" id="agents-list"></div></div>
+      <div id="gestion-page" class="page"><div class="section-header"><div class="section-title">Gestion</div></div><div id="access-requests"></div><div id="approved-users"></div></div>
+    </div>
+  </div>
+</div>
+<div class="toast-container" id="toasts"></div>
+
+<!-- Modales simplifiées -->
+<div id="modal" class="modal-overlay"><div class="modal"><div class="modal-header"><span id="modal-title">Titre</span><button class="close-btn" onclick="closeModal()">✕</button></div><div id="modal-body" class="modal-body"></div><div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal()">Annuler</button><button id="modal-save" class="btn btn-primary" onclick="saveCurrent()">Enregistrer</button></div></div></div>
+
+<script>
+let currentUser = null;
+let db, fb;
+
+window.addEventListener('firebase-ready', () => {
+  db = window.db;
+  fb = window.fb;
+  console.log('Firebase prêt');
+  checkSession();
+  setInterval(() => {}, 1000);
+});
+
+async function hashPassword(pwd) {
+  const enc = new TextEncoder();
+  const hash = await crypto.subtle.digest('SHA-256', enc.encode(pwd));
+  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+function toast(msg, type='success') {
+  let t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = msg;
+  document.getElementById('toasts').appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+
+function fmtDate(d) { return d ? new Date(d).toLocaleString('fr-FR') : '—'; }
+
+function canDelete() { return currentUser && ['Directeur', 'Directeur Adjoint'].includes(currentUser.grade); }
+
+function canEdit(item) {
+  if (!currentUser) return false;
+  return item.createdBy === `${currentUser.prenom} ${currentUser.nom}` || canDelete();
+}
+
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(`${page}-page`).classList.add('active');
+  document.getElementById('page-title').textContent = page.charAt(0).toUpperCase() + page.slice(1);
+}
+
+function openModal(title, bodyHtml, saveCallback) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-body').innerHTML = bodyHtml;
+  document.getElementById('modal-save').onclick = saveCallback;
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+
+// Authentification
+function switchTab(tab) {
+  document.getElementById('login-form').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('register-form').style.display = tab === 'register' ? 'block' : 'none';
+}
+
+function checkSession() {
+  let saved = localStorage.getItem('pm_session');
+  if (saved) {
+    try { loginUser(JSON.parse(saved), false); } catch(e) {}
+  }
+}
+
+async function doLogin() {
+  let prenom = document.getElementById('login-prenom').value.trim();
+  let nom = document.getElementById('login-nom').value.trim();
+  let pwd = document.getElementById('login-password').value;
+  if (!prenom || !nom || !pwd) return toast('Champs requis');
+  let key = `${prenom.toLowerCase()}_${nom.toLowerCase()}`;
+  let snap = await fb.get(fb.ref(db, `users/${key}`));
+  if (!snap.exists()) return toast('Compte inexistant');
+  let user = snap.val();
+  if (user.status === 'pending') return toast('Demande en attente');
+  if (user.status !== 'approved') return toast('Accès refusé');
+  let hashed = await hashPassword(pwd);
+  if (user.password !== hashed) return toast('Mot de passe incorrect');
+  loginUser({ ...user, id: key }, true);
+}
+
+function loginUser(user, save) {
+  currentUser = user;
+  if (save) localStorage.setItem('pm_session', JSON.stringify(user));
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('main-app').style.display = 'flex';
+  document.getElementById('user-info').innerHTML = `👮 ${user.prenom} ${user.nom}<br><small>${user.grade}</small>`;
+  if (canDelete()) document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'flex');
+  loadAllData();
+}
+
+function logout() {
+  localStorage.removeItem('pm_session');
+  currentUser = null;
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('main-app').style.display = 'none';
+}
+
+async function doRegister() {
+  let prenom = document.getElementById('reg-prenom').value.trim();
+  let nom = document.getElementById('reg-nom').value.trim();
+  let pseudo = document.getElementById('reg-pseudo').value.trim();
+  let pwd = document.getElementById('reg-password').value;
+  let pwd2 = document.getElementById('reg-password2').value;
+  let grade = document.getElementById('reg-grade').value;
+  if (!prenom || !nom || !pseudo || !pwd) return toast('Tous les champs requis');
+  if (pwd !== pwd2) return toast('Mots de passe différents');
+  if (pwd.length < 4) return toast('Mot de passe trop court (min 4)');
+  let key = `${prenom.toLowerCase()}_${nom.toLowerCase()}`;
+  let existing = await fb.get(fb.ref(db, `users/${key}`));
+  if (existing.exists()) return toast('Compte déjà existant');
+  await fb.set(fb.ref(db, `users/${key}`), {
+    prenom, nom, pseudo, grade, password: await hashPassword(pwd),
+    status: 'pending', createdAt: new Date().toISOString()
+  });
+  toast('Demande envoyée');
+  switchTab('login');
+}
+
+// Chargement des données
+let collections = ['rapports', 'signalements', 'plaintes', 'saisies', 'fiches', 'vehicules', 'agents'];
+
+function loadAllData() {
+  collections.forEach(col => {
+    fb.onValue(fb.ref(db, col), (snap) => {
+      let items = [];
+      let data = snap.val() || {};
+      for (let [id, val] of Object.entries(data)) items.push({ id, ...val });
+      items.sort((a,b) => (b.createdAt||'').localeCompare(a.createdAt||''));
+      renderCollection(col, items);
+    });
+  });
+  if (canDelete()) loadAdminData();
+}
+
+function renderCollection(col, items) {
+  document.getElementById(`stat-${col === 'rapports' ? 'rapports' : col === 'plaintes' ? 'plaintes' : col === 'saisies' ? 'saisies' : col === 'agents' ? 'agents' : ''}`)?.textContent = items.length;
+  let tbody = document.getElementById(`${col}-list`);
+  if (!tbody) return;
+  if (!items.length) { tbody.innerHTML = '<tr><td colspan="10" class="empty-state">Aucune donnée</td></tr>'; return; }
+  
+  if (col === 'rapports') {
+    tbody.innerHTML = items.map(r => `<tr>
+      <td>${r.num || r.id.slice(0,8)}</td><td>${fmtDate(r.date)}</td><td>${r.type||'—'}</td><td>${r.lieu||'—'}</td><td>${r.agent||'—'}</td>
+      <td><span class="badge ${r.statut === 'Ouvert' ? 'badge-open' : r.statut === 'En cours' ? 'badge-progress' : 'badge-closed'}">${r.statut||'—'}</span></td>
+      <td><small>${r.createdBy || '—'}</small></td>
+      <td>${canEdit(r) ? `<button class="btn btn-primary btn-sm" onclick="editItem('${col}','${r.id}')">✏️</button>` : ''} ${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('${col}','${r.id}')">🗑️</button>` : ''}</td>
+    </tr>`).join('');
+  } else if (col === 'signalements') {
+    tbody.innerHTML = items.map((s,i) => `<tr>
+      <td>SIG-${i+1}</td><td>${fmtDate(s.date)}</td><td>${s.type||'—'}</td><td>${s.zone||'—'}</td>
+      <td><span class="badge ${s.priorite === 'Urgent' ? 'badge-open' : 'badge-info'}">${s.priorite||'Normal'}</span></td>
+      <td><small>${s.createdBy || '—'}</small></td>
+      <td>${canEdit(s) ? `<button class="btn btn-primary btn-sm" onclick="editItem('${col}','${s.id}')">✏️</button>` : ''} ${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('${col}','${s.id}')">🗑️</button>` : ''}</td>
+    </tr>`).join('');
+  } else if (col === 'plaintes') {
+    tbody.innerHTML = items.map((p,i) => `<tr>
+      <td>PL-${i+1}</td><td>${fmtDate(p.date)}</td><td>${p.plaignant||'—'}</td><td>${p.accuse||'—'}</td><td>${p.motif||'—'}</td>
+      <td><span class="badge ${p.statut === 'En attente' ? 'badge-open' : p.statut === 'Résolue' ? 'badge-closed' : 'badge-progress'}">${p.statut||'—'}</span></td>
+      <td><small>${p.createdBy || '—'}</small></td>
+      <td>${canEdit(p) ? `<button class="btn btn-primary btn-sm" onclick="editItem('${col}','${p.id}')">✏️</button>` : ''} ${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('${col}','${p.id}')">🗑️</button>` : ''}</td>
+    </tr>`).join('');
+  } else if (col === 'saisies') {
+    tbody.innerHTML = items.map(s => `<tr>
+      <td>${s.num || s.id.slice(0,8)}</td><td>${fmtDate(s.date)}</td><td>${s.categorie||'—'}</td><td>${s.objet||'—'}</td><td>${s.proprio||'—'}</td><td>${s.agent||'—'}</td>
+      <td><small>${s.createdBy || '—'}</small></td>
+      <td>${canEdit(s) ? `<button class="btn btn-primary btn-sm" onclick="editItem('${col}','${s.id}')">✏️</button>` : ''} ${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('${col}','${s.id}')">🗑️</button>` : ''}</td>
+    </tr>`).join('');
+  } else if (col === 'fiches') {
+    tbody.innerHTML = items.map(f => `<tr>
+      <td>${f.nom||'—'}</td><td>${f.naissance||'—'}</td>
+      <td><span class="badge ${f.statut === 'Dangereux' ? 'badge-open' : 'badge-info'}">${f.statut||'—'}</span></td>
+      <td style="max-width:200px;overflow:hidden;">${(f.antecedents||'').substring(0,50)}...</td>
+      <td><small>${f.createdBy || '—'}</small></td>
+      <td>${canEdit(f) ? `<button class="btn btn-primary btn-sm" onclick="editItem('${col}','${f.id}')">✏️</button>` : ''} ${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('${col}','${f.id}')">🗑️</button>` : ''}</td>
+    </tr>`).join('');
+  } else if (col === 'vehicules') {
+    tbody.innerHTML = items.map(v => `<tr>
+      <td>${v.plaque||'—'}</td><td>${v.modele||'—'}</td><td>${v.couleur||'—'}</td><td>${v.proprio||'—'}</td><td style="max-width:150px;">${v.motif||'—'}</td>
+      <td><small>${v.createdBy || '—'}</small></td>
+      <td>${canEdit(v) ? `<button class="btn btn-primary btn-sm" onclick="editItem('${col}','${v.id}')">✏️</button>` : ''} ${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('${col}','${v.id}')">🗑️</button>` : ''}</td>
+    </tr>`).join('');
+  } else if (col === 'agents') {
+    let grid = document.getElementById('agents-list');
+    if (grid) grid.innerHTML = items.map(a => `<div class="agent-card"><div><strong>${a.nom}</strong><br>${a.grade}<br>${a.matricule||''}<br><small>Créé par: ${a.createdBy||'—'}</small></div>${canDelete() ? `<button class="btn btn-danger btn-sm" onclick="deleteItem('agents','${a.id}')">🗑️</button>` : ''}</div>`).join('');
+  }
+  
+  if (col === 'rapports') {
+    let recent = items.slice(0,5);
+    document.getElementById('activity-list').innerHTML = recent.length ? recent.map(r => `<div style="padding:12px;border-bottom:1px solid var(--border);">📋 Rapport ${r.num} - ${r.type} - par ${r.createdBy || '—'}</div>`).join('') : '<div class="empty-state">Aucune activité</div>';
+  }
+}
+
+// Administration
+async function loadAdminData() {
+  let users = await fb.get(fb.ref(db, 'users'));
+  let data = users.val() || {};
+  let pending = [], approved = [];
+  for (let [id, u] of Object.entries(data)) {
+    if (u.status === 'pending') pending.push({id, ...u});
+    else if (u.status === 'approved') approved.push({id, ...u});
+  }
+  document.getElementById('access-requests').innerHTML = `<div class="section-title">Demandes (${pending.length})</div>` + pending.map(u => `<div style="padding:10px;border-bottom:1px solid var(--border);">${u.prenom} ${u.nom} (${u.grade})<br><button class="btn btn-primary btn-sm" onclick="approveUser('${u.id}')">Accepter</button> <button class="btn btn-danger btn-sm" onclick="rejectUser('${u.id}')">Refuser</button></div>`).join('');
+  document.getElementById('approved-users').innerHTML = `<div class="section-title">Utilisateurs (${approved.length})</div>` + approved.map(u => `<div style="padding:10px;border-bottom:1px solid var(--border);">✅ ${u.prenom} ${u.nom} (${u.grade})<br><button class="btn btn-danger btn-sm" onclick="revokeUser('${u.id}')">Révoquer</button></div>`).join('');
+}
+
+window.approveUser = async (id) => { await fb.update(fb.ref(db, `users/${id}`), { status: 'approved', approvedAt: new Date().toISOString() }); toast('Utilisateur approuvé'); loadAdminData(); };
+window.rejectUser = async (id) => { await fb.update(fb.ref(db, `users/${id}`), { status: 'rejected' }); toast('Demande refusée'); loadAdminData(); };
+window.revokeUser = async (id) => { await fb.update(fb.ref(db, `users/${id}`), { status: 'rejected' }); toast('Accès révoqué'); loadAdminData(); };
+
+// CRUD
+let currentEditId = null;
+let currentEditCol = null;
+
+function openNewModal() {
+  currentEditId = null;
+  openModal('Nouveau rapport', `
+    <div class="form-grid"><div class="form-group"><label>Type</label><select id="r-type"><option>Intervention</option><option>Patrouille</option></select></div>
+    <div class="form-group"><label>Statut</label><select id="r-statut"><option>Ouvert</option><option>En cours</option><option>Clôturé</option></select></div>
+    <div class="form-group"><label>Date</label><input id="r-date" type="datetime-local"></div>
+    <div class="form-group"><label>Lieu</label><input id="r-lieu" placeholder="Lieu"></div>
+    <div class="form-group"><label>Agent</label><input id="r-agent" placeholder="Agent"></div>
+    <div class="form-group span2"><label>Description</label><textarea id="r-description"></textarea></div></div>
+  `, () => saveRapport());
+}
+
+async function saveRapport() {
+  let data = { num: `INT-${Date.now().slice(-6)}`, type: document.getElementById('r-type').value, statut: document.getElementById('r-statut').value, date: document.getElementById('r-date').value, lieu: document.getElementById('r-lieu').value, agent: document.getElementById('r-agent').value, description: document.getElementById('r-description').value, createdAt: new Date().toISOString(), createdBy: `${currentUser.prenom} ${currentUser.nom}`, createdById: currentUser.id };
+  if (currentEditId) await fb.update(fb.ref(db, `rapports/${currentEditId}`), { ...data, updatedAt: new Date().toISOString(), updatedBy: currentUser.prenom });
+  else await fb.push(fb.ref(db, 'rapports'), data);
+  closeModal(); toast(currentEditId ? 'Rapport modifié' : 'Rapport créé');
+  currentEditId = null;
+}
+
+function openSignalementModal() { openModal('Nouveau signalement', `<div class="form-grid"><div class="form-group"><label>Type</label><input id="s-type"></div><div class="form-group"><label>Priorité</label><select id="s-priorite"><option>Normal</option><option>Urgent</option></select></div><div class="form-group"><label>Zone</label><input id="s-zone"></div><div class="form-group"><label>Date</label><input id="s-date" type="datetime-local"></div><div class="form-group span2"><label>Description</label><textarea id="s-description"></textarea></div></div>`, () => saveSignalement()); }
+async function saveSignalement() { let data = { type: document.getElementById('s-type').value, priorite: document.getElementById('s-priorite').value, zone: document.getElementById('s-zone').value, date: document.getElementById('s-date').value, description: document.getElementById('s-description').value, createdAt: new Date().toISOString(), createdBy: `${currentUser.prenom} ${currentUser.nom}`, createdById: currentUser.id }; if (currentEditId) await fb.update(fb.ref(db, `signalements/${currentEditId}`), { ...data, updatedAt: new Date().toISOString() }); else await fb.push(fb.ref(db, 'signalements'), data); closeModal(); toast('Signalement enregistré'); currentEditId = null; }
+
+function openPlainteModal() { openModal('Nouvelle plainte', `<div class="form-grid"><div class="form-group"><label>Plaignant</label><input id="p-plaignant" value="${currentUser.prenom} ${currentUser.nom}"></div><div class="form-group"><label>Accusé</label><input id="p-accuse"></div><div class="form-group"><label>Date</label><input id="p-date" type="datetime-local"></div><div class="form-group"><label>Motif</label><input id="p-motif"></div><div class="form-group"><label>Statut</label><select id="p-statut"><option>En attente</option><option>En cours</option><option>Résolue</option></select></div><div class="form-group span2"><label>Description</label><textarea id="p-description"></textarea></div></div>`, () => savePlainte()); }
+async function savePlainte() { let data = { plaignant: document.getElementById('p-plaignant').value, accuse: document.getElementById('p-accuse').value, date: document.getElementById('p-date').value, motif: document.getElementById('p-motif').value, statut: document.getElementById('p-statut').value, description: document.getElementById('p-description').value, createdAt: new Date().toISOString(), createdBy: `${currentUser.prenom} ${currentUser.nom}`, createdById: currentUser.id }; if (currentEditId) await fb.update(fb.ref(db, `plaintes/${currentEditId}`), { ...data, updatedAt: new Date().toISOString() }); else await fb.push(fb.ref(db, 'plaintes'), data); closeModal(); toast('Plainte enregistrée'); currentEditId = null; }
+
+function openSaisieModal() { openModal('Nouvelle saisie', `<div class="form-grid"><div class="form-group"><label>Catégorie</label><input id="sa-categorie"></div><div class="form-group"><label>Date</label><input id="sa-date" type="datetime-local"></div><div class="form-group"><label>Objet</label><input id="sa-objet"></div><div class="form-group"><label>Quantité</label><input id="sa-quantite"></div><div class="form-group"><label>Propriétaire</label><input id="sa-proprio"></div><div class="form-group"><label>Agent</label><input id="sa-agent"></div><div class="form-group span2"><label>Description</label><textarea id="sa-description"></textarea></div></div>`, () => saveSaisie()); }
+async function saveSaisie() { let data = { num: `SAI-${Date.now().slice(-6)}`, categorie: document.getElementById('sa-categorie').value, date: document.getElementById('sa-date').value, objet: document.getElementById('sa-objet').value, quantite: document.getElementById('sa-quantite').value, proprio: document.getElementById('sa-proprio').value, agent: document.getElementById('sa-agent').value, description: document.getElementById('sa-description').value, createdAt: new Date().toISOString(), createdBy: `${currentUser.prenom} ${currentUser.nom}`, createdById: currentUser.id }; if (currentEditId) await fb.update(fb.ref(db, `saisies/${currentEditId}`), { ...data, updatedAt: new Date().toISOString() }); else await fb.push(fb.ref(db, 'saisies'), data); closeModal(); toast('Saisie enregistrée'); currentEditId = null; }
+
+function openFicheModal() { openModal('Nouvelle fiche', `<div class="form-grid"><div class="form-group"><label>Nom</label><input id="f-nom"></div><div class="form-group"><label>Naissance</label><input id="f-naissance" type="date"></div><div class="form-group"><label>Nationalité</label><input id="f-nationalite"></div><div class="form-group"><label>Statut</label><select id="f-statut"><option>Fichier actif</option><option>Recherché</option><option>Dangereux</option></select></div><div class="form-group span2"><label>Antécédents</label><textarea id="f-antecedents"></textarea></div></div>`, () => saveFiche()); }
+async function saveFiche() { let data = { nom: document.getElementById('f-nom').value, naissance: document.getElementById('f-naissance').value, nationalite: document.getElementById('f-nationalite').value, statut: document.getElementById('f-statut').value, antecedents: document.getElementById('f-antecedents').value, createdAt: new Date().toISOString(), createdBy: `${currentUser.prenom} ${currentUser.nom}`, createdById: currentUser.id }; if (currentEditId) await fb.update(fb.ref(db, `fiches/${currentEditId}`), { ...data, updatedAt: new Date().toISOString() }); else await fb.push(fb.ref(db, 'fiches'), data); closeModal(); toast('Fiche enregistrée'); currentEditId = null; }
+
+function openVehiculeModal() { openModal('Nouveau véhicule', `<div class="form-grid"><div class="form-group"><label>Plaque</label><input id="v-plaque"></div><div class="form-group"><label>Modèle</label><input id="v-modele"></div><div class="form-group"><label>Couleur</label><input id="v-couleur"></div><div class="form-group"><label>Propriétaire</label><input id="v-proprio"></div><div class="form-group span2"><label>Motif</label><textarea id="v-motif"></textarea></div></div>`, () => saveVehicule()); }
+async function saveVehicule() { let data = { plaque: document.getElementById('v-plaque').value, modele: document.getElementById('v-modele').value, couleur: document.getElementById('v-couleur').value, proprio: document.getElementById('v-proprio').value, motif: document.getElementById('v-motif').value, createdAt: new Date().toISOString(), createdBy: `${currentUser.prenom} ${currentUser.nom}`, createdById: currentUser.id }; if (currentEditId) await fb.update(fb.ref(db, `vehicules/${currentEditId}`), { ...data, updatedAt: new Date().toISOString() }); else await fb.push(fb.ref(db, 'vehicules'), data); closeModal(); toast('Véhicule ajouté'); currentEditId = null; }
+
+function openAgentModal() { openModal('Nouvel agent', `<div class="form-grid"><div class="form-group"><label>Nom</label><input id="a-nom"></div><div class="form-group"><label>Grade</label><select id="a-grade"><option>Gardien</option><option>Brigadier</option><option>Chef</option><option>Directeur</option></select></div><div class="form-group"><label>Matricule</label><input id="a-matricule"></div><div class="form-group"><label>Statut</label><select id="a-statut"><option>Actif</option><option>Inactif</option></select></div></div>`, () => saveAgent()); }
+async function saveAgent() { let data = { nom: document.getElementById('a-nom').value, grade: document.getElementById('a-grade').value, matricule: document.getElementById('a-matricule').value, statut: document.getElementById('a-statut').value, createdAt: new Date().toISOString(), createdBy: `${currentUser.prenom} ${currentUser.nom}`, createdById: currentUser.id }; if (currentEditId) await fb.update(fb.ref(db, `agents/${currentEditId}`), { ...data, updatedAt: new Date().toISOString() }); else await fb.push(fb.ref(db, 'agents'), data); closeModal(); toast('Agent ajouté'); currentEditId = null; }
+
+async function editItem(col, id) {
+  currentEditCol = col; currentEditId = id;
+  let snap = await fb.get(fb.ref(db, `${col}/${id}`));
+  let data = snap.val();
+  if (!canEdit(data)) return toast('Vous ne pouvez pas modifier ce dossier');
+  if (col === 'rapports') openModal('Modifier rapport', `<div class="form-grid"><div class="form-group"><label>Type</label><input id="r-type" value="${data.type||''}"></div><div class="form-group"><label>Statut</label><select id="r-statut"><option ${data.statut==='Ouvert'?'selected':''}>Ouvert</option><option ${data.statut==='En cours'?'selected':''}>En cours</option><option ${data.statut==='Clôturé'?'selected':''}>Clôturé</option></select></div><div class="form-group"><label>Date</label><input id="r-date" type="datetime-local" value="${data.date||''}"></div><div class="form-group"><label>Lieu</label><input id="r-lieu" value="${data.lieu||''}"></div><div class="form-group"><label>Agent</label><input id="r-agent" value="${data.agent||''}"></div><div class="form-group span2"><label>Description</label><textarea id="r-description">${data.description||''}</textarea></div></div>`, () => saveRapport());
+  else if (col === 'signalements') openModal('Modifier signalement', `<div class="form-grid"><div class="form-group"><label>Type</label><input id="s-type" value="${data.type||''}"></div><div class="form-group"><label>Priorité</label><select id="s-priorite"><option ${data.priorite==='Normal'?'selected':''}>Normal</option><option ${data.priorite==='Urgent'?'selected':''}>Urgent</option></select></div><div class="form-group"><label>Zone</label><input id="s-zone" value="${data.zone||''}"></div><div class="form-group"><label>Date</label><input id="s-date" type="datetime-local" value="${data.date||''}"></div><div class="form-group span2"><label>Description</label><textarea id="s-description">${data.description||''}</textarea></div></div>`, () => saveSignalement());
+  else toast('Édition non implémentée pour ce type');
+}
+
+async function deleteItem(col, id) {
+  if (!canDelete()) return toast('Permission refusée');
+  if (!confirm('Supprimer définitivement ?')) return;
+  await fb.remove(fb.ref(db, `${col}/${id}`));
+  toast('Supprimé');
+}
+</script>
+</body>
+</html>
